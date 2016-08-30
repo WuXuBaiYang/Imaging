@@ -1,6 +1,6 @@
 package com.jtech.imaging.net.api;
 
-import com.jtech.imaging.model.UnsplashOauthModel;
+import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.net.CommonResponse;
 import com.jtech.imaging.net.call.JCall;
 
@@ -13,7 +13,7 @@ import retrofit2.http.Query;
  */
 public interface UnsplashOauthApi {
     @GET("/oauth/token")
-    JCall<CommonResponse<UnsplashOauthModel>> unsplashOauth(
+    JCall<CommonResponse<OauthModel>> unsplashOauth(
             @Query("client_id") String clientId,
             @Query("client_secret") String clientSecret,
             @Query("redirect_uri") String redirectUri,

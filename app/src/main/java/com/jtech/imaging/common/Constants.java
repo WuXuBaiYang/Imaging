@@ -20,7 +20,7 @@ public class Constants {
     /**
      * unsplash认证地址
      */
-    public static final String BASE_UNSPLASH_OAUTH_URL = HTTPS + "www.unsplash.com";
+    public static final String BASE_UNSPLASH_OAUTH_URL = HTTPS + "unsplash.com";
 
     /**
      * unsplash的client_id

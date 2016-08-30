@@ -6,7 +6,7 @@ import com.jtech.imaging.common.Constants;
  * unsplase认证通用方法
  * Created by jianghan on 2016/8/30.
  */
-public class UnsplashOauthUtils {
+public class OauthUtils {
     /**
      * 拼接认证地址
      *
@@ -23,8 +23,8 @@ public class UnsplashOauthUtils {
         }
         return Constants.BASE_UNSPLASH_OAUTH_URL + "/oauth/authorize?"
                 + "client_id=" + Constants.UNSPLASH_CLIENT_ID
-                + "redirect_uri=" + Constants.UNSPLASH_REDIRECT_URI
-                + "response_type=" + Constants.UNSPLASH_RESPONSE_TYPE
-                + "scope=" + stringBuffer.toString();
+                + "&redirect_uri=" + Constants.UNSPLASH_REDIRECT_URI
+                + "&response_type=" + Constants.UNSPLASH_RESPONSE_TYPE
+                + "&scope=" + stringBuffer.toString();
     }
 }

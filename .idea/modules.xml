@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Imaging.iml" filepath="$PROJECT_DIR$/Imaging.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/smoothCheckBoxLibrary/smoothCheckBoxLibrary.iml" filepath="$PROJECT_DIR$/smoothCheckBoxLibrary/smoothCheckBoxLibrary.iml" />
     </modules>
   </component>
 </project>

@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Imaging</string>
+
+    <array name="scopeList">
+        <item>默认项，读取公共数据|true|true|public</item>
+        <item>读取私人数据|false|true|read_user</item>
+        <item>上传用户头像|false|false|write_user</item>
+        <item>读取相册中的用户私有数据|false|true|read_photos</item>
+        <item>上传用户照片|false|true|write_photos</item>
+        <item>对相册中的照片点赞或取消|false|true|write_likes</item>
+        <item>浏览用户的私人收藏|false|true|read_collections</item>
+        <item>创建和上传用户收藏|false|false|write_collections</item>
+    </array>
 </resources>
