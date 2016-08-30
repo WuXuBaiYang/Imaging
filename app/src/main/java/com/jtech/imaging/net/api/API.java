@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.bind.DateTypeAdapter;
 import com.jtech.imaging.common.Constants;
-import com.jtech.imaging.net.call.JCallHander;
 import com.jtech.imaging.net.converter.JConverterFactory;
 
 import java.util.Date;
@@ -38,7 +37,6 @@ public class API {
         OkHttpClient okHttpClient = new OkHttpClient();
         //创建retrofit
         Retrofit retrofit = new Retrofit.Builder()
-                .addCallAdapterFactory(new JCallHander.JCallAdapterFactory())
                 .addConverterFactory(JConverterFactory.create(gson))
                 .baseUrl(Constants.BASE_UNSPLASH_OAUTH_URL)
                 .client(okHttpClient)
@@ -62,7 +60,6 @@ public class API {
             OkHttpClient okHttpClient = new OkHttpClient();
             //创建retrofit
             Retrofit retrofit = new Retrofit.Builder()
-                    .addCallAdapterFactory(new JCallHander.JCallAdapterFactory())
                     .addConverterFactory(JConverterFactory.create(gson))
                     .baseUrl(Constants.BASE_UNSPLASH_URL)
                     .client(okHttpClient)

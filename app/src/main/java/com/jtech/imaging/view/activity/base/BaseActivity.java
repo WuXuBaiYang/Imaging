@@ -11,8 +11,6 @@ import android.view.KeyEvent;
 
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
-import com.jtech.imaging.net.RequestManager;
-import com.jtech.imaging.net.call.JCall;
 import com.jtech.imaging.presenter.base.BasePresenter;
 import com.jtech.imaging.util.ActivityUtils;
 import com.jtech.imaging.util.ToastUtils;
@@ -30,8 +28,6 @@ import butterknife.ButterKnife;
 public class BaseActivity extends AppCompatActivity {
 
     public static final String TAG = BaseActivity.class.getSimpleName();
-
-    private RequestManager requestManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
@@ -122,47 +118,11 @@ public class BaseActivity extends AppCompatActivity {
         ToastUtils.showShort(getActivity(), message);
     }
 
-    /**
-     * 获取请求管理对象
-     *
-     * @return
-     */
-    public RequestManager getRequestManager() {
-        if (null == requestManager) {
-            //实例化请求管理对象
-            requestManager = new RequestManager();
-        }
-        return requestManager;
-    }
-
-    /**
-     * 添加一个请求
-     *
-     * @param jCall
-     * @return
-     */
-    public RequestManager addCall(JCall jCall) {
-        return getRequestManager().addCall(jCall);
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         //移除当前activity对象
         ActivityManager.getInstance().removeActivity(this);
-        //取消全部请求
-        if (null != requestManager) {
-            requestManager.clearAllCall();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //取消全部请求
-        if (null != requestManager) {
-            requestManager.clearAllCall();
-        }
     }
 
     @Override

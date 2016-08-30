@@ -3,22 +3,27 @@ package com.jtech.imaging.presenter;
 import android.app.Activity;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.contract.OauthContract;
+import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.ScopeModel;
+import com.jtech.imaging.net.api.API;
 import com.jtech.imaging.presenter.base.BasePresenter;
 import com.jtech.imaging.util.OauthUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * 授权认证
  * Created by wuxubaiyang on 16/4/16.
  */
-public class OauthPresenter extends BasePresenter<MainContract.View> implements OauthContract.Presenter {
+public class OauthPresenter extends BasePresenter<OauthContract.View> implements OauthContract.Presenter {
 
-    public OauthPresenter(Activity activity, MainContract.View view) {
+    public OauthPresenter(Activity activity, OauthContract.View view) {
         super(activity, view);
     }
 
@@ -41,5 +46,27 @@ public class OauthPresenter extends BasePresenter<MainContract.View> implements 
             scopeModels.add(scopeModel);
         }
         return scopeModels;
+    }
+
+    @Override
+    public void requestToken(String clientId, String clientSecret, String redirectUri, String code, String grantType) {
+        API.unsplashOauthApi()
+                .unsplashOauth(clientId, clientSecret, redirectUri, code, grantType)
+                .enqueue(new Callback<OauthModel>() {
+                    @Override
+                    public void onResponse(Call<OauthModel> call, Response<OauthModel> response) {
+                        OauthModel oauthModel = response.body();
+                        if (response.body().isSuccess()) {
+                            getView().oauthSuccess(response.body());
+                        } else {
+                            getView().oauthFail(response.body().getError());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<OauthModel> call, Throwable t) {
+                        getView().oauthFail(t.getMessage());
+                    }
+                });
     }
 }

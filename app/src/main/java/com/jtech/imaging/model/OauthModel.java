@@ -1,13 +1,14 @@
 package com.jtech.imaging.model;
 
-import io.realm.RealmObject;
+import com.jtech.imaging.model.base.BaseModel;
+
 import io.realm.annotations.PrimaryKey;
 
 /**
  * unsplash的授权认证数据对象
  * Created by jianghan on 2016/8/30.
  */
-public class OauthModel extends RealmObject {
+public class OauthModel extends BaseModel {
     @PrimaryKey
     private String accessToken;
     private String tokenType;

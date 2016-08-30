@@ -38,4 +38,8 @@ public class Constants {
      * unsplash的SECRET
      */
     public static final String UNSPLASH_SECRET = "f44341303cc2cafc8c1c53ebf4162c52c9ad3fe69ad08035a4ba096d643aebf8";
+    /**
+     * 类型
+     */
+    public static final String GRANT_TYPE = "authorization_code";
 }

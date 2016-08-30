@@ -13,8 +13,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.contract.MainContract;
+import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.OauthContract;
+import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 import com.jtech.listener.OnItemClickListener;
@@ -27,7 +28,7 @@ import butterknife.Bind;
  * 授权认证fragment
  * Created by wuxubaiyang on 16/4/16.
  */
-public class OauthFragment extends BaseFragment<OauthContract.Presenter> implements MainContract.View, OnItemClickListener {
+public class OauthFragment extends BaseFragment<OauthContract.Presenter> implements OauthContract.View, OnItemClickListener {
 
     @Bind(R.id.jrecyclerview_oauth)
     JRecyclerView jRecyclerView;
@@ -66,6 +67,8 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         webView.setWebViewClient(new mWebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new mWebChromeClient());
+        //隐藏progressbar
+        contentLoadingProgressBar.hide();
         //设置数据
         scopesAdapter.setDatas(getPresenter().getScopeList());
     }
@@ -90,16 +93,30 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     private class mWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            int codeIndex = url.lastIndexOf("code");
-            if (codeIndex > 0) {
-                //授权成功
-                String code = url.substring(codeIndex);
+            if (url.startsWith(Constants.UNSPLASH_REDIRECT_URI)) {
+                String code = url.substring(url.indexOf("code=") + "code=".length());
+                getPresenter().requestToken(Constants.UNSPLASH_CLIENT_ID,
+                        Constants.UNSPLASH_SECRET, Constants.UNSPLASH_REDIRECT_URI,
+                        code, Constants.GRANT_TYPE);
                 Log.d("", code);
-            } else {
-                view.loadUrl(url);
             }
+            view.loadUrl(url);
             return true;
         }
+    }
+
+    @Override
+    public void oauthSuccess(OauthModel oauthModel) {
+        contentLoadingProgressBar.hide();
+    }
+
+    @Override
+    public void oauthFail(String error) {
+        Snackbar.make(jRecyclerView, error,
+                Snackbar.LENGTH_SHORT).show();
+        jRecyclerView.setVisibility(View.VISIBLE);
+        webView.setVisibility(View.GONE);
+        contentLoadingProgressBar.hide();
     }
 
     @Override

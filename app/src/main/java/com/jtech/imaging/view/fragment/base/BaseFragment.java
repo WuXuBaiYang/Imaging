@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
 import com.jtech.imaging.contract.base.BaseContract;
-import com.jtech.imaging.net.call.JCall;
-import com.jtech.imaging.net.RequestManager;
 import com.jtech.imaging.util.ActivityUtils;
 import com.jtech.imaging.util.ToastUtils;
 
@@ -30,7 +28,6 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
 
     private T presenter;
     private View contentView;
-    private RequestManager requestManager;
 
     @Nullable
     @Override
@@ -92,48 +89,9 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
         return (T) contentView.findViewById(id);
     }
 
-    /**
-     * 获取请求管理对象
-     *
-     * @return
-     */
-    public RequestManager getRequestManager() {
-        if (null == requestManager) {
-            //实例化请求管理对象
-            requestManager = new RequestManager();
-        }
-        return requestManager;
-    }
-
-    /**
-     * 添加一个请求
-     *
-     * @param call
-     * @return
-     */
-    public RequestManager addCall(JCall call) {
-        return getRequestManager().addCall(call);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (null != requestManager) {
-            requestManager.clearAllCall();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (null != requestManager) {
-            requestManager.clearAllCall();
-        }
     }
 
     @Override
