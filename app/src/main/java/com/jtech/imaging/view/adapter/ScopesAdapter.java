@@ -40,7 +40,7 @@ public class ScopesAdapter extends RecyclerAdapter<ScopeModel> {
                 scopes.add(getItem(i).getScopeValue());
             }
         }
-        return (String[]) scopes.toArray();
+        return scopes.toArray(new String[]{});
     }
 
     @Override
