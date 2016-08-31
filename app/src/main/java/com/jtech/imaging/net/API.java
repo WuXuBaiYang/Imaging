@@ -66,15 +66,9 @@ public class API {
      */
     public static UnsplashApi unsplashApi() {
         if (null == unsplashApi) {
-            //获取token
-            String authToken = "";
-            if (OauthRealm.hasOauthModel()) {
-                OauthModel oauthModel = OauthRealm.getInstance().getOauthModel();
-                authToken = oauthModel.getTokenType() + " " + oauthModel.getAccessToken();
-            }
             //创建okhttp
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(new mInterceptor(authToken)).build();
+                    .addInterceptor(new mInterceptor(getAuthToken())).build();
             //创建retrofit
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))
@@ -86,6 +80,20 @@ public class API {
             unsplashApi = retrofit.create(UnsplashApi.class);
         }
         return unsplashApi;
+    }
+
+    /**
+     * 获取token
+     *
+     * @return
+     */
+    private static String getAuthToken() {
+        String authToken = "";
+        if (OauthRealm.hasOauthModel()) {
+            OauthModel oauthModel = OauthRealm.getInstance().getOauthModel();
+            authToken = oauthModel.getTokenType() + " " + oauthModel.getAccessToken();
+        }
+        return authToken;
     }
 
     /**
