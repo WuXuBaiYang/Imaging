@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import io.realm.Realm;
 
 /**
  * activity基类
@@ -42,15 +41,6 @@ public class BaseActivity extends AppCompatActivity {
      */
     public BaseActivity getActivity() {
         return this;
-    }
-
-    /**
-     * 获取realm对象
-     *
-     * @return
-     */
-    public Realm getRealm() {
-        return Realm.getDefaultInstance();
     }
 
     /**

@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.bind.DateTypeAdapter;
 import com.jtech.imaging.common.Constants;
+import com.jtech.imaging.model.OauthModel;
+import com.jtech.imaging.realm.OauthRealm;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -16,6 +18,7 @@ import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.concurrent.Executor;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Call;
@@ -63,8 +66,15 @@ public class API {
      */
     public static UnsplashApi unsplashApi() {
         if (null == unsplashApi) {
+            //获取token
+            String authToken = "";
+            if (OauthRealm.hasOauthModel()) {
+                OauthModel oauthModel = OauthRealm.getInstance().getOauthModel();
+                authToken = oauthModel.getTokenType() + " " + oauthModel.getAccessToken();
+            }
             //创建okhttp
-            OkHttpClient okHttpClient = new OkHttpClient();
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .addInterceptor(new mInterceptor(authToken)).build();
             //创建retrofit
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))
@@ -100,6 +110,11 @@ public class API {
         }
     }
 
+    /**
+     * 适配器
+     *
+     * @param <T>
+     */
     private static class mCallAdapter<T> implements Call<T> {
         private final Call<T> call;
         private final Executor callbackExecutor;
@@ -168,6 +183,28 @@ public class API {
         @Override
         public Request request() {
             return null;
+        }
+    }
+
+    /**
+     * 拦截器实现
+     */
+    private static class mInterceptor implements Interceptor {
+
+        private String authToken;
+
+        public mInterceptor(String authToken) {
+            this.authToken = authToken;
+        }
+
+        @Override
+        public okhttp3.Response intercept(Chain chain) throws IOException {
+            //拼接请求，添加头
+            Request request = chain.request()
+                    .newBuilder()
+                    .addHeader("Authorization", authToken)
+                    .build();
+            return chain.proceed(request);
         }
     }
 }

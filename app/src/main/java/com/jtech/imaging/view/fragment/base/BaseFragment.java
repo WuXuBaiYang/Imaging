@@ -15,7 +15,6 @@ import com.jtech.imaging.contract.base.BaseContract;
 import com.jtech.imaging.util.ActivityUtils;
 
 import butterknife.ButterKnife;
-import io.realm.Realm;
 
 /**
  * Fragment基类
@@ -44,15 +43,6 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    /**
-     * 获取realm对象
-     *
-     * @return
-     */
-    public Realm getRealm() {
-        return Realm.getDefaultInstance();
     }
 
     /**

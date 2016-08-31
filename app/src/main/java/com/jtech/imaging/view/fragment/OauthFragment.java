@@ -15,6 +15,7 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
+import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 import com.jtech.listener.OnItemClickListener;
@@ -107,12 +108,15 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     public void oauthSuccess(OauthModel oauthModel) {
         Snackbar.make(getContentView(), "授权成功"
                 , Snackbar.LENGTH_SHORT).show();
+        //插入数据
+        OauthRealm.getInstance().insertOauthModel(oauthModel);
     }
 
     @Override
     public void oauthFail(String error) {
         Snackbar.make(jRecyclerView, error,
                 Snackbar.LENGTH_SHORT).show();
+        //还原状态
         jRecyclerView.setVisibility(View.VISIBLE);
         webView.setVisibility(View.GONE);
     }
