@@ -6,8 +6,6 @@ import com.jtech.imaging.model.ScopeModel;
 
 import java.util.List;
 
-import retrofit2.Call;
-
 /**
  * 授权认证协议
  * Created by wuxubaiyang on 16/4/16.

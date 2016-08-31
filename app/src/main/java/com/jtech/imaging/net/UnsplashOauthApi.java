@@ -1,4 +1,4 @@
-package com.jtech.imaging.net.api;
+package com.jtech.imaging.net;
 
 import com.jtech.imaging.model.OauthModel;
 

@@ -6,7 +6,7 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.ScopeModel;
-import com.jtech.imaging.net.api.API;
+import com.jtech.imaging.net.API;
 import com.jtech.imaging.presenter.base.BasePresenter;
 import com.jtech.imaging.util.OauthUtils;
 

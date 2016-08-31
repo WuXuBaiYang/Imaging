@@ -2,7 +2,6 @@ package com.jtech.imaging.view.fragment.base;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,17 +13,15 @@ import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
 import com.jtech.imaging.contract.base.BaseContract;
 import com.jtech.imaging.util.ActivityUtils;
-import com.jtech.imaging.util.ToastUtils;
 
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 /**
  * Fragment基类
  * Created by wuxubaiyang on 16/4/16.
  */
 public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fragment implements BaseContract.View, View.OnClickListener {
-
-    public static final String TAG = BaseFragment.class.getSimpleName();
 
     private T presenter;
     private View contentView;
@@ -50,12 +47,12 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
     }
 
     /**
-     * 显示toast
+     * 获取realm对象
      *
-     * @param message
+     * @return
      */
-    public void showToast(String message) {
-        ToastUtils.showShort(getActivity(), message);
+    public Realm getRealm() {
+        return Realm.getDefaultInstance();
     }
 
     /**
@@ -77,16 +74,6 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
      */
     public View getContentView() {
         return contentView;
-    }
-
-    /**
-     * 根据id获取视图
-     *
-     * @param id
-     * @return
-     */
-    public <T extends View> T findViewById(@IdRes int id) {
-        return (T) contentView.findViewById(id);
     }
 
     @Override

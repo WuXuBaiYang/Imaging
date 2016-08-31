@@ -2,7 +2,6 @@ package com.jtech.imaging.view.activity.base;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -13,26 +12,19 @@ import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
 import com.jtech.imaging.presenter.base.BasePresenter;
 import com.jtech.imaging.util.ActivityUtils;
-import com.jtech.imaging.util.ToastUtils;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.realm.Realm;
 
 /**
  * activity基类
  * Created by wuxubaiyang on 16/4/16.
  */
 public class BaseActivity extends AppCompatActivity {
-
-    public static final String TAG = BaseActivity.class.getSimpleName();
-
-    @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
 
     @Override
     public void setContentView(@LayoutRes int layoutResID) {
@@ -50,6 +42,15 @@ public class BaseActivity extends AppCompatActivity {
      */
     public BaseActivity getActivity() {
         return this;
+    }
+
+    /**
+     * 获取realm对象
+     *
+     * @return
+     */
+    public Realm getRealm() {
+        return Realm.getDefaultInstance();
     }
 
     /**
@@ -107,15 +108,6 @@ public class BaseActivity extends AppCompatActivity {
      */
     public void checkPermission(String[] permissions, PermissionsResultAction permissionsResultAction) {
         PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(getActivity(), permissions, permissionsResultAction);
-    }
-
-    /**
-     * 显示toast
-     *
-     * @param message
-     */
-    public void showToast(String message) {
-        ToastUtils.showShort(getActivity(), message);
     }
 
     @Override

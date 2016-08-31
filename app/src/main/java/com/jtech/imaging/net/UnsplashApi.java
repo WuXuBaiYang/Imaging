@@ -1,4 +1,4 @@
-package com.jtech.imaging.net.api;
+package com.jtech.imaging.net;
 
 /**
  * unsplash接口

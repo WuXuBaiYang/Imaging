@@ -79,7 +79,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     private class mWebChromeClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            if (newProgress == 100) {
+            if (newProgress > 95) {
                 contentLoadingProgressBar.hide();
             } else {
                 contentLoadingProgressBar.show();
@@ -98,7 +98,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                 getPresenter().requestToken(Constants.UNSPLASH_CLIENT_ID,
                         Constants.UNSPLASH_SECRET, Constants.UNSPLASH_REDIRECT_URI,
                         code, Constants.GRANT_TYPE);
-                Log.d("", code);
+                contentLoadingProgressBar.show();
             }
             view.loadUrl(url);
             return true;
@@ -123,7 +123,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         if (position == scopesAdapter.getItemCount() - 1) {
             //隐藏授权列表，显示浏览器
-            contentLoadingProgressBar.show();
             webView.setVisibility(View.VISIBLE);
             jRecyclerView.setVisibility(View.GONE);
             //得到授权认证的url
