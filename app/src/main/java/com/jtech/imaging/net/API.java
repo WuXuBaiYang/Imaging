@@ -111,7 +111,7 @@ public class API {
                 }
 
                 @Override
-                public <R> Call<R> adapt(Call<R> call) {
+                public Call adapt(Call call) {
                     return new mCallAdapter<>(callbackExecutor, call);
                 }
             };
@@ -121,14 +121,14 @@ public class API {
     /**
      * 适配器
      *
-     * @param <T>
+     * @param
      */
     private static class mCallAdapter<T> implements Call<T> {
-        private final Call<T> call;
-        private final Executor callbackExecutor;
-        private final Handler mainThreadHandler;
+        private Call call;
+        private Executor callbackExecutor;
+        private Handler mainThreadHandler;
 
-        public mCallAdapter(Executor callbackExecutor, Call<T> call) {
+        public mCallAdapter(Executor callbackExecutor, Call call) {
             this.callbackExecutor = callbackExecutor;
             this.call = call;
             //创建主线程handler
@@ -160,7 +160,7 @@ public class API {
                 }
 
                 @Override
-                public void onFailure(Call<T> call, Throwable t) {
+                public void onFailure(Call call, Throwable t) {
                     callback.onFailure(call, t);
                 }
             });
@@ -184,7 +184,7 @@ public class API {
         }
 
         @Override
-        public Call<T> clone() {
+        public Call clone() {
             return new mCallAdapter<>(callbackExecutor, call.clone());
         }
 

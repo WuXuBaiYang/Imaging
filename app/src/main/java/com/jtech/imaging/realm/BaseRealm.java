@@ -55,7 +55,7 @@ public class BaseRealm {
      * @param realm
      * @param realmObject
      */
-    public void updataModel(Realm realm, RealmObject realmObject) {
+    public void updateModel(Realm realm, RealmObject realmObject) {
         realm.beginTransaction();
         realm.insertOrUpdate(realmObject);
         realm.commitTransaction();
@@ -66,8 +66,8 @@ public class BaseRealm {
      *
      * @param realmObject
      */
-    public void updataModel(RealmObject realmObject) {
-        updataModel(getRealm(), realmObject);
+    public void updateModel(RealmObject realmObject) {
+        updateModel(getRealm(), realmObject);
     }
 
     /**

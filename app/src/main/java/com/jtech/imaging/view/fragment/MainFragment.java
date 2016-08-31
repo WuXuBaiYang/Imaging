@@ -34,5 +34,4 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     @Override
     public void init(Bundle bundle) {
     }
-
 }
