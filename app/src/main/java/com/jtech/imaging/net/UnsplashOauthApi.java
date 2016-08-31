@@ -3,7 +3,10 @@ package com.jtech.imaging.net;
 import com.jtech.imaging.model.OauthModel;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -11,11 +14,12 @@ import retrofit2.http.Query;
  * Created by wuxubaiyang on 16/4/17.
  */
 public interface UnsplashOauthApi {
-    @GET("/oauth/token")
+    @FormUrlEncoded
+    @POST("/oauth/token")
     Call<OauthModel> unsplashOauth(
-            @Query("client_id") String clientId,
-            @Query("client_secret") String clientSecret,
-            @Query("redirect_uri") String redirectUri,
-            @Query("code") String code,
-            @Query("grant_type") String grantType);
+            @Field("client_id") String clientId,
+            @Field("client_secret") String clientSecret,
+            @Field("redirect_uri") String redirectUri,
+            @Field("code") String code,
+            @Field("grant_type") String grantType);
 }

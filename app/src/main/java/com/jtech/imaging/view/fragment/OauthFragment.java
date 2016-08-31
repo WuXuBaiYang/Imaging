@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     private class mWebChromeClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            if (newProgress > 95) {
+            if (newProgress >= 98) {
                 contentLoadingProgressBar.hide();
             } else {
                 contentLoadingProgressBar.show();

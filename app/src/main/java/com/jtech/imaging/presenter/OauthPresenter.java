@@ -55,12 +55,7 @@ public class OauthPresenter extends BasePresenter<OauthContract.View> implements
                 .enqueue(new Callback<OauthModel>() {
                     @Override
                     public void onResponse(Call<OauthModel> call, Response<OauthModel> response) {
-                        OauthModel oauthModel = response.body();
-                        if (response.body().isSuccess()) {
-                            getView().oauthSuccess(response.body());
-                        } else {
-                            getView().oauthFail(response.body().getError());
-                        }
+                        getView().oauthSuccess(response.body());
                     }
 
                     @Override

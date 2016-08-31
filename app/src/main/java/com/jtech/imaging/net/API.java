@@ -1,14 +1,27 @@
 package com.jtech.imaging.net;
 
+import android.os.Handler;
+import android.os.Looper;
+
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.internal.bind.DateTypeAdapter;
 import com.jtech.imaging.common.Constants;
 
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.concurrent.Executor;
 
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Call;
+import retrofit2.CallAdapter;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -36,6 +49,7 @@ public class API {
         //创建retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addCallAdapterFactory(new CallAdapterFactory())
                 .baseUrl(Constants.BASE_UNSPLASH_OAUTH_URL)
                 .client(new OkHttpClient())
                 .build();
@@ -54,6 +68,7 @@ public class API {
             //创建retrofit
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addCallAdapterFactory(new CallAdapterFactory())
                     .baseUrl(Constants.BASE_UNSPLASH_URL)
                     .client(okHttpClient)
                     .build();
@@ -61,5 +76,98 @@ public class API {
             unsplashApi = retrofit.create(UnsplashApi.class);
         }
         return unsplashApi;
+    }
+
+    /**
+     * 请求处理
+     */
+    private static class CallAdapterFactory extends CallAdapter.Factory {
+        @Override
+        public CallAdapter<?> get(Type returnType, Annotation[] annotations, Retrofit retrofit) {
+            final Type responseType = getParameterUpperBound(0, (ParameterizedType) returnType);
+            final Executor callbackExecutor = retrofit.callbackExecutor();
+            return new CallAdapter<Call<?>>() {
+                @Override
+                public Type responseType() {
+                    return responseType;
+                }
+
+                @Override
+                public <R> Call<R> adapt(Call<R> call) {
+                    return new mCallAdapter<>(callbackExecutor, call);
+                }
+            };
+        }
+    }
+
+    private static class mCallAdapter<T> implements Call<T> {
+        private final Call<T> call;
+        private final Executor callbackExecutor;
+        private final Handler mainThreadHandler;
+
+        public mCallAdapter(Executor callbackExecutor, Call<T> call) {
+            this.callbackExecutor = callbackExecutor;
+            this.call = call;
+            //创建主线程handler
+            mainThreadHandler = new Handler(Looper.getMainLooper());
+        }
+
+        @Override
+        public Response<T> execute() throws IOException {
+            return null;
+        }
+
+        @Override
+        public void enqueue(final Callback<T> callback) {
+            call.enqueue(new Callback<T>() {
+                @Override
+                public void onResponse(final Call<T> call, final Response<T> response) {
+                    if (!call.isCanceled()) {
+                        mainThreadHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (200 == response.code()) {
+                                    callback.onResponse(call, response);
+                                } else {
+                                    callback.onFailure(call, new Throwable(response.message()));
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<T> call, Throwable t) {
+                    callback.onFailure(call, t);
+                }
+            });
+        }
+
+        @Override
+        public boolean isExecuted() {
+            return false;
+        }
+
+        @Override
+        public void cancel() {
+            if (null != call) {
+                call.cancel();
+            }
+        }
+
+        @Override
+        public boolean isCanceled() {
+            return null != call ? call.isCanceled() : true;
+        }
+
+        @Override
+        public Call<T> clone() {
+            return new mCallAdapter<>(callbackExecutor, call.clone());
+        }
+
+        @Override
+        public Request request() {
+            return null;
+        }
     }
 }

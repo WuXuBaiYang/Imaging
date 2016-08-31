@@ -82,6 +82,7 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void setPresenter(BaseContract.Presenter presenter) {
         this.presenter = (T) presenter;
     }

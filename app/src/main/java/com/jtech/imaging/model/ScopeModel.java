@@ -1,16 +1,19 @@
 package com.jtech.imaging.model;
 
-import com.jtech.imaging.model.base.BaseModel;
+import io.realm.RealmObject;
 
 /**
  * unsplash的授权认证权限数据对象
  * Created by jianghan on 2016/8/30.
  */
-public class ScopeModel extends BaseModel {
+public class ScopeModel extends RealmObject {
     private String scopeValue;
     private String scopeDescribe;
     private boolean isChecked;
     private boolean cantChange;
+
+    public ScopeModel() {
+    }
 
     public String getScopeValue() {
         return scopeValue;

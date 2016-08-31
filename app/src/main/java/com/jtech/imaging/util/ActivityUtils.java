@@ -107,6 +107,7 @@ public class ActivityUtils {
      * @param <R>
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static <R extends BaseFragment> R newFragmentInstance(Class<R> classType, Bundle bundle) {
         try {
             BaseFragment fragment = classType.newInstance();
