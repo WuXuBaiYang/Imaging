@@ -6,6 +6,10 @@ package com.jtech.imaging.common;
  */
 public class Constants {
     /**
+     * realm数据库名称
+     */
+    public static final String REALM_DB_NAME = "JTechImaging";
+    /**
      * http
      */
     public static final String HTTP = "http://";

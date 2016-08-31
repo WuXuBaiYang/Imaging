@@ -109,7 +109,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         Snackbar.make(getContentView(), "授权成功"
                 , Snackbar.LENGTH_SHORT).show();
         //插入数据
-        OauthRealm.getInstance().insertOauthModel(oauthModel);
+        OauthRealm.getInstance().setOauthModel(oauthModel);
     }
 
     @Override

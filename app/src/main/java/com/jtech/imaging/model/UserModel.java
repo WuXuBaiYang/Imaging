@@ -19,7 +19,7 @@ public class UserModel {
     private int uploadsRemaining;
     private String instagramUsername;
     private String email;
-    private LinksBean links;
+    private LinksModel links;
 
     public String getUsername() {
         return username;
@@ -125,15 +125,15 @@ public class UserModel {
         this.email = email;
     }
 
-    public LinksBean getLinks() {
+    public LinksModel getLinks() {
         return links;
     }
 
-    public void setLinks(LinksBean links) {
+    public void setLinks(LinksModel links) {
         this.links = links;
     }
 
-    public static class LinksBean {
+    public static class LinksModel {
         private String self;
         private String html;
         private String photos;

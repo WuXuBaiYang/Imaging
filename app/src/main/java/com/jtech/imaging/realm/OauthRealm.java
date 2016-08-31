@@ -2,21 +2,19 @@ package com.jtech.imaging.realm;
 
 import com.jtech.imaging.model.OauthModel;
 
-import io.realm.Realm;
-
 /**
  * 授权认证相关的数据库操作
  * Created by jianghan on 2016/8/31.
  */
-public class OauthRealm {
-    private static OauthRealm oauthRealm;
+public class OauthRealm extends BaseRealm {
+    private static OauthRealm INSTANCE;
     private OauthModel oauthModel;
 
     public static OauthRealm getInstance() {
-        if (null == oauthRealm) {
-            oauthRealm = new OauthRealm();
+        if (null == INSTANCE) {
+            INSTANCE = new OauthRealm();
         }
-        return oauthRealm;
+        return INSTANCE;
     }
 
     /**
@@ -33,11 +31,9 @@ public class OauthRealm {
      *
      * @param oauthModel
      */
-    public void insertOauthModel(OauthModel oauthModel) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        realm.insertOrUpdate(oauthModel);
-        realm.commitTransaction();
+    public void setOauthModel(OauthModel oauthModel) {
+        this.oauthModel = oauthModel;
+        insertModel(OauthModel.class, oauthModel);
     }
 
     /**
@@ -45,10 +41,7 @@ public class OauthRealm {
      */
     public void removeOauthModel() {
         this.oauthModel = null;
-        Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        realm.delete(OauthModel.class);
-        realm.commitTransaction();
+        deleteModel(OauthModel.class);
     }
 
     /**
@@ -58,10 +51,7 @@ public class OauthRealm {
      */
     public OauthModel getOauthModel() {
         if (null == oauthModel) {
-            Realm realm = Realm.getDefaultInstance();
-            realm.beginTransaction();
-            oauthModel = realm.where(OauthModel.class).findFirst();
-            realm.commitTransaction();
+            oauthModel = queryModel(OauthModel.class);
         }
         return oauthModel;
     }
