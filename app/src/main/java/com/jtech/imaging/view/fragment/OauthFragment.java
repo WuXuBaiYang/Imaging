@@ -78,7 +78,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     private class mWebChromeClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            if (newProgress >= 98) {
+            if (newProgress >= 97) {
                 contentLoadingProgressBar.hide();
             } else {
                 contentLoadingProgressBar.show();
@@ -97,7 +97,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                 getPresenter().requestToken(Constants.UNSPLASH_CLIENT_ID,
                         Constants.UNSPLASH_SECRET, Constants.UNSPLASH_REDIRECT_URI,
                         code, Constants.GRANT_TYPE);
-                contentLoadingProgressBar.show();
             }
             view.loadUrl(url);
             return true;
@@ -106,7 +105,8 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
 
     @Override
     public void oauthSuccess(OauthModel oauthModel) {
-        contentLoadingProgressBar.hide();
+        Snackbar.make(getContentView(), "授权成功"
+                , Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -115,7 +115,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                 Snackbar.LENGTH_SHORT).show();
         jRecyclerView.setVisibility(View.VISIBLE);
         webView.setVisibility(View.GONE);
-        contentLoadingProgressBar.hide();
     }
 
     @Override
