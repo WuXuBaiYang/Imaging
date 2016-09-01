@@ -74,12 +74,13 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     }
 
     /**
-     * 处理浏览器进度
+     * 进度监听
      */
     private class mWebChromeClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            if (newProgress >= 97) {
+            contentLoadingProgressBar.setProgress(newProgress);
+            if (newProgress >= 100) {
                 contentLoadingProgressBar.hide();
             } else {
                 contentLoadingProgressBar.show();
@@ -94,7 +95,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.startsWith(Constants.UNSPLASH_REDIRECT_URI)) {
-                String code = url.substring(url.indexOf("code=") + "code=".length());
+                String code = url.replace(Constants.UNSPLASH_REDIRECT_URI + "?code=", "");
                 getPresenter().requestToken(Constants.UNSPLASH_CLIENT_ID,
                         Constants.UNSPLASH_SECRET, Constants.UNSPLASH_REDIRECT_URI,
                         code, Constants.GRANT_TYPE);

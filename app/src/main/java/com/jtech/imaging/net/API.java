@@ -48,7 +48,7 @@ public class API {
      *
      * @return
      */
-    public static UnsplashOauthApi unsplashOauthApi() {
+    public static UnsplashApi.OauthApi unsplashOauthApi() {
         //创建retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -56,7 +56,7 @@ public class API {
                 .baseUrl(Constants.BASE_UNSPLASH_OAUTH_URL)
                 .client(new OkHttpClient())
                 .build();
-        return retrofit.create(UnsplashOauthApi.class);
+        return retrofit.create(UnsplashApi.OauthApi.class);
     }
 
     /**

@@ -1,12 +1,13 @@
 package com.jtech.imaging.net;
 
+import com.jtech.imaging.model.CollectionsModel;
 import com.jtech.imaging.model.LikePhotoModel;
+import com.jtech.imaging.model.OauthModel;
+import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.model.PhotoStats;
 import com.jtech.imaging.model.SearchModel;
-import com.jtech.imaging.model.CollectionsModel;
 import com.jtech.imaging.model.StatsModel;
 import com.jtech.imaging.model.UserModel;
-import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.model.UserPublicModel;
 
 import java.util.List;
@@ -461,4 +462,18 @@ public interface UnsplashApi {
      */
     @GET("/stats/total")
     Call<StatsModel> totalPhotos();
+
+    /**
+     * oauth2.0授权
+     */
+    interface OauthApi {
+        @FormUrlEncoded
+        @POST("/oauth/token")
+        Call<OauthModel> unsplashOauth(
+                @Field("client_id") String clientId,
+                @Field("client_secret") String clientSecret,
+                @Field("redirect_uri") String redirectUri,
+                @Field("code") String code,
+                @Field("grant_type") String grantType);
+    }
 }
