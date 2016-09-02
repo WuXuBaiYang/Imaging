@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.MainContract;
+import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.activity.OauthActivity;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 
@@ -35,6 +36,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
      */
     @Override
     public void init(Bundle bundle) {
-        startActivity(new Intent(getActivity(), OauthActivity.class));
+        if (OauthRealm.hasOauthModel()) {
+        } else {
+            startActivity(new Intent(getActivity(), OauthActivity.class));
+        }
     }
 }

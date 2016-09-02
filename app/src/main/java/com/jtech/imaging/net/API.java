@@ -68,7 +68,7 @@ public class API {
         if (null == unsplashApi) {
             //创建okhttp
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(new mInterceptor(getAuthToken())).build();
+                    .addInterceptor(new MyInterceptor(getAuthToken())).build();
             //创建retrofit
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))
@@ -112,7 +112,7 @@ public class API {
 
                 @Override
                 public Call adapt(Call call) {
-                    return new mCallAdapter<>(callbackExecutor, call);
+                    return new MyCallAdapter<>(callbackExecutor, call);
                 }
             };
         }
@@ -123,12 +123,12 @@ public class API {
      *
      * @param
      */
-    private static class mCallAdapter<T> implements Call<T> {
+    private static class MyCallAdapter<T> implements Call<T> {
         private Call call;
         private Executor callbackExecutor;
         private Handler mainThreadHandler;
 
-        public mCallAdapter(Executor callbackExecutor, Call call) {
+        public MyCallAdapter(Executor callbackExecutor, Call call) {
             this.callbackExecutor = callbackExecutor;
             this.call = call;
             //创建主线程handler
@@ -185,7 +185,7 @@ public class API {
 
         @Override
         public Call clone() {
-            return new mCallAdapter<>(callbackExecutor, call.clone());
+            return new MyCallAdapter<>(callbackExecutor, call.clone());
         }
 
         @Override
@@ -197,11 +197,11 @@ public class API {
     /**
      * 拦截器实现
      */
-    private static class mInterceptor implements Interceptor {
+    private static class MyInterceptor implements Interceptor {
 
         private String authToken;
 
-        public mInterceptor(String authToken) {
+        public MyInterceptor(String authToken) {
             this.authToken = authToken;
         }
 

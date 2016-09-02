@@ -34,7 +34,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/me")
-    Call<UserModel> getUserProfile();
+    Call<UserModel> userProfile();
 
     /**
      * 更新用户信息
@@ -69,7 +69,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}")
-    Call<UserPublicModel> getUserPublishProfile(
+    Call<UserPublicModel> userPublishProfile(
             @Path("username") String username,
             @Query("w") int width,
             @Query("h") int height);
@@ -199,6 +199,16 @@ public interface UnsplashApi {
             @Path("id") String id);
 
     /**
+     * 只获取图片的下载地址
+     *
+     * @param id
+     * @return
+     */
+    @GET("/photos/{id}/download")
+    Call<PhotoStats> photoLink(
+            @Path("id") String id);
+
+    /**
      * 上传图片
      *
      * @param id
@@ -293,38 +303,38 @@ public interface UnsplashApi {
     /**
      * 收藏列表
      *
-     * @param query
      * @param page
+     * @param perPage
      * @return
      */
     @GET("/collections")
     Call<List<CollectionsModel>> listOfCollections(
-            @Query("query") String query,
-            @Query("page") int page);
+            @Query("page") String page,
+            @Query("per_page") int perPage);
 
     /**
      * 特色收藏列表
      *
-     * @param query
      * @param page
+     * @param perPage
      * @return
      */
     @GET("/collections/featured")
     Call<List<CollectionsModel>> listOfFeaturedCollections(
-            @Query("query") String query,
-            @Query("page") int page);
+            @Query("page") String page,
+            @Query("per_page") int perPage);
 
     /**
-     * 精选收藏列表
+     * 精选列表
      *
-     * @param query
      * @param page
+     * @param perPage
      * @return
      */
     @GET("/collections/curated")
     Call<List<CollectionsModel>> listOfCuratedCollections(
-            @Query("query") String query,
-            @Query("page") int page);
+            @Query("page") String page,
+            @Query("per_page") int perPage);
 
     /**
      * 收藏详情
@@ -337,7 +347,7 @@ public interface UnsplashApi {
             @Path("id") String id);
 
     /**
-     * 精选收藏详情
+     * 精选详情
      *
      * @param id
      * @return
@@ -361,7 +371,7 @@ public interface UnsplashApi {
             @Query("per_page") int perPage);
 
     /**
-     * 精选收藏图片列表
+     * 精选图片列表
      *
      * @param id
      * @param page
@@ -429,30 +439,26 @@ public interface UnsplashApi {
     /**
      * 向收藏中添加一个图片
      *
-     * @param id
      * @param collectionId
      * @param photoId
      * @return
      */
     @FormUrlEncoded
-    @POST("/collections/{id}/add")
+    @POST("/collections/{collectionId}/add")
     Call<CollectionsModel> addPhotoCollection(
-            @Path("id") String id,
-            @Field("collection_id") String collectionId,
+            @Path("collectionId") String collectionId,
             @Field("photo_id") String photoId);
 
     /**
      * 从收藏中删除一个图片
      *
-     * @param id
      * @param collectionId
      * @param photoId
      * @return
      */
-    @DELETE("/collections/{id}/remove")
+    @DELETE("/collections/{collectionId}/remove")
     Call<CollectionsModel> removePhotoCollection(
-            @Path("id") String id,
-            @Part("collection_id") String collectionId,
+            @Path("collectionId") String collectionId,
             @Part("photo_id") String photoId);
 
     /**

@@ -9,7 +9,16 @@ public class PhotoStats {
     private int downloads;
     private int likes;
     private int views;
+    private String url;
     private LinksModel links;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public int getDownloads() {
         return downloads;
