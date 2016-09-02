@@ -152,7 +152,12 @@ public class API {
                                 if (200 == response.code()) {
                                     callback.onResponse(call, response);
                                 } else {
-                                    callback.onFailure(call, new Throwable(response.message()));
+                                    try {
+                                        callback.onFailure(call, new Throwable(response.errorBody().string()));
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        callback.onFailure(call, e);
+                                    }
                                 }
                             }
                         });

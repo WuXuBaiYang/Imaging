@@ -37,6 +37,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     @Override
     public void init(Bundle bundle) {
         if (OauthRealm.hasOauthModel()) {
+
         } else {
             startActivity(new Intent(getActivity(), OauthActivity.class));
         }
