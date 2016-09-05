@@ -13,7 +13,6 @@ import com.jtech.imaging.model.UserModel;
 
 import java.util.List;
 
-import retrofit2.Call;
 import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -22,19 +21,20 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * unsplash接口
  * Created by wuxubaiyang on 16/4/17.
  */
-public interface UnsplashApi {
+interface UnsplashApi {
     /**
      * 获取用户信息 PASS
      *
      * @return
      */
     @GET("/me")
-    Call<UserModel> userProfile();
+    Observable<UserModel> userProfile();
 
     /**
      * 更新用户信息 PASS
@@ -51,7 +51,7 @@ public interface UnsplashApi {
      */
     @FormUrlEncoded
     @PUT("/me")
-    Call<UserModel> updateUserProfile(
+    Observable<UserModel> updateUserProfile(
             @Field("username") String userName,
             @Field("first_name") String firstName,
             @Field("last_name") String lastName,
@@ -70,7 +70,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}")
-    Call<UserModel> userPublishProfile(
+    Observable<UserModel> userPublishProfile(
             @Path("username") String username,
             @Query("w") int width,
             @Query("h") int height);
@@ -85,7 +85,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}/photos")
-    Call<List<PhotoModel>> userPhotoList(
+    Observable<List<PhotoModel>> userPhotoList(
             @Path("username") String username,
             @Query("page") int page,
             @Query("per_page") int perPage,
@@ -101,7 +101,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}/likes")
-    Call<List<PhotoModel>> userLikePhotoList(
+    Observable<List<PhotoModel>> userLikePhotoList(
             @Path("username") String username,
             @Query("page") int page,
             @Query("per_page") int perPage,
@@ -116,7 +116,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}/collections")
-    Call<List<CollectionsModel>> userCollectionList(
+    Observable<List<CollectionsModel>> userCollectionList(
             @Path("username") String username,
             @Query("page") int page,
             @Query("per_page") int perPage);
@@ -130,7 +130,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/photos")
-    Call<List<PhotoModel>> photos(
+    Observable<List<PhotoModel>> photos(
             @Query("page") int page,
             @Query("per_page") int perPage,
             @Query("order_by") String orderBy);
@@ -144,7 +144,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/photos/curated")
-    Call<List<PhotoModel>> curatedPhotos(
+    Observable<List<PhotoModel>> curatedPhotos(
             @Query("page") int page,
             @Query("per_page") int perPage,
             @Query("order_by") String orderBy);
@@ -159,7 +159,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/photos/{id}")
-    Call<PhotoModel> photoDetail(
+    Observable<PhotoModel> photoDetail(
             @Path("id") String id,
             @Query("width") int width,
             @Query("height") int height,
@@ -179,7 +179,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/photos/random")
-    Call<PhotoModel> randomPhoto(
+    Observable<PhotoModel> randomPhoto(
             @Query("category") String category,
             @Query("collections") String collections,
             @Query("featured") String featured,
@@ -196,7 +196,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/photos/{id}/stats")
-    Call<PhotoStats> photoStats(
+    Observable<PhotoStats> photoStats(
             @Path("id") String id);
 
     /**
@@ -206,7 +206,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/photos/{id}/download")
-    Call<PhotoStats> photoLink(
+    Observable<PhotoStats> photoLink(
             @Path("id") String id);
 
     /**
@@ -229,7 +229,7 @@ public interface UnsplashApi {
      */
     @FormUrlEncoded
     @PUT("/photos/{id}")
-    Call<PhotoModel> updatePhoto(
+    Observable<PhotoModel> updatePhoto(
             @Path("id") String id,
             @Field("location[latitude]") String latitude,
             @Field("location[longitude]") String longitude,
@@ -251,7 +251,7 @@ public interface UnsplashApi {
      * @return
      */
     @POST("/photos/{id}/like")
-    Call<LikePhotoModel> likePhoto(
+    Observable<LikePhotoModel> likePhoto(
             @Path("id") String id);
 
     /**
@@ -261,7 +261,7 @@ public interface UnsplashApi {
      * @return
      */
     @DELETE("/photos/{id}/like")
-    Call<LikePhotoModel> unlikePhoto(
+    Observable<LikePhotoModel> unlikePhoto(
             @Path("id") String id);
 
     /**
@@ -272,7 +272,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/search/photos")
-    Call<SearchPhotoModel> searchPhotos(
+    Observable<SearchPhotoModel> searchPhotos(
             @Query("query") String query,
             @Query("page") int page);
 
@@ -284,7 +284,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/search/collections")
-    Call<SearchCollectionModel> searchCollections(
+    Observable<SearchCollectionModel> searchCollections(
             @Query("query") String query,
             @Query("page") int page);
 
@@ -296,7 +296,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/search/users")
-    Call<SearchUserModel> searchUsers(
+    Observable<SearchUserModel> searchUsers(
             @Query("query") String query,
             @Query("page") int page);
 
@@ -308,7 +308,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections")
-    Call<List<CollectionsModel>> listOfCollections(
+    Observable<List<CollectionsModel>> listOfCollections(
             @Query("page") int page,
             @Query("per_page") int perPage);
 
@@ -320,7 +320,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections/featured")
-    Call<List<CollectionsModel>> listOfFeaturedCollections(
+    Observable<List<CollectionsModel>> listOfFeaturedCollections(
             @Query("page") int page,
             @Query("per_page") int perPage);
 
@@ -332,7 +332,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections/curated")
-    Call<List<CollectionsModel>> listOfCuratedCollections(
+    Observable<List<CollectionsModel>> listOfCuratedCollections(
             @Query("page") int page,
             @Query("per_page") int perPage);
 
@@ -343,7 +343,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections/{id}")
-    Call<CollectionsModel> collectionsDetail(
+    Observable<CollectionsModel> collectionsDetail(
             @Path("id") String id);
 
     /**
@@ -353,7 +353,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections/curated/{id}")
-    Call<CollectionsModel> curatedDetail(
+    Observable<CollectionsModel> curatedDetail(
             @Path("id") String id);
 
     /**
@@ -365,7 +365,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections/{id}/photos")
-    Call<List<PhotoModel>> collectionsPhotos(
+    Observable<List<PhotoModel>> collectionsPhotos(
             @Path("id") String id,
             @Query("page") int page,
             @Query("per_page") int perPage);
@@ -379,7 +379,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections/curated/{id}/photos")
-    Call<List<PhotoModel>> curatedPhotos(
+    Observable<List<PhotoModel>> curatedPhotos(
             @Path("id") String id,
             @Query("page") int page,
             @Query("per_page") int perPage);
@@ -391,7 +391,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections/{id}/related")
-    Call<List<CollectionsModel>> relatedCollections(
+    Observable<List<CollectionsModel>> relatedCollections(
             @Path("id") String id);
 
     /**
@@ -404,7 +404,7 @@ public interface UnsplashApi {
      */
     @FormUrlEncoded
     @POST("/collections")
-    Call<CollectionsModel> createCollection(
+    Observable<CollectionsModel> createCollection(
             @Field("title") String title,
             @Field("description") String description,
             @Field("private") String priv);
@@ -420,7 +420,7 @@ public interface UnsplashApi {
      */
     @FormUrlEncoded
     @PUT("/collections/{id}")
-    Call<CollectionsModel> updateCollection(
+    Observable<CollectionsModel> updateCollection(
             @Path("id") String id,
             @Field("title") String title,
             @Field("description") String description,
@@ -434,7 +434,7 @@ public interface UnsplashApi {
      * @return
      */
     @DELETE("/collections/{id}")
-    Call<Object> deleteCollection(
+    Observable<Object> deleteCollection(
             @Path("id") String id);
 
     /**
@@ -446,7 +446,7 @@ public interface UnsplashApi {
      */
     @FormUrlEncoded
     @POST("/collections/{collectionId}/add")
-    Call<CollectionsModel> addPhotoCollection(
+    Observable<CollectionsModel> addPhotoCollection(
             @Path("collectionId") String collectionId,
             @Field("photo_id") String photoId);
 
@@ -458,7 +458,7 @@ public interface UnsplashApi {
      * @return
      */
     @DELETE("/collections/{collectionId}/remove")
-    Call<CollectionsModel> removePhotoCollection(
+    Observable<CollectionsModel> removePhotoCollection(
             @Path("collectionId") String collectionId,
             @Query("photo_id") String photoId);
 
@@ -468,7 +468,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/stats/total")
-    Call<StatsModel> totalPhotos();
+    Observable<StatsModel> totalPhotos();
 
     /**
      * oauth2.0授权
@@ -476,7 +476,7 @@ public interface UnsplashApi {
     interface OauthApi {
         @FormUrlEncoded
         @POST("/oauth/token")
-        Call<OauthModel> unsplashOauth(
+        Observable<OauthModel> oauth(
                 @Field("client_id") String clientId,
                 @Field("client_secret") String clientSecret,
                 @Field("redirect_uri") String redirectUri,

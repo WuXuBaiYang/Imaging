@@ -13,9 +13,9 @@ import com.jtech.imaging.util.OauthUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * 授权认证
@@ -50,17 +50,23 @@ public class OauthPresenter extends BasePresenter<OauthContract.View> implements
 
     @Override
     public void requestToken(String clientId, String clientSecret, String redirectUri, String code, String grantType) {
-        API.unsplashOauthApi()
-                .unsplashOauth(clientId, clientSecret, redirectUri, code, grantType)
-                .enqueue(new Callback<OauthModel>() {
+        API.oauthApi()
+                .oauth(clientId, clientSecret, redirectUri, code, grantType)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<OauthModel>() {
                     @Override
-                    public void onResponse(Call<OauthModel> call, Response<OauthModel> response) {
-                        getView().oauthSuccess(response.body());
+                    public void onCompleted() {
                     }
 
                     @Override
-                    public void onFailure(Call<OauthModel> call, Throwable t) {
-                        getView().oauthFail(t.getMessage());
+                    public void onError(Throwable e) {
+                        getView().oauthFail(e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(OauthModel oauthModel) {
+                        getView().oauthSuccess(oauthModel);
                     }
                 });
     }
