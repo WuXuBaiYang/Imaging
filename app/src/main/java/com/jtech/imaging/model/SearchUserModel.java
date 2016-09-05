@@ -1,15 +1,20 @@
 package com.jtech.imaging.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
- * 搜索结果
- * Created by jianghan on 2016/8/31.
+ * 用户中搜索
+ * Created by jianghan on 2016/9/5.
  */
-public class SearchModel {
+public class SearchUserModel {
 
+    @SerializedName("total")
     private int total;
+    @SerializedName("total_pages")
     private int totalPages;
+    @SerializedName("results")
     private List<ResultsModel> results;
 
     public int getTotal() {
@@ -37,15 +42,25 @@ public class SearchModel {
     }
 
     public static class ResultsModel {
+        @SerializedName("id")
         private String id;
+        @SerializedName("username")
         private String username;
+        @SerializedName("name")
         private String name;
-        private Object portfolioUrl;
+        @SerializedName("portfolio_url")
+        private String portfolioUrl;
+        @SerializedName("total_likes")
         private int totalLikes;
+        @SerializedName("total_photos")
         private int totalPhotos;
+        @SerializedName("total_collections")
         private int totalCollections;
+        @SerializedName("profile_image")
         private ProfileImageModel profileImage;
+        @SerializedName("links")
         private LinksModel links;
+        @SerializedName("photos")
         private List<PhotosModel> photos;
 
         public String getId() {
@@ -72,11 +87,11 @@ public class SearchModel {
             this.name = name;
         }
 
-        public Object getPortfolioUrl() {
+        public String getPortfolioUrl() {
             return portfolioUrl;
         }
 
-        public void setPortfolioUrl(Object portfolioUrl) {
+        public void setPortfolioUrl(String portfolioUrl) {
             this.portfolioUrl = portfolioUrl;
         }
 
@@ -129,8 +144,11 @@ public class SearchModel {
         }
 
         public static class ProfileImageModel {
+            @SerializedName("small")
             private String small;
+            @SerializedName("medium")
             private String medium;
+            @SerializedName("large")
             private String large;
 
             public String getSmall() {
@@ -159,10 +177,16 @@ public class SearchModel {
         }
 
         public static class LinksModel {
+            @SerializedName("self")
             private String self;
+            @SerializedName("html")
             private String html;
+            @SerializedName("photos")
             private String photos;
+            @SerializedName("likes")
             private String likes;
+            @SerializedName("portfolio")
+            private String portfolio;
 
             public String getSelf() {
                 return self;
@@ -195,19 +219,39 @@ public class SearchModel {
             public void setLikes(String likes) {
                 this.likes = likes;
             }
+
+            public String getPortfolio() {
+                return portfolio;
+            }
+
+            public void setPortfolio(String portfolio) {
+                this.portfolio = portfolio;
+            }
         }
 
         public static class PhotosModel {
+            @SerializedName("id")
             private String id;
+            @SerializedName("created_at")
             private String createdAt;
+            @SerializedName("width")
             private int width;
+            @SerializedName("height")
             private int height;
+            @SerializedName("color")
             private String color;
+            @SerializedName("likes")
             private int likes;
+            @SerializedName("liked_by_user")
             private boolean likedByUser;
+            @SerializedName("urls")
             private UrlsModel urls;
+            @SerializedName("links")
             private LinksModel links;
+            @SerializedName("current_user_collections")
             private List<?> currentUserCollections;
+            @SerializedName("categories")
+            private List<CategoriesModel> categories;
 
             public String getId() {
                 return id;
@@ -289,11 +333,24 @@ public class SearchModel {
                 this.currentUserCollections = currentUserCollections;
             }
 
+            public List<CategoriesModel> getCategories() {
+                return categories;
+            }
+
+            public void setCategories(List<CategoriesModel> categories) {
+                this.categories = categories;
+            }
+
             public static class UrlsModel {
+                @SerializedName("raw")
                 private String raw;
+                @SerializedName("full")
                 private String full;
+                @SerializedName("regular")
                 private String regular;
+                @SerializedName("small")
                 private String small;
+                @SerializedName("thumb")
                 private String thumb;
 
                 public String getRaw() {
@@ -338,9 +395,14 @@ public class SearchModel {
             }
 
             public static class LinksModel {
+                @SerializedName("self")
                 private String self;
+                @SerializedName("html")
                 private String html;
+                @SerializedName("download")
                 private String download;
+                @SerializedName("download_location")
+                private String downloadLocation;
 
                 public String getSelf() {
                     return self;
@@ -364,6 +426,57 @@ public class SearchModel {
 
                 public void setDownload(String download) {
                     this.download = download;
+                }
+
+                public String getDownloadLocation() {
+                    return downloadLocation;
+                }
+
+                public void setDownloadLocation(String downloadLocation) {
+                    this.downloadLocation = downloadLocation;
+                }
+            }
+
+            public static class CategoriesModel {
+                @SerializedName("id")
+                private int id;
+                @SerializedName("title")
+                private String title;
+                @SerializedName("photo_count")
+                private int photoCount;
+                @SerializedName("links")
+                private LinksModel links;
+
+                public int getId() {
+                    return id;
+                }
+
+                public void setId(int id) {
+                    this.id = id;
+                }
+
+                public String getTitle() {
+                    return title;
+                }
+
+                public void setTitle(String title) {
+                    this.title = title;
+                }
+
+                public int getPhotoCount() {
+                    return photoCount;
+                }
+
+                public void setPhotoCount(int photoCount) {
+                    this.photoCount = photoCount;
+                }
+
+                public LinksModel getLinks() {
+                    return links;
+                }
+
+                public void setLinks(LinksModel links) {
+                    this.links = links;
                 }
             }
         }

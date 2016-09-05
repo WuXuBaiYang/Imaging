@@ -5,7 +5,9 @@ import com.jtech.imaging.model.LikePhotoModel;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.model.PhotoStats;
-import com.jtech.imaging.model.SearchModel;
+import com.jtech.imaging.model.SearchCollectionModel;
+import com.jtech.imaging.model.SearchPhotoModel;
+import com.jtech.imaging.model.SearchUserModel;
 import com.jtech.imaging.model.StatsModel;
 import com.jtech.imaging.model.UserModel;
 
@@ -18,7 +20,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
-import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -135,7 +136,7 @@ public interface UnsplashApi {
             @Query("order_by") String orderBy);
 
     /**
-     * 照片精选
+     * 照片精选 PASS
      *
      * @param page
      * @param perPage
@@ -149,7 +150,7 @@ public interface UnsplashApi {
             @Query("order_by") String orderBy);
 
     /**
-     * 图片详情
+     * 图片详情 PASS
      *
      * @param id
      * @param width
@@ -165,7 +166,7 @@ public interface UnsplashApi {
             @Query("rect") int rect);
 
     /**
-     * 获取一张随机的图片
+     * 获取一张随机的图片 PASS
      *
      * @param category
      * @param collections
@@ -179,7 +180,7 @@ public interface UnsplashApi {
      */
     @GET("/photos/random")
     Call<PhotoModel> randomPhoto(
-            @Path("category") String category,
+            @Query("category") String category,
             @Query("collections") String collections,
             @Query("featured") String featured,
             @Query("username") String username,
@@ -189,7 +190,7 @@ public interface UnsplashApi {
             @Query("orientation") String orientation);
 
     /**
-     * 获取照片属性
+     * 获取照片属性 ERROR
      *
      * @param id
      * @return
@@ -199,7 +200,7 @@ public interface UnsplashApi {
             @Path("id") String id);
 
     /**
-     * 只获取图片的下载地址
+     * 只获取图片的下载地址 PASS
      *
      * @param id
      * @return
@@ -209,7 +210,7 @@ public interface UnsplashApi {
             @Path("id") String id);
 
     /**
-     * 上传图片
+     * 上传图片 UNCHECK
      *
      * @param id
      * @param latitude
@@ -226,82 +227,81 @@ public interface UnsplashApi {
      * @param isoSpeedRatings
      * @return
      */
+    @FormUrlEncoded
     @PUT("/photos/{id}")
     Call<PhotoModel> updatePhoto(
             @Path("id") String id,
-            @Part("location[latitude]") String latitude,
-            @Part("location[longitude]") String longitude,
-            @Part("location[name]") String name,
-            @Part("location[city]") String city,
-            @Part("location[country]") String country,
-            @Part("location[confidential]") String confidential,
-            @Part("exif[make]") String make,
-            @Part("exif[model]") String model,
-            @Part("exif[exposure_time]") String exposureTime,
-            @Part("exif[aperture_value]") String apertureValue,
-            @Part("exif[focal_length]") String focalLength,
-            @Part("exif[iso_speed_ratings]") String isoSpeedRatings);
+            @Field("location[latitude]") String latitude,
+            @Field("location[longitude]") String longitude,
+            @Field("location[name]") String name,
+            @Field("location[city]") String city,
+            @Field("location[country]") String country,
+            @Field("location[confidential]") String confidential,
+            @Field("exif[make]") String make,
+            @Field("exif[model]") String model,
+            @Field("exif[exposure_time]") String exposureTime,
+            @Field("exif[aperture_value]") String apertureValue,
+            @Field("exif[focal_length]") String focalLength,
+            @Field("exif[iso_speed_ratings]") String isoSpeedRatings);
 
     /**
-     * 喜欢
+     * 喜欢 PASS
      *
      * @param id
      * @return
      */
-    @FormUrlEncoded
     @POST("/photos/{id}/like")
     Call<LikePhotoModel> likePhoto(
             @Path("id") String id);
 
     /**
-     * 不喜欢
+     * 不喜欢 PASS
      *
      * @param id
      * @return
      */
-    @FormUrlEncoded
     @DELETE("/photos/{id}/like")
     Call<LikePhotoModel> unlikePhoto(
             @Path("id") String id);
 
     /**
-     * 搜索图片
+     * 搜索图片 PASS
      *
      * @param query
      * @param page
      * @return
      */
     @GET("/search/photos")
-    Call<SearchModel> searchPhotos(
+    Call<SearchPhotoModel> searchPhotos(
             @Query("query") String query,
             @Query("page") int page);
 
     /**
-     * 在合集中搜索
+     * 在合集中搜索 PASS
      *
      * @param query
      * @param page
      * @return
      */
     @GET("/search/collections")
-    Call<SearchModel> searchCollections(
+    Call<SearchCollectionModel> searchCollections(
             @Query("query") String query,
             @Query("page") int page);
 
     /**
-     * 搜索用户
+     * 搜索用户 PASS
      *
      * @param query
      * @param page
      * @return
      */
     @GET("/search/users")
-    Call<SearchModel> searchUsers(
+    Call<SearchUserModel> searchUsers(
             @Query("query") String query,
             @Query("page") int page);
 
     /**
-     * 收藏列表
+     * 收藏列表 PASS
      *
      * @param page
      * @param perPage
@@ -309,11 +309,11 @@ public interface UnsplashApi {
      */
     @GET("/collections")
     Call<List<CollectionsModel>> listOfCollections(
-            @Query("page") String page,
+            @Query("page") int page,
             @Query("per_page") int perPage);
 
     /**
-     * 特色收藏列表
+     * 特色收藏列表 PASS
      *
      * @param page
      * @param perPage
@@ -321,11 +321,11 @@ public interface UnsplashApi {
      */
     @GET("/collections/featured")
     Call<List<CollectionsModel>> listOfFeaturedCollections(
-            @Query("page") String page,
+            @Query("page") int page,
             @Query("per_page") int perPage);
 
     /**
-     * 精选列表
+     * 精选收藏列表 PASS
      *
      * @param page
      * @param perPage
@@ -333,11 +333,11 @@ public interface UnsplashApi {
      */
     @GET("/collections/curated")
     Call<List<CollectionsModel>> listOfCuratedCollections(
-            @Query("page") String page,
+            @Query("page") int page,
             @Query("per_page") int perPage);
 
     /**
-     * 收藏详情
+     * 收藏详情 PASS
      *
      * @param id
      * @return
@@ -347,17 +347,17 @@ public interface UnsplashApi {
             @Path("id") String id);
 
     /**
-     * 精选详情
+     * 精选详情 PASS
      *
      * @param id
      * @return
      */
     @GET("/collections/curated/{id}")
-    Call<CollectionsModel> curatedCollectionsDetail(
+    Call<CollectionsModel> curatedDetail(
             @Path("id") String id);
 
     /**
-     * 收藏图片列表
+     * 收藏图片列表 PASS
      *
      * @param id
      * @param page
@@ -371,7 +371,7 @@ public interface UnsplashApi {
             @Query("per_page") int perPage);
 
     /**
-     * 精选图片列表
+     * 精选图片列表 PASS
      *
      * @param id
      * @param page
@@ -379,13 +379,13 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/collections/curated/{id}/photos")
-    Call<List<PhotoModel>> curatedCollectionsPhotos(
+    Call<List<PhotoModel>> curatedPhotos(
             @Path("id") String id,
             @Query("page") int page,
             @Query("per_page") int perPage);
 
     /**
-     * 集合的相关集合
+     * 集合的相关集合 PASS
      *
      * @param id
      * @return
@@ -395,7 +395,7 @@ public interface UnsplashApi {
             @Path("id") String id);
 
     /**
-     * 创建收藏
+     * 创建收藏 PASS
      *
      * @param title
      * @param description
@@ -410,7 +410,7 @@ public interface UnsplashApi {
             @Field("private") String priv);
 
     /**
-     * 更新收藏信息
+     * 更新收藏信息 PASS
      *
      * @param id
      * @param title
@@ -418,15 +418,16 @@ public interface UnsplashApi {
      * @param priv
      * @return
      */
+    @FormUrlEncoded
     @PUT("/collections/{id}")
     Call<CollectionsModel> updateCollection(
             @Path("id") String id,
-            @Part("title") String title,
-            @Part("description") String description,
-            @Part("private") String priv);
+            @Field("title") String title,
+            @Field("description") String description,
+            @Field("private") String priv);
 
     /**
-     * 删除一个收藏
+     * 删除一个收藏 PASS
      * Responds with a 204 status and an empty body.
      *
      * @param id
@@ -437,7 +438,7 @@ public interface UnsplashApi {
             @Path("id") String id);
 
     /**
-     * 向收藏中添加一个图片
+     * 向收藏中添加一个图片 PASS
      *
      * @param collectionId
      * @param photoId
@@ -450,7 +451,7 @@ public interface UnsplashApi {
             @Field("photo_id") String photoId);
 
     /**
-     * 从收藏中删除一个图片
+     * 从收藏中删除一个图片 PASS
      *
      * @param collectionId
      * @param photoId
@@ -459,10 +460,10 @@ public interface UnsplashApi {
     @DELETE("/collections/{collectionId}/remove")
     Call<CollectionsModel> removePhotoCollection(
             @Path("collectionId") String collectionId,
-            @Part("photo_id") String photoId);
+            @Query("photo_id") String photoId);
 
     /**
-     * 状态
+     * 状态 PASS
      *
      * @return
      */

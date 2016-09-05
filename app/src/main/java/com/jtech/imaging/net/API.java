@@ -149,11 +149,19 @@ public class API {
                         mainThreadHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                if (200 == response.code()) {
+                                int code = response.code();
+                                if (code >= 200 || code < 300) {
                                     callback.onResponse(call, response);
                                 } else {
                                     try {
-                                        callback.onFailure(call, new Throwable(response.errorBody().string()));
+                                        String message;
+                                        if (null != response.errorBody()) {
+                                            message = response.errorBody().string();
+                                        } else {
+                                            message = response.message();
+                                        }
+                                        Throwable throwable = new Throwable(message);
+                                        callback.onFailure(call, throwable);
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                         callback.onFailure(call, e);
