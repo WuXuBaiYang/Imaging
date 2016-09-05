@@ -27,7 +27,7 @@ import rx.Observable;
  * unsplash接口
  * Created by wuxubaiyang on 16/4/17.
  */
-interface UnsplashApi {
+public interface UnsplashApi {
     /**
      * 获取用户信息 PASS
      *
