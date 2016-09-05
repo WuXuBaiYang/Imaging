@@ -1,7 +1,5 @@
 package com.jtech.imaging.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
  * 状态
  * Created by jianghan on 2016/8/31.

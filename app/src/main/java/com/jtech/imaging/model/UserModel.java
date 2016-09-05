@@ -1,24 +1,40 @@
 package com.jtech.imaging.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * 用户信息
  * Created by jianghan on 2016/8/31.
  */
 public class UserModel {
 
+    @SerializedName("username")
     private String username;
+    @SerializedName("name")
+    private String name;
+    @SerializedName("first_name")
     private String firstName;
+    @SerializedName("last_name")
     private String lastName;
+    @SerializedName("portfolio_url")
     private Object portfolioUrl;
+    @SerializedName("bio")
     private String bio;
+    @SerializedName("location")
     private String location;
+    @SerializedName("total_likes")
     private int totalLikes;
+    @SerializedName("total_photos")
     private int totalPhotos;
+    @SerializedName("total_collections")
     private int totalCollections;
+    @SerializedName("downloads")
     private int downloads;
-    private int uploadsRemaining;
-    private String instagramUsername;
-    private String email;
+    @SerializedName("profile_image")
+    private ProfileImageModel profileImage;
+    @SerializedName("badge")
+    private BadgeModel badge;
+    @SerializedName("links")
     private LinksModel links;
 
     public String getUsername() {
@@ -27,6 +43,14 @@ public class UserModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getFirstName() {
@@ -101,28 +125,20 @@ public class UserModel {
         this.downloads = downloads;
     }
 
-    public int getUploadsRemaining() {
-        return uploadsRemaining;
+    public ProfileImageModel getProfileImage() {
+        return profileImage;
     }
 
-    public void setUploadsRemaining(int uploadsRemaining) {
-        this.uploadsRemaining = uploadsRemaining;
+    public void setProfileImage(ProfileImageModel profileImage) {
+        this.profileImage = profileImage;
     }
 
-    public String getInstagramUsername() {
-        return instagramUsername;
+    public BadgeModel getBadge() {
+        return badge;
     }
 
-    public void setInstagramUsername(String instagramUsername) {
-        this.instagramUsername = instagramUsername;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setBadge(BadgeModel badge) {
+        this.badge = badge;
     }
 
     public LinksModel getLinks() {
@@ -133,11 +149,62 @@ public class UserModel {
         this.links = links;
     }
 
+
+
+    public static class BadgeModel {
+        @SerializedName("title")
+        private String title;
+        @SerializedName("primary")
+        private boolean primary;
+        @SerializedName("slug")
+        private String slug;
+        @SerializedName("link")
+        private String link;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public boolean isPrimary() {
+            return primary;
+        }
+
+        public void setPrimary(boolean primary) {
+            this.primary = primary;
+        }
+
+        public String getSlug() {
+            return slug;
+        }
+
+        public void setSlug(String slug) {
+            this.slug = slug;
+        }
+
+        public String getLink() {
+            return link;
+        }
+
+        public void setLink(String link) {
+            this.link = link;
+        }
+    }
+
     public static class LinksModel {
+        @SerializedName("self")
         private String self;
+        @SerializedName("html")
         private String html;
+        @SerializedName("photos")
         private String photos;
+        @SerializedName("likes")
         private String likes;
+        @SerializedName("portfolio")
+        private String portfolio;
 
         public String getSelf() {
             return self;
@@ -169,6 +236,14 @@ public class UserModel {
 
         public void setLikes(String likes) {
             this.likes = likes;
+        }
+
+        public String getPortfolio() {
+            return portfolio;
+        }
+
+        public void setPortfolio(String portfolio) {
+            this.portfolio = portfolio;
         }
     }
 }

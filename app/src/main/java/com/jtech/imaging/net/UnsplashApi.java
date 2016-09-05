@@ -8,7 +8,6 @@ import com.jtech.imaging.model.PhotoStats;
 import com.jtech.imaging.model.SearchModel;
 import com.jtech.imaging.model.StatsModel;
 import com.jtech.imaging.model.UserModel;
-import com.jtech.imaging.model.UserPublicModel;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ import retrofit2.http.Query;
  */
 public interface UnsplashApi {
     /**
-     * 获取用户信息
+     * 获取用户信息 PASS
      *
      * @return
      */
@@ -37,7 +36,7 @@ public interface UnsplashApi {
     Call<UserModel> userProfile();
 
     /**
-     * 更新用户信息
+     * 更新用户信息 PASS
      *
      * @param userName
      * @param firstName
@@ -49,19 +48,20 @@ public interface UnsplashApi {
      * @param instagramUsername
      * @return
      */
+    @FormUrlEncoded
     @PUT("/me")
     Call<UserModel> updateUserProfile(
-            @Part("username") String userName,
-            @Part("first_name") String firstName,
-            @Part("last_name") String lastName,
-            @Part("email") String email,
-            @Part("url") String url,
-            @Part("location") String location,
-            @Part("bio") String bio,
-            @Part("instagram_username") String instagramUsername);
+            @Field("username") String userName,
+            @Field("first_name") String firstName,
+            @Field("last_name") String lastName,
+            @Field("email") String email,
+            @Field("url") String url,
+            @Field("location") String location,
+            @Field("bio") String bio,
+            @Field("instagram_username") String instagramUsername);
 
     /**
-     * 获取用户的公共信息
+     * 获取用户的公共信息 PASS
      *
      * @param username
      * @param width
@@ -69,13 +69,13 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}")
-    Call<UserPublicModel> userPublishProfile(
+    Call<UserModel> userPublishProfile(
             @Path("username") String username,
             @Query("w") int width,
             @Query("h") int height);
 
     /**
-     * 用户的图片列表
+     * 用户的图片列表 PASS
      *
      * @param username
      * @param page
@@ -84,14 +84,14 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}/photos")
-    Call<List<PhotoModel>> listOfUserPhotos(
+    Call<List<PhotoModel>> userPhotoList(
             @Path("username") String username,
             @Query("page") int page,
             @Query("per_page") int perPage,
             @Query("order_by") String orderBy);
 
     /**
-     * 用户的喜欢列表
+     * 用户的喜欢列表 PASS
      *
      * @param username
      * @param page
@@ -100,14 +100,14 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}/likes")
-    Call<List<PhotoModel>> listOfLikePhotos(
+    Call<List<PhotoModel>> userLikePhotoList(
             @Path("username") String username,
             @Query("page") int page,
             @Query("per_page") int perPage,
             @Query("order_by") String orderBy);
 
     /**
-     * 用户的收藏列表
+     * 用户的收藏列表 PASS
      *
      * @param username
      * @param page
@@ -115,13 +115,13 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/users/{username}/collections")
-    Call<List<CollectionsModel>> listOfCollectionPhotos(
+    Call<List<CollectionsModel>> userCollectionList(
             @Path("username") String username,
             @Query("page") int page,
             @Query("per_page") int perPage);
 
     /**
-     * 图片列表
+     * 图片列表 PASS
      *
      * @param page
      * @param perPage
