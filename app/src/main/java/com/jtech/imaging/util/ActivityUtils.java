@@ -36,9 +36,10 @@ public class ActivityUtils {
      * performed by the {@code fragmentManager}.
      */
     public static void addFragmentToActivity(@NonNull FragmentManager fragmentManager, @NonNull Fragment fragment, int frameId) {
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(frameId, fragment);
-        transaction.commit();
+        fragmentManager.beginTransaction()
+                .replace(frameId, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     /**

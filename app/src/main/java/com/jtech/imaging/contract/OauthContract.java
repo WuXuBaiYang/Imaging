@@ -1,5 +1,8 @@
 package com.jtech.imaging.contract;
 
+import android.app.Activity;
+import android.support.v4.app.FragmentManager;
+
 import com.jtech.imaging.contract.base.BaseContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.ScopeModel;
@@ -15,9 +18,11 @@ public interface OauthContract {
     interface Presenter extends BaseContract.Presenter {
         String getOauthUrl(String[] scopes);
 
-        List<ScopeModel> getScopeList();
+        List<ScopeModel> getScopeList(Activity activity);
 
         void requestToken(String clientId, String clientSecret, String redirectUri, String code, String grantType);
+
+        void jumpToMainPage(FragmentManager fragmentManager, android.view.View view, String name);
     }
 
     interface View extends BaseContract.View {

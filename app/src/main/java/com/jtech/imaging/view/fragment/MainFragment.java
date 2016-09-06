@@ -27,6 +27,13 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
+    public static MainFragment newInstance() {
+        Bundle args = new Bundle();
+        MainFragment fragment = new MainFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     /**
      * 入口方法
      *
@@ -34,6 +41,6 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
      */
     @Override
     public void init(Bundle bundle) {
-        
+
     }
 }

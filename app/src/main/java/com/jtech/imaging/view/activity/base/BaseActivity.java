@@ -57,43 +57,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * 添加视图
-     *
-     * @param presenter
-     * @param resId
-     * @param <T>
-     */
-    public <T extends BasePresenter<?>> void addFragmentToActivity(T presenter, int resId) {
-        ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), presenter.getViewImplAsFragment(), resId);
-    }
-
-    /**
-     * 实例化一个fragment对象
-     *
-     * @param classType
-     * @param <R>
-     * @return
-     */
-    public <R extends BaseFragment> R newFragmentInstance(Class<R> classType) {
-        return ActivityUtils.newFragmentInstance(classType, getBundle());
-    }
-
-    /**
-     * 添加一堆视图
-     *
-     * @param presenters
-     * @param resId
-     * @param <T>
-     */
-    public <T extends BasePresenter<?>> void addFragmentListToActivity(List<T> presenters, int resId) {
-        List<Fragment> fragments = new ArrayList<>();
-        for (BasePresenter presenter : presenters) {
-            fragments.add(presenter.getViewImplAsFragment());
-        }
-        ActivityUtils.addFragmentListToActivity(getSupportFragmentManager(), fragments, resId);
-    }
-
-    /**
      * 权限检查
      */
     public void checkPermission(String[] permissions, PermissionsResultAction permissionsResultAction) {

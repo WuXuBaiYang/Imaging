@@ -1,6 +1,5 @@
 package com.jtech.imaging.view.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -12,8 +11,6 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.LoadingContract;
 import com.jtech.imaging.realm.OauthRealm;
-import com.jtech.imaging.view.activity.MainActivity;
-import com.jtech.imaging.view.activity.OauthActivity;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 
 import java.util.concurrent.TimeUnit;
@@ -37,6 +34,13 @@ public class LoadingFragment extends BaseFragment<LoadingContract.Presenter> imp
         return inflater.inflate(R.layout.fragment_loading, container, false);
     }
 
+    public static LoadingFragment newInstance() {
+        Bundle args = new Bundle();
+        LoadingFragment fragment = new LoadingFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void init(Bundle bundle) {
         RxView.clicks(floatingActionButton)
@@ -51,9 +55,13 @@ public class LoadingFragment extends BaseFragment<LoadingContract.Presenter> imp
         @Override
         public void call(Void aVoid) {
             if (OauthRealm.hasOauthModel()) {
-                startActivity(new Intent(getActivity(), MainActivity.class));
+                getPresenter().jumpToMainPage(getActivity().getSupportFragmentManager()
+                        , floatingActionButton
+                        , getString(R.string.fab));
             } else {
-                startActivity(new Intent(getActivity(), OauthActivity.class));
+                getPresenter().jumpToOauthPage(getActivity().getSupportFragmentManager()
+                        , floatingActionButton
+                        , getString(R.string.fab));
             }
         }
     }

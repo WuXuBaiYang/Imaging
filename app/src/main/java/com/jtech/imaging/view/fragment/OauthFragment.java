@@ -57,6 +57,13 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         return inflater.inflate(R.layout.fragment_oauth, container, false);
     }
 
+    public static OauthFragment newInstance() {
+        Bundle args = new Bundle();
+        OauthFragment fragment = new OauthFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     /**
      * 入口方法
      *
@@ -80,7 +87,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         //隐藏progressbar
         contentLoadingProgressBar.hide();
         //设置数据
-        scopesAdapter.setDatas(getPresenter().getScopeList());
+        scopesAdapter.setDatas(getPresenter().getScopeList(getActivity()));
     }
 
     /**
@@ -135,6 +142,10 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                 , Snackbar.LENGTH_SHORT).show();
         //插入数据
         OauthRealm.getInstance().setOauthModel(oauthModel);
+        //跳转到主页
+        getPresenter().jumpToMainPage(getActivity().getSupportFragmentManager()
+                , floatingActionButton
+                , getString(R.string.fab));
     }
 
     @Override

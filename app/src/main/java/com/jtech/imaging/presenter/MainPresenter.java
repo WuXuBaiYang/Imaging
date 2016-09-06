@@ -1,7 +1,5 @@
 package com.jtech.imaging.presenter;
 
-import android.app.Activity;
-
 import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.presenter.base.BasePresenter;
 
@@ -11,7 +9,7 @@ import com.jtech.imaging.presenter.base.BasePresenter;
  */
 public class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
 
-    public MainPresenter(Activity activity, MainContract.View view) {
-        super(activity, view);
+    public MainPresenter(MainContract.View view) {
+        super(view);
     }
 }

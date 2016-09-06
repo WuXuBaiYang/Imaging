@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
 import com.jtech.imaging.contract.base.BaseContract;
-import com.jtech.imaging.util.ActivityUtils;
 
 import butterknife.ButterKnife;
 
@@ -84,28 +83,6 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
      */
     public T getPresenter() {
         return presenter;
-    }
-
-    /**
-     * 无bundle的方法
-     *
-     * @param classType
-     * @param <R>
-     * @return
-     */
-    public static <R extends BaseFragment> R newInstance(Class<R> classType) {
-        return newInstance(classType, null);
-    }
-
-    /**
-     * 实例化方法
-     *
-     * @param classType
-     * @param args
-     * @return
-     */
-    public static <R extends BaseFragment> R newInstance(Class<R> classType, Bundle args) {
-        return ActivityUtils.newFragmentInstance(classType, args);
     }
 
     /**
