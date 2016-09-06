@@ -127,7 +127,7 @@ public class ImageUtils {
      * @param context
      * @param uri
      */
-    public static void requestImage(final Context context, String uri, Action1<Bitmap> action) {
+    public static void requestImage(final Context context, String uri, Action1<? super Bitmap> action) {
         Observable.just(uri)
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<String, Bitmap>() {

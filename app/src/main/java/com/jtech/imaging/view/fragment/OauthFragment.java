@@ -1,8 +1,10 @@
 package com.jtech.imaging.view.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.ContentLoadingProgressBar;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.OauthContract;
@@ -18,17 +21,18 @@ import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
-import com.jtech.listener.OnItemClickListener;
 import com.jtech.view.JRecyclerView;
-import com.jtech.view.RecyclerHolder;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import rx.functions.Action1;
 
 /**
  * 授权认证fragment
  * Created by wuxubaiyang on 16/4/16.
  */
-public class OauthFragment extends BaseFragment<OauthContract.Presenter> implements OauthContract.View, OnItemClickListener {
+public class OauthFragment extends BaseFragment<OauthContract.Presenter> implements OauthContract.View {
 
     @Bind(R.id.jrecyclerview_oauth)
     JRecyclerView jRecyclerView;
@@ -36,6 +40,8 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     WebView webView;
     @Bind(R.id.contentloading_oauth)
     ContentLoadingProgressBar contentLoadingProgressBar;
+    @Bind(R.id.fab)
+    FloatingActionButton floatingActionButton;
 
     private ScopesAdapter scopesAdapter;
 
@@ -60,17 +66,35 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     public void init(Bundle bundle) {
         //设置列表
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        jRecyclerView.setItemAnimator(new DefaultItemAnimator());
         scopesAdapter = new ScopesAdapter(getActivity());
         jRecyclerView.setAdapter(scopesAdapter);
-        jRecyclerView.setOnItemClickListener(this);
         //设置浏览器
         webView.setWebViewClient(new mWebViewClient());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new mWebChromeClient());
+        //设置fab点击事件
+        RxView.clicks(floatingActionButton)
+                .throttleFirst(500, TimeUnit.MILLISECONDS)
+                .subscribe(new FabClick());
         //隐藏progressbar
         contentLoadingProgressBar.hide();
         //设置数据
         scopesAdapter.setDatas(getPresenter().getScopeList());
+    }
+
+    /**
+     * fab的点击事件
+     */
+    private class FabClick implements Action1<Void> {
+        @Override
+        public void call(Void aVoid) {
+            //隐藏授权列表，显示浏览器
+            webView.setVisibility(View.VISIBLE);
+            //得到授权认证的url
+            String oauthUrl = getPresenter().getOauthUrl(scopesAdapter.getCheckedScope());
+            webView.loadUrl(oauthUrl);
+        }
     }
 
     /**
@@ -118,19 +142,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         Snackbar.make(jRecyclerView, error,
                 Snackbar.LENGTH_SHORT).show();
         //还原状态
-        jRecyclerView.setVisibility(View.VISIBLE);
         webView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
-        if (position == scopesAdapter.getItemCount() - 1) {
-            //隐藏授权列表，显示浏览器
-            webView.setVisibility(View.VISIBLE);
-            jRecyclerView.setVisibility(View.GONE);
-            //得到授权认证的url
-            String oauthUrl = getPresenter().getOauthUrl(scopesAdapter.getCheckedScope());
-            webView.loadUrl(oauthUrl);
-        }
     }
 }

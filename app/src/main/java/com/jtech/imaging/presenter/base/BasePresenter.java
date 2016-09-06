@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment;
 
 import com.jtech.imaging.contract.base.BaseContract;
 
-import java.lang.annotation.ElementType;
-
 /**
  * P类基类
  * Created by wuxubaiyang on 16/5/5.
@@ -41,7 +39,7 @@ public class BasePresenter<T extends BaseContract.View> implements BaseContract.
     }
 
     @SuppressWarnings("unchecked")
-    public <S extends Fragment> S getViewImplAsFragment() {
-        return null != view ? (S) view : null;
+    public <R extends Fragment> R getViewImplAsFragment() {
+        return null != view ? (R) view : null;
     }
 }

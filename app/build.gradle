@@ -27,6 +27,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.3.2'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.github.WuXuBaiYang:JRecyclerViewLibrary:v1.4'
+    compile 'jp.wasabeef:recyclerview-animators:2.2.4'
     compile 'com.anthonycr.grant:permissions:1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
