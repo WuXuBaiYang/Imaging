@@ -6,13 +6,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.io.IOException;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * 图片通用类
@@ -31,19 +37,6 @@ public class ImageUtils {
      */
     public static <T extends ImageView> void showCropImage(Context context, String uri, T imageView, int targetWidth, int targetHeight) {
         showCropImage(context, uri, imageView, 0, 0, targetWidth, targetHeight);
-    }
-
-    /**
-     * 显示本地裁剪图片
-     *
-     * @param context
-     * @param uri
-     * @param imageView
-     * @param targetWidth
-     * @param targetHeight
-     */
-    public static <T extends ImageView> void showLocalCropImage(Context context, String uri, T imageView, int targetWidth, int targetHeight) {
-        showCropImage(context, getLocalUri(uri), imageView, 0, 0, targetWidth, targetHeight);
     }
 
     /**
@@ -81,17 +74,6 @@ public class ImageUtils {
     }
 
     /**
-     * 显示本地圆形图片
-     *
-     * @param context
-     * @param uri
-     * @param imageView
-     */
-    public static <T extends ImageView> void showLocalCircleImage(Context context, String uri, T imageView) {
-        showCircleImage(context, getLocalUri(uri), imageView, 0, 0);
-    }
-
-    /**
      * 显示圆形图片
      *
      * @param context
@@ -122,17 +104,6 @@ public class ImageUtils {
     }
 
     /**
-     * 显示一张本地图片
-     *
-     * @param context
-     * @param uri
-     * @param imageView
-     */
-    public static <T extends ImageView> void showLocalImage(Context context, String uri, T imageView) {
-        showImage(context, getLocalUri(uri), imageView, 0, 0);
-    }
-
-    /**
      * 显示一张图片
      *
      * @param context
@@ -151,47 +122,32 @@ public class ImageUtils {
     }
 
     /**
-     * 请求本地图片，回调bitmap
-     *
-     * @param context
-     * @param uri
-     * @param onImageResponse
-     */
-    public static void requestLocalImage(Context context, String uri, OnImageResponse onImageResponse) {
-        requestImage(context, getLocalUri(uri), onImageResponse);
-    }
-
-    /**
      * 请求图片，回调bitmap
      *
      * @param context
      * @param uri
      */
-    public static void requestImage(final Context context, final String uri, final OnImageResponse onImageResponse) {
-        new AsyncTask<Object, Object, Bitmap>() {
-            @Override
-            protected Bitmap doInBackground(Object... params) {
-                Bitmap bitmap = null;
-                try {
-                    bitmap = Picasso.with(context)
-                            .load(uri)
-                            .config(Bitmap.Config.RGB_565)
-                            .get();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return bitmap;
-            }
-
-            @Override
-            protected void onPostExecute(Bitmap bitmap) {
-                if (null != onImageResponse && null != bitmap) {
-                    onImageResponse.success(bitmap);
-                } else {
-                    onImageResponse.fail();
-                }
-            }
-        }.execute("");
+    public static void requestImage(final Context context, String uri, Action1<Bitmap> action) {
+        Observable.just(uri)
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<String, Bitmap>() {
+                    @Override
+                    public Bitmap call(String uri) {
+                        if (!TextUtils.isEmpty(uri)) {
+                            try {
+                                return Picasso.with(context)
+                                        .load(uri)
+                                        .config(Bitmap.Config.RGB_565)
+                                        .get();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        return null;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(action);
     }
 
     /**
@@ -203,17 +159,6 @@ public class ImageUtils {
      */
     public static <T extends ImageView> void showLargeImage(Application application, String uri, T imageView) {
         showLargeImage(application, uri, imageView, 0, 0);
-    }
-
-    /**
-     * 显示本地的大图
-     *
-     * @param application
-     * @param uri
-     * @param imageView
-     */
-    public static <T extends ImageView> void showLocalLargeImage(Application application, String uri, T imageView) {
-        showLargeImage(application, getLocalUri(uri), imageView, 0, 0);
     }
 
     /**
@@ -232,19 +177,6 @@ public class ImageUtils {
                 .placeholder(placeholderResId)
                 .skipMemoryCache()
                 .into(imageView);
-    }
-
-    /**
-     * 获取本地地址
-     *
-     * @param uri
-     * @return
-     */
-    private static String getLocalUri(String uri) {
-        if (!uri.startsWith("file://")) {
-            uri = "file://" + uri;
-        }
-        return uri;
     }
 
     /**
@@ -283,14 +215,5 @@ public class ImageUtils {
         public String key() {
             return "circle";
         }
-    }
-
-    /**
-     * 图片请求结果回调
-     */
-    public interface OnImageResponse {
-        void success(Bitmap bitmap);
-
-        void fail();
     }
 }

@@ -14,6 +14,7 @@ import com.jtech.imaging.view.fragment.base.BaseFragment;
  * Created by wuxubaiyang on 16/4/16.
  */
 public class MainFragment extends BaseFragment<MainContract.Presenter> implements MainContract.View {
+
     /**
      * 创建视图的方法
      *
