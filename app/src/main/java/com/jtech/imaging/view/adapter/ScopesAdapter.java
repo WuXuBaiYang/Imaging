@@ -32,7 +32,7 @@ public class ScopesAdapter extends RecyclerAdapter<ScopeModel> {
      */
     public String[] getCheckedScope() {
         List<String> scopes = new ArrayList<>();
-        for (int i = 0; i < getItemCount() - 1; i++) {
+        for (int i = 0; i < getItemCount(); i++) {
             if (getItem(i).isChecked()) {
                 scopes.add(getItem(i).getScopeValue());
             }

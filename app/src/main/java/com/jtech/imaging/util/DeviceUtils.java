@@ -1,11 +1,14 @@
 package com.jtech.imaging.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import java.lang.reflect.Field;
 
@@ -91,12 +94,52 @@ public class DeviceUtils {
         try {
             c = Class.forName("com.android.internal.R$dimen");
             obj = c.newInstance();
-            field = c.getField("status_bar_height");
+            field = c.getField("status_bar_height");//navigation_bar_height
             x = Integer.parseInt(field.get(obj).toString());
             statusBarHeight = activity.getResources().getDimensionPixelSize(x);
         } catch (Exception e1) {
             e1.printStackTrace();
         }
         return statusBarHeight;
+    }
+
+    /**
+     * 获取NavigationBar高度
+     *
+     * @param activity
+     * @return
+     */
+    public static int getNavigationBarHeight(Activity activity) {
+        Class<?> c;
+        Object obj;
+        Field field;
+        int x, statusBarHeight = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("navigation_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            statusBarHeight = activity.getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+        return statusBarHeight;
+    }
+
+    /**
+     * 设置状态栏为透明的
+     */
+    @TargetApi(19)
+    public static void setTranslucentStatus(Activity activity) {
+        Window window = activity.getWindow();
+        WindowManager.LayoutParams winParams = window.getAttributes();
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            winParams.flags |= bits;
+        } else {
+            winParams.flags &= ~bits;
+        }
+        window.setAttributes(winParams);
     }
 }

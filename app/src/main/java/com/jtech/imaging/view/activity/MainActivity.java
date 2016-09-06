@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.presenter.LoadingPresenter;
+import com.jtech.imaging.util.DeviceUtils;
 import com.jtech.imaging.view.activity.base.BaseActivity;
 import com.jtech.imaging.view.fragment.LoadingFragment;
 
@@ -16,6 +17,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //设置透明状态栏
+        DeviceUtils.setTranslucentStatus(getActivity());
         //设置loading页
         setupLoadingPage();
     }

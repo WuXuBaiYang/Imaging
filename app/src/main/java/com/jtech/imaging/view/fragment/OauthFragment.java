@@ -39,7 +39,7 @@ import rx.functions.Action1;
  */
 public class OauthFragment extends BaseFragment<OauthContract.Presenter> implements OauthContract.View {
 
-    private static final long ANIMATION_DURATION = 350;
+    private static final long ANIMATION_DURATION = 130;
 
     @Bind(R.id.jrecyclerview_oauth)
     JRecyclerView jRecyclerView;
@@ -113,7 +113,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                     //显示或隐藏webview
                     webView.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
                     //设置fab的图标
-                    floatingActionButton.setImageResource(isVisible ? R.drawable.ic_reply_white_36dp : R.drawable.ic_done_white_36dp);
+                    floatingActionButton.setImageResource(isVisible ? R.drawable.ic_done_white_36dp : R.drawable.ic_reply_white_36dp);
                     //设置fab的位置
                     CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
                             , ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -122,11 +122,12 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                     layoutParams.setAnchorId(R.id.jrecyclerview_oauth);
                     floatingActionButton.setLayoutParams(layoutParams);
                     //加载url
+                    webView.stopLoading();
+                    contentLoadingProgressBar.setProgress(0);
                     if (!isVisible) {
                         //得到授权认证的url
                         String oauthUrl = getPresenter().getOauthUrl(scopesAdapter.getCheckedScope());
                         webView.loadUrl(oauthUrl);
-                        webView.reload();
                     }
                     //放大fab
                     scaleFab(floatingActionButton, 0f, 1.0f, null);
@@ -162,7 +163,10 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                 ViewHelper.setScaleY(floatingActionButton, value);
             }
         });
-        valueAnimator.addListener(animatorListener);
+        if (null != animatorListener) {
+            valueAnimator.addListener(animatorListener);
+        }
+        valueAnimator.start();
     }
 
     /**
@@ -171,12 +175,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     private class mWebChromeClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            contentLoadingProgressBar.setProgress(newProgress);
-            if (newProgress >= 100) {
-                contentLoadingProgressBar.hide();
-            } else {
-                contentLoadingProgressBar.show();
-            }
+            contentLoadingProgressBar.setProgress(newProgress < 100 ? newProgress : 0);
         }
     }
 
@@ -200,13 +199,17 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     @Override
     public void oauthSuccess(OauthModel oauthModel) {
         Snackbar.make(getContentView(), "授权成功"
-                , Snackbar.LENGTH_SHORT).show();
+                , Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                //跳转到主页
+                getPresenter().jumpToMainPage(getActivity().getSupportFragmentManager()
+                        , floatingActionButton
+                        , getString(R.string.fab));
+            }
+        }).show();
         //插入数据
         OauthRealm.getInstance().setOauthModel(oauthModel);
-        //跳转到主页
-        getPresenter().jumpToMainPage(getActivity().getSupportFragmentManager()
-                , floatingActionButton
-                , getString(R.string.fab));
     }
 
     @Override
@@ -214,6 +217,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         Snackbar.make(jRecyclerView, error,
                 Snackbar.LENGTH_SHORT).show();
         //还原状态
-        webView.setVisibility(View.GONE);
+        new FabClick().call(null);
     }
 }
