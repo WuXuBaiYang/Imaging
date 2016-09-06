@@ -16,9 +16,10 @@
         android:id="@id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="@dimen/fab_default_margin"
-        android:src="@drawable/ic_done_white_36dp"
+        android:src="@drawable/ic_room_white_36dp"
         android:transitionName="@string/fab"
+        app:layout_anchor="@id/imageview_loading"
+        app:layout_anchorGravity="bottom|center_horizontal"
         app:useCompatPadding="true" />
 </android.support.design.widget.CoordinatorLayout>

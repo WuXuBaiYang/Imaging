@@ -8,29 +8,33 @@
     <com.jtech.view.JRecyclerView
         android:id="@id/jrecyclerview_oauth"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/recyclerview_default_margin"
-        android:layout_marginRight="@dimen/recyclerview_default_margin" />
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/recyclerview_default_margin"
+        android:paddingRight="@dimen/recyclerview_default_margin" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
         android:layout_margin="@dimen/fab_default_margin"
-        android:src="@drawable/ic_done_all_white_36dp"
+        android:src="@drawable/ic_done_white_36dp"
         android:transitionName="@string/fab"
+        app:layout_anchor="@id/jrecyclerview_oauth"
+        app:layout_anchorGravity="bottom|center_horizontal"
         app:useCompatPadding="true" />
 
     <WebView
         android:id="@id/webview_oauth"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:visibility="invisible" />
 
     <android.support.v4.widget.ContentLoadingProgressBar
         android:id="@id/contentloading_oauth"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="5dp" />
+        android:layout_height="@dimen/progress_height"
+        android:progress="0" />
+
+
 </android.support.design.widget.CoordinatorLayout>

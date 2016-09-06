@@ -4,4 +4,5 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_default_margin">35dp</dimen>
     <dimen name="recyclerview_default_margin">15dp</dimen>
+    <dimen name="progress_height">5dp</dimen>
 </resources>

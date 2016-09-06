@@ -2,6 +2,7 @@ package com.jtech.imaging.presenter;
 
 import android.support.v4.app.FragmentManager;
 import android.transition.ChangeBounds;
+import android.transition.ChangeTransform;
 import android.view.View;
 
 import com.jtech.imaging.R;
@@ -23,6 +24,7 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.View> implem
     @Override
     public void jumpToMainPage(FragmentManager fragmentManager, View view, String name) {
         MainPresenter mainPresenter = new MainPresenter(MainFragment.newInstance());
+        mainPresenter.getViewImplAsFragment().setEnterTransition(new ChangeTransform());
         mainPresenter.getViewImplAsFragment().setSharedElementEnterTransition(new ChangeBounds());
         fragmentManager.beginTransaction()
                 .addSharedElement(view, name)
@@ -33,6 +35,7 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.View> implem
     @Override
     public void jumpToOauthPage(FragmentManager fragmentManager, View view, String name) {
         OauthPresenter oauthPresenter = new OauthPresenter(OauthFragment.newInstance());
+        oauthPresenter.getViewImplAsFragment().setEnterTransition(new ChangeTransform());
         oauthPresenter.getViewImplAsFragment().setSharedElementEnterTransition(new ChangeBounds());
         fragmentManager.beginTransaction()
                 .addSharedElement(view, name)

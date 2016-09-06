@@ -1,11 +1,15 @@
 package com.jtech.imaging.view.fragment;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +26,7 @@ import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 import com.jtech.view.JRecyclerView;
+import com.nineoldandroids.view.ViewHelper;
 
 import java.util.concurrent.TimeUnit;
 
@@ -33,6 +38,8 @@ import rx.functions.Action1;
  * Created by wuxubaiyang on 16/4/16.
  */
 public class OauthFragment extends BaseFragment<OauthContract.Presenter> implements OauthContract.View {
+
+    private static final long ANIMATION_DURATION = 350;
 
     @Bind(R.id.jrecyclerview_oauth)
     JRecyclerView jRecyclerView;
@@ -84,8 +91,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new FabClick());
-        //隐藏progressbar
-        contentLoadingProgressBar.hide();
         //设置数据
         scopesAdapter.setDatas(getPresenter().getScopeList(getActivity()));
     }
@@ -96,12 +101,68 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            //隐藏授权列表，显示浏览器
-            webView.setVisibility(View.VISIBLE);
-            //得到授权认证的url
-            String oauthUrl = getPresenter().getOauthUrl(scopesAdapter.getCheckedScope());
-            webView.loadUrl(oauthUrl);
+            //缩小fab
+            scaleFab(floatingActionButton, 1.0f, 0f, new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    boolean isVisible = View.VISIBLE == webView.getVisibility();
+                    //显示或隐藏webview
+                    webView.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
+                    //设置fab的图标
+                    floatingActionButton.setImageResource(isVisible ? R.drawable.ic_reply_white_36dp : R.drawable.ic_done_white_36dp);
+                    //设置fab的位置
+                    CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
+                            , ViewGroup.LayoutParams.WRAP_CONTENT);
+                    layoutParams.bottomMargin = getResources().getDimensionPixelSize(R.dimen.fab_default_margin);
+                    layoutParams.anchorGravity = isVisible ? Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL : Gravity.BOTTOM | Gravity.LEFT;
+                    layoutParams.setAnchorId(R.id.jrecyclerview_oauth);
+                    floatingActionButton.setLayoutParams(layoutParams);
+                    //加载url
+                    if (!isVisible) {
+                        //得到授权认证的url
+                        String oauthUrl = getPresenter().getOauthUrl(scopesAdapter.getCheckedScope());
+                        webView.loadUrl(oauthUrl);
+                        webView.reload();
+                    }
+                    //放大fab
+                    scaleFab(floatingActionButton, 0f, 1.0f, null);
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            });
         }
+    }
+
+    /**
+     * 缩放fab
+     *
+     * @param floatingActionButton
+     * @param start
+     * @param end
+     * @param animatorListener
+     */
+    private void scaleFab(final FloatingActionButton floatingActionButton, float start, float end, Animator.AnimatorListener animatorListener) {
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(start, end);
+        valueAnimator.setDuration(ANIMATION_DURATION);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float value = (float) animation.getAnimatedValue();
+                ViewHelper.setScaleX(floatingActionButton, value);
+                ViewHelper.setScaleY(floatingActionButton, value);
+            }
+        });
+        valueAnimator.addListener(animatorListener);
     }
 
     /**
