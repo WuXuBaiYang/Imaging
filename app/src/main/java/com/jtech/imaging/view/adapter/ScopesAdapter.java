@@ -48,7 +48,7 @@ public class ScopesAdapter extends RecyclerAdapter<ScopeModel> {
     @Override
     public void convert(RecyclerHolder recyclerHolder, ScopeModel scopeModel, final int position) {
         //获取选择框对象
-        AppCompatCheckBox appCompatCheckBox = recyclerHolder.getView(R.id.checkbox_scope);
+        AppCompatCheckBox appCompatCheckBox = recyclerHolder.getView(R.id.checkbox);
         appCompatCheckBox.setText(scopeModel.getScopeDescribe());
         appCompatCheckBox.setEnabled(!scopeModel.isCantChange());
         appCompatCheckBox.setChecked(scopeModel.isChecked());

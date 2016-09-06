@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="framelayout_content" type="id"></item>
-    <item name="jrecyclerview_oauth" type="id"></item>
-    <item name="webview_oauth" type="id"></item>
-    <item name="contentloading_oauth" type="id"></item>
-    <item name="checkbox_scope" type="id"></item>
+    <item name="refreshlayout" type="id"></item>
+    <item name="jrecyclerview" type="id"></item>
+    <item name="webview" type="id"></item>
+    <item name="contentloading" type="id"></item>
+    <item name="checkbox" type="id"></item>
     <item name="fab" type="id"></item>
     <item name="imageview_loading" type="id"></item>
     <item name="placeholder" type="id"></item>

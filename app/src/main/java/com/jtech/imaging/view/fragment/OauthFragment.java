@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.realm.OauthRealm;
+import com.jtech.imaging.util.DeviceUtils;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 import com.jtech.view.JRecyclerView;
@@ -41,14 +43,18 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
 
     private static final long ANIMATION_DURATION = 130;
 
-    @Bind(R.id.jrecyclerview_oauth)
+    @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
-    @Bind(R.id.webview_oauth)
+    @Bind(R.id.webview)
     WebView webView;
-    @Bind(R.id.contentloading_oauth)
+    @Bind(R.id.contentloading)
     ContentLoadingProgressBar contentLoadingProgressBar;
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
+    @Bind(R.id.placeholder)
+    View viewPlachholder;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private ScopesAdapter scopesAdapter;
 
@@ -78,6 +84,8 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
      */
     @Override
     public void init(Bundle bundle) {
+        //设置状态栏高度
+        DeviceUtils.setStatusBar(getActivity(), viewPlachholder);
         //设置列表
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         jRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -119,7 +127,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                             , ViewGroup.LayoutParams.WRAP_CONTENT);
                     layoutParams.bottomMargin = getResources().getDimensionPixelSize(R.dimen.fab_default_margin);
                     layoutParams.anchorGravity = isVisible ? Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL : Gravity.BOTTOM | Gravity.LEFT;
-                    layoutParams.setAnchorId(R.id.jrecyclerview_oauth);
+                    layoutParams.setAnchorId(R.id.jrecyclerview);
                     floatingActionButton.setLayoutParams(layoutParams);
                     //加载url
                     webView.stopLoading();

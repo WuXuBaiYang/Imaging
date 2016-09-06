@@ -2,6 +2,7 @@ package com.jtech.imaging.view.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,10 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.realm.OauthRealm;
+import com.jtech.imaging.util.DeviceUtils;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
+import com.jtech.view.JRecyclerView;
+import com.jtech.view.RefreshLayout;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,6 +29,14 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
+    @Bind(R.id.refreshlayout)
+    RefreshLayout refreshLayout;
+    @Bind(R.id.jrecyclerview)
+    JRecyclerView jRecyclerView;
+    @Bind(R.id.placeholder)
+    View viewPlachholder;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     /**
      * 创建视图的方法
@@ -52,6 +64,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
      */
     @Override
     public void init(Bundle bundle) {
+        //设置状态栏高度
+        DeviceUtils.setStatusBar(getActivity(), viewPlachholder);
+        //fab点击
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new FabClick());

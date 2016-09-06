@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <include
-        layout="@layout/view_placeholder"
+    <View
+        android:id="@id/placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:background="@color/colorPrimary" />
 
     <android.support.v7.widget.Toolbar
@@ -12,4 +14,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary" />
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>
