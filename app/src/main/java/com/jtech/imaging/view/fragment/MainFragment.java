@@ -17,8 +17,9 @@ import com.jtech.imaging.view.activity.OauthActivity;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 
 import butterknife.Bind;
-import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -59,22 +60,17 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
 
     private void step() {
         if (OauthRealm.hasOauthModel()) {
-            API.unsplashApi().likePhoto("Gacd_XeSGQk")
+            Subscription subscription = API.unsplashApi().likePhoto("Gacd_XeSGQk")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<LikePhotoModel>() {
+                    .subscribe(new Action1<LikePhotoModel>() {
                         @Override
-                        public void onCompleted() {
+                        public void call(LikePhotoModel likePhotoModel) {
                             Log.d("", "");
                         }
-
+                    }, new Action1<Throwable>() {
                         @Override
-                        public void onError(Throwable e) {
-                            Log.d("", "");
-                        }
-
-                        @Override
-                        public void onNext(LikePhotoModel oauthModel) {
+                        public void call(Throwable throwable) {
                             Log.d("", "");
                         }
                     });

@@ -13,8 +13,8 @@ import com.jtech.imaging.util.OauthUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -54,19 +54,15 @@ public class OauthPresenter extends BasePresenter<OauthContract.View> implements
                 .oauth(clientId, clientSecret, redirectUri, code, grantType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<OauthModel>() {
+                .subscribe(new Action1<OauthModel>() {
                     @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getView().oauthFail(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(OauthModel oauthModel) {
+                    public void call(OauthModel oauthModel) {
                         getView().oauthSuccess(oauthModel);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        getView().oauthFail(throwable.getMessage());
                     }
                 });
     }
