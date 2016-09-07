@@ -124,8 +124,8 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                     //设置fab的位置
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
                             , ViewGroup.LayoutParams.WRAP_CONTENT);
-                    layoutParams.bottomMargin = getResources().getDimensionPixelSize(R.dimen.fab_default_margin);
-                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM | (isVisible ? RelativeLayout.CENTER_HORIZONTAL : RelativeLayout.ALIGN_PARENT_LEFT));
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM
+                            | (isVisible ? RelativeLayout.CENTER_HORIZONTAL : RelativeLayout.ALIGN_PARENT_LEFT));
                     floatingActionButton.setLayoutParams(layoutParams);
                     //加载url
                     webView.stopLoading();

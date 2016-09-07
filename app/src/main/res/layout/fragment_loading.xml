@@ -22,6 +22,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_room_white_36dp"
+            android:transitionName="@string/fab"
             app:useCompatPadding="true" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

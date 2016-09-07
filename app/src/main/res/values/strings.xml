@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Imaging</string>
     <string name="fab">fab</string>
-    <string name="loading_page_image_url">https://unsplash.com/?photo=fwxculYOjDo</string>
+    <string name="loading_page_image_url">https://hd.unsplash.com/photo-1470897655254-05feb2d2ab97</string>
 
     <array name="scopeList">
         <item>默认项，读取公共数据|true|true|public</item>
