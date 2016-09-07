@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.RelativeLayout;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
@@ -119,16 +118,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                     webView.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
                     //设置fab的图标
                     floatingActionButton.setImageResource(isVisible ? R.drawable.ic_done_white_36dp : R.drawable.ic_reply_white_36dp);
-                    //设置fab的位置
-                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
-                            , ViewGroup.LayoutParams.WRAP_CONTENT);
-                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM | RelativeLayout.ALIGN_PARENT_LEFT);
-//                    if (isVisible) {
-//                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-//                    } else {
-//                        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-//                    }
-                    floatingActionButton.setLayoutParams(layoutParams);
                     //加载url
                     webView.stopLoading();
                     contentLoadingProgressBar.setProgress(0);
@@ -183,7 +172,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     private class mWebChromeClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
-            contentLoadingProgressBar.setProgress(newProgress < 100 ? newProgress : 0);
+            contentLoadingProgressBar.setProgress(newProgress >= 100 ? 0 : newProgress);
         }
     }
 
@@ -206,6 +195,8 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
 
     @Override
     public void oauthSuccess(OauthModel oauthModel) {
+        //插入数据
+        OauthRealm.getInstance().setOauthModel(oauthModel);
         Snackbar.make(getContentView(), "授权成功"
                 , Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
             @Override
@@ -216,15 +207,13 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                         , getString(R.string.fab));
             }
         }).show();
-        //插入数据
-        OauthRealm.getInstance().setOauthModel(oauthModel);
     }
 
     @Override
     public void oauthFail(String error) {
-        Snackbar.make(jRecyclerView, error,
-                Snackbar.LENGTH_SHORT).show();
         //还原状态
         new FabClick().call(null);
+        Snackbar.make(getContentView(), error,
+                Snackbar.LENGTH_SHORT).show();
     }
 }

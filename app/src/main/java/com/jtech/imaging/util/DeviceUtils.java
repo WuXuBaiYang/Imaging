@@ -145,8 +145,8 @@ public class DeviceUtils {
         Window window = activity.getWindow();
         window.setStatusBarColor(Color.TRANSPARENT);
         WindowManager.LayoutParams winParams = window.getAttributes();
-        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             winParams.flags |= bits;
         } else {

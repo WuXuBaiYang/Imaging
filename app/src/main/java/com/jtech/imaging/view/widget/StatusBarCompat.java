@@ -48,7 +48,7 @@ public class StatusBarCompat {
      * @param activity
      */
     public static void compat(Activity activity) {
-        compat(activity, activity.getResources().getColor(R.color.color_primary));
+        compat(activity, INVALID_VAL);
     }
 
 

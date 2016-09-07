@@ -9,5 +9,4 @@
     <item name="fab" type="id"></item>
     <item name="imageview_loading" type="id"></item>
     <item name="toolbar" type="id"></item>
-    <item name="toolbar_include" type="id"></item>
 </resources>

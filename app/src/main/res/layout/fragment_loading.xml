@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_room_white_36dp"
+            android:src="@drawable/ic_fingerprint_white_36dp"
             android:transitionName="@string/fab"
             app:useCompatPadding="true" />
     </RelativeLayout>
