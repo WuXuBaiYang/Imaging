@@ -11,6 +11,7 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.LoadingContract;
 import com.jtech.imaging.realm.OauthRealm;
+import com.jtech.imaging.util.ImageUtils;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 
 import java.util.concurrent.TimeUnit;
@@ -43,9 +44,21 @@ public class LoadingFragment extends BaseFragment<LoadingContract.Presenter> imp
 
     @Override
     public void init(Bundle bundle) {
+        //设置fab的点击事件
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new FabClick());
+        //加载图片
+        ImageUtils.showImage(getActivity(), getLoadingPageImage(), imageView);
+    }
+
+    /**
+     * 获取loading页的图片url
+     *
+     * @return
+     */
+    private String getLoadingPageImage() {
+        return getResources().getString(R.string.loading_page_image_url);
     }
 
     /**

@@ -3,20 +3,19 @@ package com.jtech.imaging.view.fragment;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.RelativeLayout;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
@@ -51,8 +50,8 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     ContentLoadingProgressBar contentLoadingProgressBar;
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
-    @Bind(R.id.placeholder)
-    View viewPlachholder;
+    @Bind(R.id.toolbar_placeholder)
+    View toolbarPlachholder;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -84,8 +83,8 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
      */
     @Override
     public void init(Bundle bundle) {
-        //设置状态栏高度
-        DeviceUtils.setStatusBar(getActivity(), viewPlachholder);
+        //设置状态栏占位
+        DeviceUtils.setStatusBar(getActivity(), toolbarPlachholder);
         //设置列表
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         jRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -123,11 +122,10 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                     //设置fab的图标
                     floatingActionButton.setImageResource(isVisible ? R.drawable.ic_done_white_36dp : R.drawable.ic_reply_white_36dp);
                     //设置fab的位置
-                    CoordinatorLayout.LayoutParams layoutParams = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
                             , ViewGroup.LayoutParams.WRAP_CONTENT);
                     layoutParams.bottomMargin = getResources().getDimensionPixelSize(R.dimen.fab_default_margin);
-                    layoutParams.anchorGravity = isVisible ? Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL : Gravity.BOTTOM | Gravity.LEFT;
-                    layoutParams.setAnchorId(R.id.jrecyclerview);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM | (isVisible ? RelativeLayout.CENTER_HORIZONTAL : RelativeLayout.ALIGN_PARENT_LEFT));
                     floatingActionButton.setLayoutParams(layoutParams);
                     //加载url
                     webView.stopLoading();

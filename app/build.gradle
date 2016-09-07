@@ -40,4 +40,5 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.androidadvance:topsnackbar:+'
 }

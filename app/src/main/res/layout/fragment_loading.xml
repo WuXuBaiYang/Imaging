@@ -2,24 +2,26 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="3">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.AppCompatImageView
+    <ImageView
         android:id="@id/imageview_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_default_margin"
-        android:src="@drawable/ic_room_white_36dp"
-        android:transitionName="@string/fab"
-        app:layout_anchor="@id/imageview_loading"
-        app:layout_anchorGravity="bottom|center_horizontal"
-        app:useCompatPadding="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_room_white_36dp"
+            app:useCompatPadding="true" />
+    </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

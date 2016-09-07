@@ -2,36 +2,33 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <RelativeLayout
+    <include layout="@layout/view_toolbar" />
+
+    <com.jtech.view.RefreshLayout
+        android:id="@id/refreshlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/toolbar_main"
-            layout="@layout/view_toolbar" />
-
-        <com.jtech.view.RefreshLayout
-            android:id="@id/refreshlayout"
+        <com.jtech.view.JRecyclerView
+            android:id="@id/jrecyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar_main">
+            android:layout_height="match_parent" />
+    </com.jtech.view.RefreshLayout>
 
-            <com.jtech.view.JRecyclerView
-                android:id="@id/jrecyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.jtech.view.RefreshLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_room_white_36dp"
+            app:useCompatPadding="true" />
     </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
-        android:layout_margin="@dimen/fab_default_margin"
-        android:transitionName="@string/fab"
-        app:useCompatPadding="true" />
 </android.support.design.widget.CoordinatorLayout>

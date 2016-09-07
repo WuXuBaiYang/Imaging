@@ -3,6 +3,8 @@ package com.jtech.imaging.util;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -10,7 +12,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * 设备通用类
@@ -73,10 +75,35 @@ public class DeviceUtils {
                     layoutParams.height = DeviceUtils.getStatusBarHeight(activity);
                     statusBar.setLayoutParams(layoutParams);
                 } else {
-                    statusBar.setLayoutParams(new ViewGroup.LayoutParams(0, DeviceUtils.getStatusBarHeight(activity)));
+                    statusBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtils.getStatusBarHeight(activity)));
                 }
             } else {
                 statusBar.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    /**
+     * 设置navigationBar
+     *
+     * @param activity
+     * @param navigationBar
+     */
+    public static void setNavigationBar(Activity activity, View navigationBar) {
+        if (null != navigationBar) {
+            //判断SDK版本是否大于等于19，大于就让他显示
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                navigationBar.setVisibility(View.VISIBLE);
+                //设置状态栏高度
+                ViewGroup.LayoutParams layoutParams = navigationBar.getLayoutParams();
+                if (null != layoutParams) {
+                    layoutParams.height = DeviceUtils.getNavigationBarHeight(activity);
+                    navigationBar.setLayoutParams(layoutParams);
+                } else {
+                    navigationBar.setLayoutParams(new ViewGroup.LayoutParams(0, DeviceUtils.getStatusBarHeight(activity)));
+                }
+            } else {
+                navigationBar.setVisibility(View.GONE);
             }
         }
     }
@@ -86,44 +113,28 @@ public class DeviceUtils {
      *
      * @return 状态栏高度
      */
-    public static int getStatusBarHeight(Activity activity) {
-        Class<?> c;
-        Object obj;
-        Field field;
-        int x, statusBarHeight = 0;
-        try {
-            c = Class.forName("com.android.internal.R$dimen");
-            obj = c.newInstance();
-            field = c.getField("status_bar_height");//navigation_bar_height
-            x = Integer.parseInt(field.get(obj).toString());
-            statusBarHeight = activity.getResources().getDimensionPixelSize(x);
-        } catch (Exception e1) {
-            e1.printStackTrace();
+    public static int getStatusBarHeight(Context context) {
+        Resources resources = context.getResources();
+        int id = resources.getIdentifier("status_bar_height", "dimen", "android");
+        if (id > 0) {
+            return resources.getDimensionPixelSize(id);
         }
-        return statusBarHeight;
+        return 0;
     }
 
     /**
      * 获取NavigationBar高度
      *
-     * @param activity
+     * @param context
      * @return
      */
-    public static int getNavigationBarHeight(Activity activity) {
-        Class<?> c;
-        Object obj;
-        Field field;
-        int x, statusBarHeight = 0;
-        try {
-            c = Class.forName("com.android.internal.R$dimen");
-            obj = c.newInstance();
-            field = c.getField("navigation_bar_height");
-            x = Integer.parseInt(field.get(obj).toString());
-            statusBarHeight = activity.getResources().getDimensionPixelSize(x);
-        } catch (Exception e1) {
-            e1.printStackTrace();
+    public static int getNavigationBarHeight(Context context) {
+        Resources resources = context.getResources();
+        int id = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+        if (id > 0 && hasNavigationBar(context)) {
+            return resources.getDimensionPixelSize(id);
         }
-        return statusBarHeight;
+        return 0;
     }
 
     /**
@@ -132,6 +143,7 @@ public class DeviceUtils {
     @TargetApi(19)
     public static void setTranslucentStatus(Activity activity) {
         Window window = activity.getWindow();
+        window.setStatusBarColor(Color.TRANSPARENT);
         WindowManager.LayoutParams winParams = window.getAttributes();
         final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                 | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
@@ -141,5 +153,35 @@ public class DeviceUtils {
             winParams.flags &= ~bits;
         }
         window.setAttributes(winParams);
+    }
+
+    /**
+     * 是否存在navigationbar
+     *
+     * @param context
+     * @return
+     */
+    public static boolean hasNavigationBar(Context context) {
+        boolean hasNavigationBar = false;
+        Resources rs = context.getResources();
+        int id = rs.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (id > 0) {
+            hasNavigationBar = rs.getBoolean(id);
+        }
+        try {
+            Class systemPropertiesClass = Class.forName("android.os.SystemProperties");
+            Method m = systemPropertiesClass.getMethod("get", String.class);
+            String navBarOverride = (String) m.invoke(systemPropertiesClass, "qemu.hw.mainkeys");
+            if ("1".equals(navBarOverride)) {
+                hasNavigationBar = false;
+            } else if ("0".equals(navBarOverride)) {
+                hasNavigationBar = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return hasNavigationBar;
+
     }
 }

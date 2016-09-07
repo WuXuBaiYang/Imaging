@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <View
-        android:id="@id/placeholder"
+        android:id="@id/toolbar_placeholder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/colorPrimary" />
@@ -13,6 +13,6 @@
         android:id="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_below="@id/placeholder"
+        android:layout_below="@id/toolbar_placeholder"
         android:background="@color/colorPrimary" />
 </RelativeLayout>

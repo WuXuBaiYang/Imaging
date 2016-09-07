@@ -36,7 +36,12 @@ public class ImageUtils {
      * @param targetHeight
      */
     public static <T extends ImageView> void showCropImage(Context context, String uri, T imageView, int targetWidth, int targetHeight) {
-        showCropImage(context, uri, imageView, 0, 0, targetWidth, targetHeight);
+        Picasso.with(context)
+                .load(uri)
+                .centerCrop()
+                .config(Bitmap.Config.RGB_565)
+                .resize(targetWidth, targetHeight)
+                .into(imageView);
     }
 
     /**
@@ -70,7 +75,11 @@ public class ImageUtils {
      * @param imageView
      */
     public static <T extends ImageView> void showCircleImage(Context context, String uri, T imageView) {
-        showCircleImage(context, uri, imageView, 0, 0);
+        Picasso.with(context)
+                .load(uri)
+                .config(Bitmap.Config.RGB_565)
+                .transform(new CircleTransform())
+                .into(imageView);
     }
 
     /**
@@ -100,7 +109,10 @@ public class ImageUtils {
      * @param imageView
      */
     public static <T extends ImageView> void showImage(Context context, String uri, T imageView) {
-        showImage(context, uri, imageView, 0, 0);
+        Picasso.with(context)
+                .load(uri)
+                .config(Bitmap.Config.RGB_565)
+                .into(imageView);
     }
 
     /**
@@ -158,7 +170,10 @@ public class ImageUtils {
      * @param imageView
      */
     public static <T extends ImageView> void showLargeImage(Application application, String uri, T imageView) {
-        showLargeImage(application, uri, imageView, 0, 0);
+        Picasso.with(application)
+                .load(uri)
+                .skipMemoryCache()
+                .into(imageView);
     }
 
     /**
