@@ -11,8 +11,8 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.realm.OauthRealm;
-import com.jtech.imaging.util.DeviceUtils;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
+import com.jtech.imaging.view.widget.StatusBarCompat;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RefreshLayout;
 
@@ -33,8 +33,6 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     RefreshLayout refreshLayout;
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
-    @Bind(R.id.toolbar_placeholder)
-    View toolbarPlachholder;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -65,7 +63,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     @Override
     public void init(Bundle bundle) {
         //设置状态栏占位
-        DeviceUtils.setStatusBar(getActivity(), toolbarPlachholder);
+        StatusBarCompat.compat(getActivity());
         //fab点击
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)

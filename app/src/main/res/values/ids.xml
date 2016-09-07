@@ -8,7 +8,6 @@
     <item name="checkbox" type="id"></item>
     <item name="fab" type="id"></item>
     <item name="imageview_loading" type="id"></item>
-    <item name="toolbar_placeholder" type="id"></item>
     <item name="toolbar" type="id"></item>
     <item name="toolbar_include" type="id"></item>
 </resources>

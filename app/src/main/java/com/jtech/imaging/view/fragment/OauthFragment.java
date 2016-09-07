@@ -23,9 +23,9 @@ import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.realm.OauthRealm;
-import com.jtech.imaging.util.DeviceUtils;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
+import com.jtech.imaging.view.widget.StatusBarCompat;
 import com.jtech.view.JRecyclerView;
 import com.nineoldandroids.view.ViewHelper;
 
@@ -50,8 +50,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     ContentLoadingProgressBar contentLoadingProgressBar;
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
-    @Bind(R.id.toolbar_placeholder)
-    View toolbarPlachholder;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
@@ -84,7 +82,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     @Override
     public void init(Bundle bundle) {
         //设置状态栏占位
-        DeviceUtils.setStatusBar(getActivity(), toolbarPlachholder);
+        StatusBarCompat.compat(getActivity());
         //设置列表
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         jRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -124,8 +122,12 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
                     //设置fab的位置
                     RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT
                             , ViewGroup.LayoutParams.WRAP_CONTENT);
-                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM
-                            | (isVisible ? RelativeLayout.CENTER_HORIZONTAL : RelativeLayout.ALIGN_PARENT_LEFT));
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM | RelativeLayout.ALIGN_PARENT_LEFT);
+//                    if (isVisible) {
+//                        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+//                    } else {
+//                        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+//                    }
                     floatingActionButton.setLayoutParams(layoutParams);
                     //加载url
                     webView.stopLoading();
