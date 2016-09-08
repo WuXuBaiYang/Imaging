@@ -25,7 +25,6 @@ import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
-import com.jtech.imaging.view.widget.StatusBarCompat;
 import com.jtech.view.JRecyclerView;
 
 import java.util.concurrent.TimeUnit;
@@ -80,8 +79,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
      */
     @Override
     public void init(Bundle bundle) {
-        //设置状态栏占位
-        StatusBarCompat.compat(getActivity());
         //设置toolbar
         setupToolbar(toolbar)
                 .setNavigationIcon(R.drawable.ic_verified_user_white_24dp)

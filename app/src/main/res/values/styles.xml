@@ -5,8 +5,8 @@
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
 
-        <!-- 允许使用transitions -->
-        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:statusBarColor">@color/color_primary</item>
     </style>
 
     <style name="AppTheme" parent="@style/BaseAppTheme"></style>

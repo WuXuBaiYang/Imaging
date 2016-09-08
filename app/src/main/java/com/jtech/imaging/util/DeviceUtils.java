@@ -1,17 +1,10 @@
 package com.jtech.imaging.util;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.os.Build;
 import android.util.DisplayMetrics;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import java.lang.reflect.Method;
 
@@ -61,71 +54,7 @@ public class DeviceUtils {
     }
 
     /**
-     * 设置状态栏
-     *
-     * @param statusBar
-     */
-    public static void setStatusBar(Activity activity, View statusBar) {
-        if (null != statusBar) {
-            //判断SDK版本是否大于等于19，大于就让他显示
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                statusBar.setVisibility(View.VISIBLE);
-                //设置状态栏高度
-                ViewGroup.LayoutParams layoutParams = statusBar.getLayoutParams();
-                if (null != layoutParams) {
-                    layoutParams.height = DeviceUtils.getStatusBarHeight(activity);
-                    statusBar.setLayoutParams(layoutParams);
-                } else {
-                    statusBar.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DeviceUtils.getStatusBarHeight(activity)));
-                }
-            } else {
-                statusBar.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    /**
-     * 设置navigationBar
-     *
-     * @param activity
-     * @param navigationBar
-     */
-    public static void setNavigationBar(Activity activity, View navigationBar) {
-        if (null != navigationBar) {
-            //判断SDK版本是否大于等于19，大于就让他显示
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                navigationBar.setVisibility(View.VISIBLE);
-                //设置状态栏高度
-                ViewGroup.LayoutParams layoutParams = navigationBar.getLayoutParams();
-                if (null != layoutParams) {
-                    layoutParams.height = DeviceUtils.getNavigationBarHeight(activity);
-                    navigationBar.setLayoutParams(layoutParams);
-                } else {
-                    navigationBar.setLayoutParams(new ViewGroup.LayoutParams(0, DeviceUtils.getStatusBarHeight(activity)));
-                }
-            } else {
-                navigationBar.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    public static void setActionBar(Activity activity, View actionBar) {
-        setActionBar(actionBar, getActionBarSize(activity));
-    }
-
-    public static void setActionBar(View actionBar, int actionBarSize) {
-        if (null != actionBar) {
-            ViewGroup.LayoutParams layoutParams = actionBar.getLayoutParams();
-            if (null == layoutParams) {
-                layoutParams = new ViewGroup.LayoutParams(0, 0);
-            }
-            layoutParams.height = actionBarSize;
-            actionBar.setLayoutParams(layoutParams);
-        }
-    }
-
-    /**
-     * 获取手机状态栏高度
+     * 获取状态栏高度
      *
      * @return 状态栏高度
      */
@@ -168,24 +97,6 @@ public class DeviceUtils {
     }
 
     /**
-     * 设置状态栏为透明的
-     */
-    @TargetApi(19)
-    public static void setTranslucentStatus(Activity activity) {
-        Window window = activity.getWindow();
-        window.setStatusBarColor(Color.TRANSPARENT);
-        WindowManager.LayoutParams winParams = window.getAttributes();
-        final int bits = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-//                | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
-        window.setAttributes(winParams);
-    }
-
-    /**
      * 是否存在navigationbar
      *
      * @param context
@@ -210,8 +121,6 @@ public class DeviceUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return hasNavigationBar;
-
     }
 }

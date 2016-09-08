@@ -20,7 +20,6 @@ import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
-import com.jtech.imaging.view.widget.StatusBarCompat;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
@@ -41,7 +40,6 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         , RefreshLayout.OnRefreshListener
         , OnItemClickListener
         , OnLoadListener {
-
 
     // 默认排序设置为最新
     private String orderBy = Constants.ORDER_BY_LATEST;
@@ -83,8 +81,6 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
      */
     @Override
     public void init(Bundle bundle) {
-        //设置状态栏占位
-        StatusBarCompat.compat(getActivity());
         //设置标题栏
         setupToolbar(toolbar)
                 .setTitle(R.string.app_name)
