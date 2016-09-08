@@ -83,8 +83,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     public void init(Bundle bundle) {
         //设置标题栏
         setupToolbar(toolbar)
-                .setTitle(R.string.app_name)
-                .setNavigationIcon(R.drawable.ic_menu_white_24dp);
+                .setTitle(R.string.app_name);
         //fab点击
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)

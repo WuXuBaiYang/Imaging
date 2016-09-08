@@ -1,6 +1,5 @@
 package com.jtech.imaging.view.fragment;
 
-import android.animation.Animator;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,9 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -81,7 +78,6 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     public void init(Bundle bundle) {
         //设置toolbar
         setupToolbar(toolbar)
-                .setNavigationIcon(R.drawable.ic_verified_user_white_24dp)
                 .setTitle(R.string.oauth_page_title)
                 .setSubTitle(R.string.oauth_page_subtitle_scope);
         //设置列表
@@ -107,61 +103,22 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            //缩小fab
-            scaleFab(floatingActionButton, 1.0f, 0f, new Animator.AnimatorListener() {
-                @Override
-                public void onAnimationStart(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    boolean isVisible = View.VISIBLE == webView.getVisibility();
-                    //设置subtitle
-                    toolbar.setSubtitle(isVisible ? R.string.oauth_page_subtitle_scope : R.string.oauth_page_subtitle_login);
-                    //显示或隐藏webview
-                    webView.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
-                    //设置fab的图标
-                    floatingActionButton.setImageResource(isVisible ? R.drawable.ic_done_white_36dp : R.drawable.ic_reply_white_36dp);
-                    //加载url
-                    webView.stopLoading();
-                    contentLoadingProgressBar.setProgress(0);
-                    if (!isVisible) {
-                        //得到授权认证的url
-                        String oauthUrl = getPresenter().getOauthUrl(scopesAdapter.getCheckedScope());
-                        webView.loadUrl(oauthUrl);
-                    }
-                    //放大fab
-                    scaleFab(floatingActionButton, 0f, 1.0f, null);
-                }
-
-                @Override
-                public void onAnimationCancel(Animator animation) {
-                }
-
-                @Override
-                public void onAnimationRepeat(Animator animation) {
-                }
-            });
+            boolean isVisible = View.VISIBLE == webView.getVisibility();
+            //设置subtitle
+            toolbar.setSubtitle(isVisible ? R.string.oauth_page_subtitle_scope : R.string.oauth_page_subtitle_login);
+            //显示或隐藏webview
+            webView.setVisibility(isVisible ? View.INVISIBLE : View.VISIBLE);
+            //设置fab的图标
+            floatingActionButton.setImageResource(isVisible ? R.drawable.ic_done_white_36dp : R.drawable.ic_reply_white_36dp);
+            //加载url
+            webView.stopLoading();
+            contentLoadingProgressBar.setProgress(0);
+            if (!isVisible) {
+                //得到授权认证的url
+                String oauthUrl = getPresenter().getOauthUrl(scopesAdapter.getCheckedScope());
+                webView.loadUrl(oauthUrl);
+            }
         }
-    }
-
-    /**
-     * 缩放fab
-     *
-     * @param floatingActionButton
-     * @param start
-     * @param end
-     * @param animatorListener
-     */
-    private void scaleFab(FloatingActionButton floatingActionButton, float start, float end, Animator.AnimatorListener animatorListener) {
-        Animator animator = ViewAnimationUtils
-                .createCircularReveal(floatingActionButton, floatingActionButton.getWidth() / 2, floatingActionButton.getHeight() / 2, start, end)
-                .setDuration(ANIMATION_DURATION);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        if (null != animatorListener) {
-            animator.addListener(animatorListener);
-        }
-        animator.start();
     }
 
     /**
