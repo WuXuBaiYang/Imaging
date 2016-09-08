@@ -5,4 +5,9 @@
     <dimen name="recyclerview_default_margin">15dp</dimen>
     <dimen name="progress_height">3dp</dimen>
     <dimen name="checkbox_padding">10dp</dimen>
+    <dimen name="actionbar_size">?attr/actionBarSize</dimen>
+    <dimen name="photo_padding_top">10dp</dimen>
+    <dimen name="text_size_normal">16sp</dimen>
+    <dimen name="text_size_big">14sp</dimen>
+    <dimen name="text_size_small">18sp</dimen>
 </resources>

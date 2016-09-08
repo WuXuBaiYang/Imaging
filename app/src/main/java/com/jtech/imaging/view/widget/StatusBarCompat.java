@@ -39,7 +39,6 @@ public class StatusBarCompat {
             statusBarView.setBackgroundColor(color);
             contentView.addView(statusBarView, lp);
         }
-
     }
 
     /**
@@ -48,7 +47,7 @@ public class StatusBarCompat {
      * @param activity
      */
     public static void compat(Activity activity) {
-        compat(activity, INVALID_VAL);
+        compat(activity, activity.getResources().getColor(R.color.color_primary));
     }
 
 

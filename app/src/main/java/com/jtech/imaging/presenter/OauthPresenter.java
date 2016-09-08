@@ -3,7 +3,6 @@ package com.jtech.imaging.presenter;
 import android.app.Activity;
 import android.support.v4.app.FragmentManager;
 import android.transition.ChangeBounds;
-import android.transition.ChangeTransform;
 import android.view.View;
 
 import com.jtech.imaging.R;
@@ -35,7 +34,6 @@ public class OauthPresenter extends BasePresenter<OauthContract.View> implements
     @Override
     public void jumpToMainPage(FragmentManager fragmentManager, View view, String name) {
         MainPresenter mainPresenter = new MainPresenter(MainFragment.newInstance());
-        mainPresenter.getViewImplAsFragment().setEnterTransition(new ChangeTransform());
         mainPresenter.getViewImplAsFragment().setSharedElementEnterTransition(new ChangeBounds());
         fragmentManager.beginTransaction()
                 .addSharedElement(view, name)

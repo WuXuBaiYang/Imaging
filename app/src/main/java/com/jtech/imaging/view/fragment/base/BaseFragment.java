@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import com.anthonycr.grant.PermissionsManager;
 import com.anthonycr.grant.PermissionsResultAction;
 import com.jtech.imaging.contract.base.BaseContract;
+import com.jtech.imaging.view.activity.base.BaseActivity;
+import com.jtech.imaging.view.widget.ToolbarChain;
 
 import butterknife.ButterKnife;
 
@@ -19,7 +22,7 @@ import butterknife.ButterKnife;
  * Fragment基类
  * Created by wuxubaiyang on 16/4/16.
  */
-public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fragment implements BaseContract.View, View.OnClickListener {
+public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fragment implements BaseContract.View {
 
     private T presenter;
     private View contentView;
@@ -42,17 +45,34 @@ public abstract class BaseFragment<T extends BaseContract.Presenter> extends Fra
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //使用fragment加载toolbar
+        setHasOptionsMenu(true);
+    }
+
+    /**
+     * 设置toolbar
+     *
+     * @param toolbar
+     * @return
+     */
+    public ToolbarChain setupToolbar(Toolbar toolbar) {
+        setSupportActionBar(toolbar);
+        return new ToolbarChain(getActivity(), toolbar);
+    }
+
+    /**
+     * 设置toolbar为actionbar
+     *
+     * @param toolbar
+     */
+    public void setSupportActionBar(Toolbar toolbar) {
+        ((BaseActivity) getActivity()).setSupportActionBar(toolbar);
     }
 
     /**
      * 开始刷新
      */
     public void startRefresh() {
-
-    }
-
-    @Override
-    public void onClick(View v) {
 
     }
 

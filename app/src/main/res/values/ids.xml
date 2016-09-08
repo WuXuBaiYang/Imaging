@@ -9,4 +9,9 @@
     <item name="fab" type="id"></item>
     <item name="imageview_loading" type="id"></item>
     <item name="toolbar" type="id"></item>
+    <item name="menu_main_search" type="id"></item>
+    <item name="appbar" type="id"></item>
+    <item name="imageview_photo" type="id"></item>
+    <item name="background" type="id"></item>
+    <item name="textview_photo" type="id"></item>
 </resources>

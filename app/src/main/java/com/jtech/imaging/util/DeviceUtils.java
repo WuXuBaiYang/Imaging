@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -108,6 +109,21 @@ public class DeviceUtils {
         }
     }
 
+    public static void setActionBar(Activity activity, View actionBar) {
+        setActionBar(actionBar, getActionBarSize(activity));
+    }
+
+    public static void setActionBar(View actionBar, int actionBarSize) {
+        if (null != actionBar) {
+            ViewGroup.LayoutParams layoutParams = actionBar.getLayoutParams();
+            if (null == layoutParams) {
+                layoutParams = new ViewGroup.LayoutParams(0, 0);
+            }
+            layoutParams.height = actionBarSize;
+            actionBar.setLayoutParams(layoutParams);
+        }
+    }
+
     /**
      * 获取手机状态栏高度
      *
@@ -120,6 +136,20 @@ public class DeviceUtils {
             return resources.getDimensionPixelSize(id);
         }
         return 0;
+    }
+
+    /**
+     * 获取actionbar的高度
+     *
+     * @param context
+     * @return
+     */
+    public static int getActionBarSize(Context context) {
+        final TypedArray styledAttributes = context.getTheme().obtainStyledAttributes(
+                new int[]{android.R.attr.actionBarSize});
+        int mActionBarSize = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+        return mActionBarSize;
     }
 
     /**

@@ -1,9 +1,12 @@
 <resources>
 
-    <style name="BaseAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="BaseAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
+
+        <!-- 允许使用transitions -->
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="AppTheme" parent="@style/BaseAppTheme"></style>
