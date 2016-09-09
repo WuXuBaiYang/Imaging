@@ -1,9 +1,11 @@
 package com.jtech.imaging.view.fragment;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -11,7 +13,6 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.LoadingContract;
 import com.jtech.imaging.realm.OauthRealm;
-import com.jtech.imaging.util.ImageUtils;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 
 import java.util.concurrent.TimeUnit;
@@ -48,8 +49,19 @@ public class LoadingFragment extends BaseFragment<LoadingContract.Presenter> imp
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new FabClick());
-        //加载图片
-//        ImageUtils.showImage(getActivity(), getLoadingPageImage(), imageView);
+//        //加载图片
+//        getPresenter().setLoadingImage(getActivity(), "photo_loading.jpg", new Action1<Bitmap>() {
+//            @Override
+//            public void call(Bitmap bitmap) {
+//                if (null != bitmap) {
+//                    imageView.setImageBitmap(bitmap);
+//                    ViewAnimationUtils
+//                            .createCircularReveal(imageView, imageView.getWidth() / 2, imageView.getHeight() / 2, 0.f, 1.f)
+//                            .setDuration(300)
+//                            .start();
+//                }
+//            }
+//        });
     }
 
     /**

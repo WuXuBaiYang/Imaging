@@ -1,9 +1,13 @@
 package com.jtech.imaging.contract;
 
 
+import android.app.Activity;
+import android.graphics.Bitmap;
 import android.support.v4.app.FragmentManager;
 
 import com.jtech.imaging.contract.base.BaseContract;
+
+import rx.functions.Action1;
 
 /**
  * 加载页协议
@@ -15,6 +19,8 @@ public interface LoadingContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
+
+        void setLoadingImage(Activity activity, String fileName, Action1<Bitmap> action1);
 
         void jumpToMainPage(FragmentManager fragmentManager, android.view.View view, String name);
 

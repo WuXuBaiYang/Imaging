@@ -41,4 +41,5 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
     compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     compile 'com.yayandroid:ParallaxListView:1.1'
+    compile 'com.github.chrisbanes:PhotoView:1.3.0'
 }

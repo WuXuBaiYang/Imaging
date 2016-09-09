@@ -1,6 +1,11 @@
 package com.jtech.imaging.presenter;
 
+import android.app.Activity;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.view.View;
 
@@ -10,6 +15,15 @@ import com.jtech.imaging.presenter.base.BasePresenter;
 import com.jtech.imaging.view.fragment.MainFragment;
 import com.jtech.imaging.view.fragment.OauthFragment;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
 /**
  * 加载页业务类
  * Created by jianghan on 2016/9/6.
@@ -18,6 +32,29 @@ public class LoadingPresenter extends BasePresenter<LoadingContract.View> implem
 
     public LoadingPresenter(LoadingContract.View view) {
         super(view);
+    }
+
+    @Override
+    public void setLoadingImage(final Activity activity, String fileName, Action1<Bitmap> action1) {
+        Observable.just(fileName)
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<String, Bitmap>() {
+                    @Override
+                    public Bitmap call(String s) {
+                        if (!TextUtils.isEmpty(s)) {
+                            try {
+                                AssetManager assetManager = activity.getAssets();
+                                InputStream inputStream = assetManager.open(s);
+                                return BitmapFactory.decodeStream(inputStream);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        return null;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(action1);
     }
 
     @Override
