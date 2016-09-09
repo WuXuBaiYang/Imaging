@@ -8,6 +8,7 @@
     <dimen name="actionbar_size">?attr/actionBarSize</dimen>
     <dimen name="photo_padding_top">10dp</dimen>
     <dimen name="text_size_normal">16sp</dimen>
-    <dimen name="text_size_big">14sp</dimen>
-    <dimen name="text_size_small">18sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_big">18sp</dimen>
+    <dimen name="card_margin">8dp</dimen>
 </resources>
