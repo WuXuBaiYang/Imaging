@@ -2,7 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="recyclerview_default_margin">15dp</dimen>
+    <dimen name="recyclerview_default_margin">16dp</dimen>
     <dimen name="progress_height">3dp</dimen>
     <dimen name="checkbox_padding">10dp</dimen>
     <dimen name="actionbar_size">?attr/actionBarSize</dimen>

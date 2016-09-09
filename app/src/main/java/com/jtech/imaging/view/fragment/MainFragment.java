@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -107,6 +108,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         jRecyclerView.setOnLoadListener(this);
         refreshLayout.setOnRefreshListener(this);
         jRecyclerView.setOnItemClickListener(this);
+        jRecyclerView.addOnScrollListener(new OnScrollListener());
         //发起下拉刷新
         refreshLayout.startRefreshing();
     }
@@ -160,6 +162,20 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_main, menu);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    /**
+     * 列表的滚动监听
+     */
+    private class OnScrollListener extends RecyclerView.OnScrollListener {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (dy > 0) {
+                floatingActionButton.hide();
+            } else {
+                floatingActionButton.show();
+            }
+        }
     }
 
     /**
