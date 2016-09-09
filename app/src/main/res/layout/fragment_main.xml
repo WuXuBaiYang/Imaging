@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/recyclerview_default_margin"
-        android:src="@drawable/ic_compare_arrows_white_36dp"
+        android:src="@drawable/ic_shuffle_white_36dp"
         android:transitionName="@string/fab"
         app:useCompatPadding="true" />
 </android.support.design.widget.CoordinatorLayout>

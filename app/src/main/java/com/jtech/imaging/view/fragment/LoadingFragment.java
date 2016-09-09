@@ -49,16 +49,7 @@ public class LoadingFragment extends BaseFragment<LoadingContract.Presenter> imp
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new FabClick());
         //加载图片
-        ImageUtils.showImage(getActivity(), getLoadingPageImage(), imageView);
-    }
-
-    /**
-     * 获取loading页的图片url
-     *
-     * @return
-     */
-    private String getLoadingPageImage() {
-        return getResources().getString(R.string.loading_page_image_url);
+//        ImageUtils.showImage(getActivity(), getLoadingPageImage(), imageView);
     }
 
     /**

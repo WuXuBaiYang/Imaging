@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/text_cover"
-        android:gravity="right|bottom"
+        android:gravity="left|bottom"
         android:padding="@dimen/recyclerview_default_margin"
         android:textColor="@color/toolbar_subtitle"
         android:textSize="@dimen/text_size_normal" />

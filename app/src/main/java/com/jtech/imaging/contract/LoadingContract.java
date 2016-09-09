@@ -15,8 +15,9 @@ public interface LoadingContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
+
         void jumpToMainPage(FragmentManager fragmentManager, android.view.View view, String name);
 
-        void jumpToOauthPage(FragmentManager fragmentManager,android.view.View view, String name);
+        void jumpToOauthPage(FragmentManager fragmentManager, android.view.View view, String name);
     }
 }

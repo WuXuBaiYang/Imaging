@@ -19,9 +19,8 @@
             android:id="@id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_fingerprint_white_36dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_wallpaper_white_36dp"
             android:transitionName="@string/fab"
             app:useCompatPadding="true" />
     </RelativeLayout>

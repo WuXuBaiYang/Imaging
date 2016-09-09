@@ -18,7 +18,6 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.model.PhotoModel;
-import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 import com.jtech.listener.OnItemClickListener;
@@ -26,7 +25,6 @@ import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
-import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -188,8 +186,7 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            OauthRealm.getInstance().removeOauthModel();
-            getActivity().finish();
+            Snackbar.make(getContentView(), "随机", Snackbar.LENGTH_SHORT).show();
         }
     }
 }
