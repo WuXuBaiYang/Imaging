@@ -20,13 +20,12 @@ import com.yayandroid.parallaxlistview.ParallaxImageView;
  */
 public class PhotoAdapter extends BaseJAdapter<ParallaxViewHolder, PhotoModel> {
 
-    private static final float PARALLAX_RATIO = 1.5f;
-    private int screenHeight;
+    private int screenWidth;
 
     public PhotoAdapter(Activity activity) {
         super(activity);
         //获取屏幕宽度
-        screenHeight = DeviceUtils.getScreenHeight(getActivity());
+        screenWidth = DeviceUtils.getScreenWidth(getActivity());
     }
 
     /**
@@ -50,15 +49,16 @@ public class PhotoAdapter extends BaseJAdapter<ParallaxViewHolder, PhotoModel> {
     public void convert(ParallaxViewHolder holder, int viewType, int position) {
         PhotoModel photoModel = getItem(position);
         //设置item的高度
+        double ratio = (1.0 * screenWidth) / photoModel.getWidth();
+        int itemHeight = (int) (ratio * photoModel.getHeight());
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
-        layoutParams.height = screenHeight / 3;
+        layoutParams.height = itemHeight / 3 * 2;
         holder.itemView.setLayoutParams(layoutParams);
         //设置背景主题色
         holder.itemView.setBackgroundColor(Color.parseColor(photoModel.getColor()));
         //显示图片
         ParallaxImageView parallaxImageView = holder.getImageView(R.id.imageview_photo);
         ImageUtils.showImage(getActivity(), photoModel.getUrls().getThumb(), parallaxImageView);
-        parallaxImageView.setParallaxRatio(PARALLAX_RATIO);
         holder.setBackgroundImage(parallaxImageView);
         //设置作者
         holder.setText(R.id.textview_photo, photoModel.getUser().getUsername());
