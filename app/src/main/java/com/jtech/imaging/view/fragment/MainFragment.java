@@ -170,6 +170,9 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     private class OnScrollListener extends RecyclerView.OnScrollListener {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            //视差滚动
+            photoAdapter.animateImage(recyclerView);
+            //隐藏或显示fab
             if (dy > 0) {
                 floatingActionButton.hide();
             } else {
