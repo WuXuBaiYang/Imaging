@@ -34,9 +34,7 @@ public class PhotoAdapter extends BaseJAdapter<ParallaxViewHolder, PhotoModel> {
     public void animateImage(RecyclerView view) {
         for (int i = 0; i < view.getChildCount(); i++) {
             RecyclerView.ViewHolder viewHolder = view.getChildViewHolder(view.getChildAt(i));
-            if (viewHolder instanceof ParallaxViewHolder) {
-                ((ParallaxViewHolder) viewHolder).animateImage();
-            }
+            ((ParallaxViewHolder) viewHolder).animateImage();
         }
     }
 
@@ -58,7 +56,7 @@ public class PhotoAdapter extends BaseJAdapter<ParallaxViewHolder, PhotoModel> {
         holder.itemView.setBackgroundColor(Color.parseColor(photoModel.getColor()));
         //显示图片
         ParallaxImageView parallaxImageView = holder.getImageView(R.id.imageview_photo);
-        ImageUtils.showImage(getActivity(), photoModel.getUrls().getThumb(), parallaxImageView);
+        ImageUtils.showImage(getActivity(), photoModel.getUrls().getRegular(), parallaxImageView);
         holder.setBackgroundImage(parallaxImageView);
         //设置作者
         holder.setText(R.id.textview_photo, photoModel.getUser().getUsername());

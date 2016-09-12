@@ -1,17 +1,16 @@
 package com.jtech.imaging.view.fragment;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.LoadingContract;
+import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 
@@ -45,6 +44,16 @@ public class LoadingFragment extends BaseFragment<LoadingContract.Presenter> imp
 
     @Override
     public void init(Bundle bundle) {
+        if (!OauthRealm.hasOauthModel()){
+            OauthModel oauthModel = new OauthModel();
+            oauthModel.setAccessToken("da20b124d815a82ef0cb79226e991559e6e4c9cdf411fcef4e51acc718c0e44a");
+            oauthModel.setCreatedAt(1473643598);
+            oauthModel.setScope("public read_user write_user read_photos write_photos write_likes read_collections write_collections");
+            oauthModel.setTokenType("bearer");
+            OauthRealm.getInstance().setOauthModel(oauthModel);
+        }
+        getPresenter().jumpToMainPage(getActivity().getSupportFragmentManager(), floatingActionButton, getString(R.string.fab));
+
         //设置fab的点击事件
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
