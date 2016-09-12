@@ -17,6 +17,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    signingConfigs {
+        debug {
+            storePassword 'JTechImaging'
+            storeFile file('../keystore/Imaging.jks')
+            keyPassword 'Imaging'
+            keyAlias 'JTech'
+        }
+        release {
+            storePassword 'JTechImaging'
+            storeFile file('../keystore/Imaging.jks')
+            keyPassword 'Imaging'
+            keyAlias 'JTech'
+        }
+    }
 }
 
 dependencies {
