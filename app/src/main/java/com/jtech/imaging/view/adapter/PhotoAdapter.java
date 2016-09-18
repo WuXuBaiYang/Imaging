@@ -34,7 +34,9 @@ public class PhotoAdapter extends BaseJAdapter<ParallaxViewHolder, PhotoModel> {
     public void animateImage(RecyclerView view) {
         for (int i = 0; i < view.getChildCount(); i++) {
             RecyclerView.ViewHolder viewHolder = view.getChildViewHolder(view.getChildAt(i));
-            ((ParallaxViewHolder) viewHolder).animateImage();
+            if (viewHolder instanceof ParallaxViewHolder) {
+                ((ParallaxViewHolder) viewHolder).animateImage();
+            }
         }
     }
 

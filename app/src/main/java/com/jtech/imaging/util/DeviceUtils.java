@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.lang.reflect.Method;
 
@@ -51,6 +53,23 @@ public class DeviceUtils {
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * 设置状态栏
+     *
+     * @param statusBar
+     */
+    public static void setupStatusBar(Context context, View statusBar) {
+        if (null != statusBar) {
+            ViewGroup.LayoutParams layoutParams = statusBar.getLayoutParams();
+            if (null != layoutParams) {
+                layoutParams.height = getStatusBarHeight(context);
+            } else {
+                layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(context));
+            }
+            statusBar.setLayoutParams(layoutParams);
+        }
     }
 
     /**

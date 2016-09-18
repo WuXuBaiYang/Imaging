@@ -18,6 +18,7 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.util.DeviceUtils;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.fragment.base.BaseFragment;
 import com.jtech.listener.OnItemClickListener;
@@ -52,6 +53,8 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
     JRecyclerView jRecyclerView;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.statusbar)
+    View statusBar;
 
     private PhotoAdapter photoAdapter;
 
@@ -84,6 +87,8 @@ public class MainFragment extends BaseFragment<MainContract.Presenter> implement
         //设置标题栏
         setupToolbar(toolbar)
                 .setTitle(R.string.app_name);
+        //设置状态栏
+        DeviceUtils.setupStatusBar(getActivity(), statusBar);
         //fab点击
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
