@@ -13,12 +13,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activity.MainActivity">
+        //欢迎页
+        <activity android:name=".view.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"></action>
                 <category android:name="android.intent.category.LAUNCHER"></category>
             </intent-filter>
         </activity>
+        //主页
+        <activity android:name=".view.activity.MainActivity" />
+        //授权认证
+        <activity android:name=".view.activity.OauthActivity" />
     </application>
 
 </manifest>

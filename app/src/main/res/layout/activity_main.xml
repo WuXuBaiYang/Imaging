@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@id/framelayout_content"
+    <include layout="@layout/view_toolbar" />
+
+    <com.jtech.view.RefreshLayout
+        android:id="@id/refreshlayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.jtech.view.JRecyclerView
+            android:id="@id/jrecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.jtech.view.RefreshLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/recyclerview_default_margin"
+        android:src="@drawable/ic_shuffle_white_36dp"
+        android:transitionName="@string/fab"
+        app:useCompatPadding="true" />
 </android.support.design.widget.CoordinatorLayout>

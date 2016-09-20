@@ -1,7 +1,7 @@
 package com.jtech.imaging.contract;
 
-import com.jtech.imaging.contract.base.BaseContract;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtechlib.contract.BaseContract;
 
 import java.util.List;
 

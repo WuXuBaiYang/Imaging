@@ -1,16 +1,12 @@
 package com.jtech.imaging;
 
-import android.app.Application;
-
 import com.jtech.imaging.common.Constants;
-
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import com.jtechlib.BaseApplication;
 
 /**
  * Created by wuxubaiyang on 16/4/21.
  */
-public class JApplication extends Application {
+public class JApplication extends BaseApplication {
 
     private static JApplication INSTANCE;
 
@@ -30,22 +26,8 @@ public class JApplication extends Application {
         return INSTANCE;
     }
 
-    /**
-     * 初始化realm
-     */
-    public Realm getRealm() {
-        return Realm.getInstance(getRealmConfiguration());
-    }
-
-    /**
-     * 获取数据库配置信息
-     *
-     * @return
-     */
-    private RealmConfiguration getRealmConfiguration() {
-        return new RealmConfiguration
-                .Builder(getApplicationContext())
-                .name(Constants.REALM_DB_NAME)
-                .build();
+    @Override
+    protected String getDBName() {
+        return Constants.REALM_DB_NAME;
     }
 }

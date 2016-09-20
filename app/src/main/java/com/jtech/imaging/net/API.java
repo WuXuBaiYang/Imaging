@@ -1,49 +1,41 @@
 package com.jtech.imaging.net;
 
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.internal.bind.DateTypeAdapter;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.realm.OauthRealm;
+import com.jtechlib.net.BaseApi;
 
-import java.util.Date;
-
-import okhttp3.OkHttpClient;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 接口的实现类
  * Created by wuxubaiyang on 16/4/17.
  */
-public class API {
+public class API extends BaseApi {
     /**
      * 持有演示用api对象
      */
-    private static UnsplashApi unsplashApi;
+    private UnsplashApi unsplashApi;
 
-    public static Gson gson = new GsonBuilder()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(Date.class, new DateTypeAdapter())
-            .create();
+    private static API api;
+
+    public static API get() {
+        if (null == api) {
+            api = new API();
+        }
+        return api;
+    }
+
 
     /**
      * 获取unsplash接口对象
      *
      * @return
      */
-    public static UnsplashApi.OauthApi oauthApi() {
+    public UnsplashApi.OauthApi oauthApi() {
         //创建retrofit
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(Constants.BASE_UNSPLASH_OAUTH_URL)
-                .client(new OkHttpClient())
-                .build();
-        return retrofit.create(UnsplashApi.OauthApi.class);
+        return createRxApi(Constants.BASE_UNSPLASH_OAUTH_URL, UnsplashApi.OauthApi.class);
     }
 
     /**
@@ -51,7 +43,7 @@ public class API {
      *
      * @return
      */
-    public static UnsplashApi unsplashApi() {
+    public UnsplashApi unsplashApi() {
         if (null == unsplashApi) {
             //获取token
             String authToken = "";
@@ -59,19 +51,10 @@ public class API {
                 OauthModel oauthModel = OauthRealm.getInstance().getOauthModel();
                 authToken = oauthModel.getTokenType() + " " + oauthModel.getAccessToken();
             }
-            //创建okhttp
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .addInterceptor(new MyInterceptor(authToken))
-                    .build();
+            Map<String, String> headerMap = new HashMap<>();
+            headerMap.put("Authorization", authToken);
             //创建retrofit
-            Retrofit retrofit = new Retrofit.Builder()
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                    .baseUrl(Constants.BASE_UNSPLASH_URL)
-                    .client(okHttpClient)
-                    .build();
-            //创建retrofit
-            unsplashApi = retrofit.create(UnsplashApi.class);
+            unsplashApi = createRxApi(headerMap, Constants.BASE_UNSPLASH_URL, UnsplashApi.class);
         }
         return unsplashApi;
     }

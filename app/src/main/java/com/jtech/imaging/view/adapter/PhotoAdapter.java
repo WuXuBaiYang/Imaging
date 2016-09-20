@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import com.jtech.adapter.BaseJAdapter;
 import com.jtech.imaging.R;
 import com.jtech.imaging.model.PhotoModel;
-import com.jtech.imaging.util.DeviceUtils;
-import com.jtech.imaging.util.ImageUtils;
 import com.jtech.imaging.view.adapter.viewholder.ParallaxViewHolder;
+import com.jtechlib.Util.DeviceUtils;
+import com.jtechlib.Util.ImageUtils;
 import com.yayandroid.parallaxlistview.ParallaxImageView;
 
 /**

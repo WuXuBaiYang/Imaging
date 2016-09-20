@@ -3,7 +3,6 @@ package com.jtech.imaging.presenter;
 import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.net.API;
-import com.jtech.imaging.presenter.base.BasePresenter;
 
 import java.util.List;
 
@@ -15,27 +14,30 @@ import rx.schedulers.Schedulers;
  * 演示用逻辑处理实现类
  * Created by wuxubaiyang on 16/4/16.
  */
-public class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
+public class MainPresenter implements MainContract.Presenter {
+
+    private MainContract.View view;
 
     public MainPresenter(MainContract.View view) {
-        super(view);
+        this.view = view;
     }
 
     @Override
     public void requestPhotoList(int pageIndex, int displayNumber, String orderBy, final boolean loadMore) {
-        API.unsplashApi()
+        API.get()
+                .unsplashApi()
                 .photos(pageIndex, displayNumber, orderBy)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<List<PhotoModel>>() {
                     @Override
                     public void call(List<PhotoModel> photoModels) {
-                        getView().success(photoModels, loadMore);
+                        view.success(photoModels, loadMore);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        getView().fail(throwable.getMessage());
+                        view.fail(throwable.getMessage());
                     }
                 });
     }

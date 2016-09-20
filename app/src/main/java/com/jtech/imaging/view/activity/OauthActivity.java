@@ -1,4 +1,4 @@
-package com.jtech.imaging.view.fragment;
+package com.jtech.imaging.view.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,9 +7,7 @@ import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -19,10 +17,11 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
+import com.jtech.imaging.presenter.OauthPresenter;
 import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
-import com.jtech.imaging.view.fragment.base.BaseFragment;
 import com.jtech.view.JRecyclerView;
+import com.jtechlib.view.activity.BaseActivity;
 
 import java.util.concurrent.TimeUnit;
 
@@ -30,12 +29,10 @@ import butterknife.Bind;
 import rx.functions.Action1;
 
 /**
- * 授权认证fragment
- * Created by wuxubaiyang on 16/4/16.
+ * 授权认证页面
+ * Created by jianghan on 2016/9/20.
  */
-public class OauthFragment extends BaseFragment<OauthContract.Presenter> implements OauthContract.View {
-
-    private static final long ANIMATION_DURATION = 130;
+public class OauthActivity extends BaseActivity implements OauthContract.View {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
@@ -49,33 +46,17 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
     Toolbar toolbar;
 
     private ScopesAdapter scopesAdapter;
+    private OauthContract.Presenter presenter;
 
-    /**
-     * 创建视图的方法
-     *
-     * @param inflater
-     * @param container
-     * @return
-     */
     @Override
-    public View createView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_oauth, container, false);
+    protected void initVariables(Bundle bundle) {
+        //绑定VP
+        presenter = new OauthPresenter(this);
     }
 
-    public static OauthFragment newInstance() {
-        Bundle args = new Bundle();
-        OauthFragment fragment = new OauthFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    /**
-     * 入口方法
-     *
-     * @param bundle
-     */
     @Override
-    public void init(Bundle bundle) {
+    protected void initViews(Bundle bundle) {
+        setContentView(R.layout.activity_oauth);
         //设置toolbar
         setupToolbar(toolbar)
                 .setTitle(R.string.oauth_page_title)
@@ -93,8 +74,33 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
                 .subscribe(new FabClick());
-        //设置数据
-        scopesAdapter.setDatas(getPresenter().getScopeList(getActivity()));
+    }
+
+    @Override
+    protected void loadData() {
+        //设置权限列表数据
+        scopesAdapter.setDatas(presenter.getScopeList(getActivity()));
+    }
+
+    @Override
+    public void oauthSuccess(OauthModel oauthModel) {
+        //插入数据
+        OauthRealm.getInstance().setOauthModel(oauthModel);
+        Snackbar.make(webView, "授权成功"
+                , Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                //跳转到主页
+            }
+        }).show();
+    }
+
+    @Override
+    public void oauthFail(String error) {
+        //还原状态
+        new FabClick().call(null);
+        Snackbar.make(webView, error,
+                Snackbar.LENGTH_SHORT).show();
     }
 
     /**
@@ -115,7 +121,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
             contentLoadingProgressBar.setProgress(0);
             if (!isVisible) {
                 //得到授权认证的url
-                String oauthUrl = getPresenter().getOauthUrl(scopesAdapter.getCheckedScope());
+                String oauthUrl = presenter.getOauthUrl(scopesAdapter.getCheckedScope());
                 webView.loadUrl(oauthUrl);
             }
         }
@@ -139,7 +145,7 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.startsWith(Constants.UNSPLASH_REDIRECT_URI)) {
                 String code = url.replace(Constants.UNSPLASH_REDIRECT_URI + "?code=", "");
-                getPresenter().requestToken(Constants.UNSPLASH_CLIENT_ID,
+                presenter.requestToken(Constants.UNSPLASH_CLIENT_ID,
                         Constants.UNSPLASH_SECRET, Constants.UNSPLASH_REDIRECT_URI,
                         code, Constants.GRANT_TYPE);
             }
@@ -148,27 +154,4 @@ public class OauthFragment extends BaseFragment<OauthContract.Presenter> impleme
         }
     }
 
-    @Override
-    public void oauthSuccess(OauthModel oauthModel) {
-        //插入数据
-        OauthRealm.getInstance().setOauthModel(oauthModel);
-        Snackbar.make(getContentView(), "授权成功"
-                , Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
-            @Override
-            public void onDismissed(Snackbar snackbar, int event) {
-                //跳转到主页
-                getPresenter().jumpToMainPage(getActivity().getSupportFragmentManager()
-                        , floatingActionButton
-                        , getString(R.string.fab));
-            }
-        }).show();
-    }
-
-    @Override
-    public void oauthFail(String error) {
-        //还原状态
-        new FabClick().call(null);
-        Snackbar.make(getContentView(), error,
-                Snackbar.LENGTH_SHORT).show();
-    }
 }

@@ -1,6 +1,10 @@
 package com.jtech.imaging.realm;
 
+import com.jtech.imaging.JApplication;
 import com.jtech.imaging.model.OauthModel;
+import com.jtechlib.realm.BaseRealm;
+
+import io.realm.Realm;
 
 /**
  * 授权认证相关的数据库操作
@@ -9,6 +13,11 @@ import com.jtech.imaging.model.OauthModel;
 public class OauthRealm extends BaseRealm {
     private static OauthRealm INSTANCE;
     private OauthModel oauthModel;
+    private Realm realm;
+
+    public OauthRealm() {
+        realm = JApplication.getInstance().getRealm();
+    }
 
     public static OauthRealm getInstance() {
         if (null == INSTANCE) {
@@ -33,7 +42,7 @@ public class OauthRealm extends BaseRealm {
      */
     public void setOauthModel(OauthModel oauthModel) {
         this.oauthModel = oauthModel;
-        insertModel(OauthModel.class, oauthModel);
+        insertModel(OauthModel.class, realm, oauthModel);
     }
 
     /**
@@ -41,7 +50,7 @@ public class OauthRealm extends BaseRealm {
      */
     public void removeOauthModel() {
         this.oauthModel = null;
-        deleteModel(OauthModel.class);
+        deleteModel(OauthModel.class, realm);
     }
 
     /**
@@ -51,7 +60,7 @@ public class OauthRealm extends BaseRealm {
      */
     public OauthModel getOauthModel() {
         if (null == oauthModel) {
-            oauthModel = queryModel(OauthModel.class);
+            oauthModel = (OauthModel) queryModel(OauthModel.class, realm);
         }
         return oauthModel;
     }
