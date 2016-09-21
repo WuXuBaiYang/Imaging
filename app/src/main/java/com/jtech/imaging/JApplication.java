@@ -3,6 +3,7 @@ package com.jtech.imaging;
 import com.jtechlib.BaseApplication;
 
 /**
+ * application，继承自JTechLib
  * Created by wuxubaiyang on 16/4/21.
  */
 public class JApplication extends BaseApplication {

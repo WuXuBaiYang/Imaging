@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -66,10 +67,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         setContentView(R.layout.activity_main);
         //设置标题栏
         setupToolbar(toolbar)
-                .inflateMenu(R.menu.menu_main)
-                .setOnMenuItemClickListener(this)
+                .setTitle(R.string.app_name)
                 .setTitleTextColor(R.color.toolbar_title)
-                .setTitle(R.string.app_name);
+                .setOnMenuItemClickListener(this);
         //设置状态栏
         StatusBarCompat.setStatusBar(getActivity(), statusBar);
         //fab点击
@@ -130,6 +130,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         refreshLayout.refreshingComplete();
         jRecyclerView.setLoadCompleteState();
         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        toolbar.inflateMenu(R.menu.menu_main);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
