@@ -1,12 +1,13 @@
 package com.jtech.imaging.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jtechlib.model.BaseModel;
 
 /**
  * 喜欢
  * Created by jianghan on 2016/8/31.
  */
-public class LikePhotoModel {
+public class LikePhotoModel extends BaseModel {
 
     private PhotoModel photo;
     private UserModel user;

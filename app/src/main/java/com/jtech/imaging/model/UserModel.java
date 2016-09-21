@@ -1,12 +1,13 @@
 package com.jtech.imaging.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jtechlib.model.BaseModel;
 
 /**
  * 用户信息
  * Created by jianghan on 2016/8/31.
  */
-public class UserModel {
+public class UserModel extends BaseModel {
 
     @SerializedName("username")
     private String username;
@@ -148,7 +149,6 @@ public class UserModel {
     public void setLinks(LinksModel links) {
         this.links = links;
     }
-
 
 
     public static class BadgeModel {

@@ -1,10 +1,12 @@
 package com.jtech.imaging.model;
 
+import com.jtechlib.model.BaseModel;
+
 /**
  * 照片属性
  * Created by jianghan on 2016/8/31.
  */
-public class PhotoStats {
+public class PhotoStats extends BaseModel {
 
     private int downloads;
     private int likes;

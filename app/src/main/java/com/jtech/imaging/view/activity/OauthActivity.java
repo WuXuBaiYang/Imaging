@@ -1,8 +1,12 @@
 package com.jtech.imaging.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,11 +18,11 @@ import android.webkit.WebViewClient;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
+import com.jtech.imaging.cache.OauthCache;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.presenter.OauthPresenter;
-import com.jtech.imaging.realm.OauthRealm;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.activity.BaseActivity;
@@ -44,6 +48,8 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
     FloatingActionButton floatingActionButton;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
+    @Bind(R.id.content)
+    CoordinatorLayout content;
 
     private ScopesAdapter scopesAdapter;
     private OauthContract.Presenter presenter;
@@ -85,12 +91,17 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
     @Override
     public void oauthSuccess(OauthModel oauthModel) {
         //插入数据
-        OauthRealm.getInstance().setOauthModel(oauthModel);
-        Snackbar.make(webView, "授权成功"
+        OauthCache.get().setOauthModel(oauthModel);
+        Snackbar.make(content, "授权成功"
                 , Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 //跳转到主页
+                ActivityOptionsCompat activityOptionsCompat =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                floatingActionButton, getString(R.string.fab));
+                ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
+                        MainActivity.class), activityOptionsCompat.toBundle());
             }
         }).show();
     }
@@ -99,7 +110,7 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
     public void oauthFail(String error) {
         //还原状态
         new FabClick().call(null);
-        Snackbar.make(webView, error,
+        Snackbar.make(content, error,
                 Snackbar.LENGTH_SHORT).show();
     }
 

@@ -1,6 +1,7 @@
 package com.jtech.imaging.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jtechlib.model.BaseModel;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * 用户中搜索
  * Created by jianghan on 2016/9/5.
  */
-public class SearchUserModel {
+public class SearchUserModel extends BaseModel {
 
     @SerializedName("total")
     private int total;

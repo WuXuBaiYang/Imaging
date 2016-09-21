@@ -1,6 +1,5 @@
 package com.jtech.imaging;
 
-import com.jtech.imaging.common.Constants;
 import com.jtechlib.BaseApplication;
 
 /**
@@ -24,10 +23,5 @@ public class JApplication extends BaseApplication {
      */
     public static JApplication getInstance() {
         return INSTANCE;
-    }
-
-    @Override
-    protected String getDBName() {
-        return Constants.REALM_DB_NAME;
     }
 }

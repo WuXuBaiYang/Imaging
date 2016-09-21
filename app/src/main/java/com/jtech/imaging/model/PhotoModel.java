@@ -1,6 +1,7 @@
 package com.jtech.imaging.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jtechlib.model.BaseModel;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * 图片对象
  * Created by jianghan on 2016/8/31.
  */
-public class PhotoModel {
+public class PhotoModel extends BaseModel {
 
     @SerializedName("id")
     private String id;

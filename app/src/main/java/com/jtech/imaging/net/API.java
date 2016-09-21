@@ -1,8 +1,8 @@
 package com.jtech.imaging.net;
 
+import com.jtech.imaging.cache.OauthCache;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.model.OauthModel;
-import com.jtech.imaging.realm.OauthRealm;
 import com.jtechlib.net.BaseApi;
 
 import java.util.HashMap;
@@ -47,8 +47,8 @@ public class API extends BaseApi {
         if (null == unsplashApi) {
             //获取token
             String authToken = "";
-            if (OauthRealm.hasOauthModel()) {
-                OauthModel oauthModel = OauthRealm.getInstance().getOauthModel();
+            if (OauthCache.hasOauthModel()) {
+                OauthModel oauthModel = OauthCache.get().getOauthModel();
                 authToken = oauthModel.getTokenType() + " " + oauthModel.getAccessToken();
             }
             Map<String, String> headerMap = new HashMap<>();

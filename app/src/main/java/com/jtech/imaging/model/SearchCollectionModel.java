@@ -1,6 +1,7 @@
 package com.jtech.imaging.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jtechlib.model.BaseModel;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * 合集中搜索
  * Created by jianghan on 2016/9/5.
  */
-public class SearchCollectionModel {
+public class SearchCollectionModel extends BaseModel {
 
     @SerializedName("total")
     private int total;

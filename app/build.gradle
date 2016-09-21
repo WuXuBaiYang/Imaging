@@ -37,5 +37,5 @@ dependencies {
     compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     compile 'com.yayandroid:ParallaxListView:1.1'
     compile 'com.github.chrisbanes:PhotoView:1.3.0'
-    compile 'com.github.WuXuBaiYang:JTechLib:0.1.9'
+    compile 'com.github.WuXuBaiYang:JTechLib:0.2.0'
 }

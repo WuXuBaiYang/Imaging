@@ -1,11 +1,12 @@
 package com.jtech.imaging.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jtechlib.model.BaseModel;
 
 /**
  * 图片尺寸对象
  */
-public class ProfileImageModel {
+public class ProfileImageModel extends BaseModel {
     @SerializedName("small")
     private String small;
     @SerializedName("medium")

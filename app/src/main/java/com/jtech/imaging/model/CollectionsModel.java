@@ -1,12 +1,13 @@
 package com.jtech.imaging.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.jtechlib.model.BaseModel;
 
 /**
  * 用户收藏对象
  * Created by jianghan on 2016/8/31.
  */
-public class CollectionsModel {
+public class CollectionsModel extends BaseModel {
 
     @SerializedName("id")
     private int id;

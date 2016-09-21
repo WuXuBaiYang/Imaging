@@ -1,15 +1,18 @@
 package com.jtech.imaging.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.widget.ImageView;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
+import com.jtech.imaging.cache.OauthCache;
 import com.jtech.imaging.contract.WelcomeContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.presenter.WelcomePresenter;
-import com.jtech.imaging.realm.OauthRealm;
 import com.jtechlib.view.activity.BaseActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -35,13 +38,13 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
         //绑定VP类
         presenter = new WelcomePresenter(this);
         //暂时使用已存在数据，不经过授权登陆
-        if (!OauthRealm.hasOauthModel()) {
+        if (!OauthCache.hasOauthModel()) {
             OauthModel oauthModel = new OauthModel();
             oauthModel.setAccessToken("da20b124d815a82ef0cb79226e991559e6e4c9cdf411fcef4e51acc718c0e44a");
             oauthModel.setCreatedAt(1473643598);
             oauthModel.setScope("public read_user write_user read_photos write_photos write_likes read_collections write_collections");
             oauthModel.setTokenType("bearer");
-            OauthRealm.getInstance().setOauthModel(oauthModel);
+            OauthCache.get().setOauthModel(oauthModel);
         }
     }
 
@@ -65,11 +68,22 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            if (OauthRealm.hasOauthModel()) {
+            if (OauthCache.hasOauthModel()) {
                 //跳转到主页
+                ActivityOptionsCompat activityOptionsCompat =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                floatingActionButton, getString(R.string.fab));
+                ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
+                        MainActivity.class), activityOptionsCompat.toBundle());
             } else {
                 //跳转到授权登陆页
+                ActivityOptionsCompat activityOptionsCompat =
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                                floatingActionButton, getString(R.string.fab));
+                ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
+                        OauthActivity.class), activityOptionsCompat.toBundle());
             }
+            keyBack();
         }
     }
 }

@@ -6,9 +6,9 @@ package com.jtech.imaging.common;
  */
 public class Constants {
     /**
-     * realm数据库名称
+     * 缓存目录名
      */
-    public static final String REALM_DB_NAME = "JTechImaging";
+    public static final String CACHE_NAME = "ImagingCache";
     /**
      * http
      */

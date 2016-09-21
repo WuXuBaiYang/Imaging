@@ -15,4 +15,5 @@
     <item name="background" type="id"></item>
     <item name="textview_photo" type="id"></item>
     <item name="statusbar" type="id"></item>
+    <item name="content" type="id"></item>
 </resources>

@@ -1,10 +1,12 @@
 package com.jtech.imaging.model;
 
+import com.jtechlib.model.BaseModel;
+
 /**
  * 状态
  * Created by jianghan on 2016/8/31.
  */
-public class StatsModel {
+public class StatsModel extends BaseModel {
 
     private int totalPhotos;
     private int photoDownloads;

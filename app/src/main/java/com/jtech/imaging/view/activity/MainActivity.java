@@ -1,6 +1,7 @@
 package com.jtech.imaging.view.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,8 +35,7 @@ import rx.functions.Action1;
  * 主页
  * Created by jianghan on 2016/9/20.
  */
-public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener {
-
+public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener, Toolbar.OnMenuItemClickListener {
 
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
@@ -47,6 +47,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     Toolbar toolbar;
     @Bind(R.id.statusbar)
     View statusBar;
+    @Bind(R.id.content)
+    CoordinatorLayout content;
 
     private PhotoAdapter photoAdapter;
     private MainContract.Presenter presenter;
@@ -64,6 +66,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         setContentView(R.layout.activity_main);
         //设置标题栏
         setupToolbar(toolbar)
+                .inflateMenu(R.menu.menu_main)
+                .setOnMenuItemClickListener(this)
                 .setTitleTextColor(R.color.toolbar_title)
                 .setTitle(R.string.app_name);
         //设置状态栏
@@ -125,17 +129,17 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     public void fail(String message) {
         refreshLayout.refreshingComplete();
         jRecyclerView.setLoadCompleteState();
-        Snackbar.make(refreshLayout, message, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_main_search://搜索按钮
-                Snackbar.make(refreshLayout, "搜索按钮", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(content, "搜索按钮", Snackbar.LENGTH_SHORT).show();
                 break;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     /**
@@ -161,7 +165,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            Snackbar.make(refreshLayout, "随机", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(content, "随机", Snackbar.LENGTH_SHORT).show();
         }
     }
 }
