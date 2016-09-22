@@ -46,20 +46,4 @@ public class Constants {
      * 类型
      */
     public static final String GRANT_TYPE = "authorization_code";
-    /**
-     * 排序，最新
-     */
-    public static final String ORDER_BY_LATEST = "latest";
-    /**
-     * 排序，反序
-     */
-    public static final String ORDER_BY_OLDEST = "oldest";
-    /**
-     * 排序，受欢迎
-     */
-    public static final String ORDER_BY_POPULAR = "popular";
-    /**
-     * 排序，存储key
-     */
-    public static final String ORDER_BY_KEY = "orderByKey";
 }

@@ -10,9 +10,9 @@
     <string name="oauth_page_subtitle_login">输入账号并登录</string>
 
     <array name="sort">
-        <item>最新</item>
-        <item>反序</item>
-        <item>受欢迎</item>
+        <item>Latest</item>
+        <item>Oldest</item>
+        <item>Popular</item>
     </array>
 
     <array name="scopeList">
