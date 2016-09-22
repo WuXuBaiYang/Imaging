@@ -170,6 +170,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                         ACache.get(getActivity()).put(Constants.ORDER_BY_KEY, orderBy);
                         //刷新列表
                         refreshLayout.startRefreshing();
+                        //滚动到首位
+                        jRecyclerView.getLayoutManager().scrollToPosition(0);
                     }
                 }).show();
     }
