@@ -9,7 +9,7 @@ import com.jtech.imaging.util.NetUtils;
 /**
  * 图片加载策略
  * Created by jianghan on 2016/9/22.
-*/
+ */
 public class PhotoLoadStrategy {
     //图片加载策略-固定清晰度
     public static final int PHOTO_LOAD_STRATEGY_FIXED_FULL = 0X0010;
@@ -65,6 +65,7 @@ public class PhotoLoadStrategy {
             return getFixedUrl(strategy, originUrl, outWidth);
         }
     }
+
 
     /**
      * 获取固定清晰度的图片

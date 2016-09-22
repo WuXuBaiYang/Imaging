@@ -58,4 +58,8 @@ public class Constants {
      * 排序，受欢迎
      */
     public static final String ORDER_BY_POPULAR = "popular";
+    /**
+     * 排序，存储key
+     */
+    public static final String ORDER_BY_KEY = "orderByKey";
 }

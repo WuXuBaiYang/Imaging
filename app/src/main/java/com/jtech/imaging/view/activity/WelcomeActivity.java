@@ -18,7 +18,11 @@ import com.jtechlib.view.activity.BaseActivity;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * 欢迎页，首屏
@@ -83,7 +87,27 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
                 ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
                         OauthActivity.class), activityOptionsCompat.toBundle());
             }
-            keyBack();
+            //一秒后关闭，等我想到更自然的方法再说把
+            Observable.just(1000)
+                    .subscribeOn(Schedulers.io())
+                    .map(new Func1<Integer, Object>() {
+                        @Override
+                        public Object call(Integer integer) {
+                            try {
+                                Thread.sleep(integer);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<Object>() {
+                        @Override
+                        public void call(Object o) {
+                            keyBack();
+                        }
+                    });
         }
     }
 }

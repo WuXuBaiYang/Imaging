@@ -1,12 +1,15 @@
 package com.jtech.imaging.view.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +28,7 @@ import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
+import com.jtechlib.cache.ACache;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
 
@@ -60,10 +64,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     @Bind(R.id.content)
     CoordinatorLayout content;
 
+    private AlertDialog sortDialog;
     private PhotoAdapter photoAdapter;
     private MainContract.Presenter presenter;
     // 默认排序设置为最新
-    private String orderBy = Constants.ORDER_BY_LATEST;
+    private String orderBy;
 
     @Override
     protected void initVariables(Bundle bundle) {
@@ -83,6 +88,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 .setOnMenuItemClickListener(this);
         //设置状态栏
         StatusBarCompat.setStatusBar(getActivity(), statusBar);
+        //设置排序
+        this.orderBy = ACache.get(getActivity()).getAsString(Constants.ORDER_BY_KEY);
+        if (TextUtils.isEmpty(orderBy)) {
+            this.orderBy = Constants.ORDER_BY_LATEST;
+        }
         //fab点击
         RxView.clicks(floatingActionButton)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)
@@ -100,6 +110,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         jRecyclerView.setOnItemClickListener(this);
         jRecyclerView.addOnScrollListener(new OnScrollListener());
     }
+
 
     @Override
     protected void loadData() {
@@ -126,13 +137,51 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     }
 
     /**
+     * 显示排序对话框
+     */
+    private AlertDialog showSortDialog() {
+        final String[] sorts = getResources().getStringArray(R.array.sort);
+        int checkedItem = 0;
+        if (orderBy.equals(Constants.ORDER_BY_LATEST)) {
+            checkedItem = 0;
+        } else if (orderBy.equals(Constants.ORDER_BY_OLDEST)) {
+            checkedItem = 1;
+        } else if (orderBy.equals(Constants.ORDER_BY_POPULAR)) {
+            checkedItem = 2;
+        }
+        return new AlertDialog
+                .Builder(getActivity())
+                .setSingleChoiceItems(sorts, checkedItem, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0://最新
+                                orderBy = Constants.ORDER_BY_LATEST;
+                                break;
+                            case 1://反序
+                                orderBy = Constants.ORDER_BY_OLDEST;
+                                break;
+                            case 2://受欢迎
+                                orderBy = Constants.ORDER_BY_POPULAR;
+                                break;
+                        }
+                        sortDialog.dismiss();
+                        //记录当前的排序
+                        ACache.get(getActivity()).put(Constants.ORDER_BY_KEY, orderBy);
+                        //刷新列表
+                        refreshLayout.startRefreshing();
+                    }
+                }).show();
+    }
+
+    /**
      * 网络状态变化监听
      *
      * @param event
      */
     @Subscribe
     public void onNetStateChange(NetStateEvent event) {
-        
+
     }
 
     @Override
@@ -181,6 +230,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         switch (item.getItemId()) {
             case R.id.menu_main_search://搜索按钮
                 Snackbar.make(content, "搜索按钮", Snackbar.LENGTH_SHORT).show();
+                break;
+            case R.id.menu_main_sort://排序
+                if (null == sortDialog) {
+                    sortDialog = showSortDialog();
+                } else {
+                    sortDialog.show();
+                }
+                break;
+            case R.id.menu_main_imagesize://图片加载策略
+                Snackbar.make(content, "图片加载策略", Snackbar.LENGTH_SHORT).show();
                 break;
         }
         return true;

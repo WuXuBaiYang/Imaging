@@ -2,10 +2,18 @@
     <string name="app_name">Imaging</string>
     <string name="fab">fab</string>
     <string name="menu_main_search">搜索</string>
+    <string name="menu_main_sort">排序</string>
+    <string name="menu_main_imagesize">图片加载策略</string>
 
     <string name="oauth_page_title">授权登陆</string>
     <string name="oauth_page_subtitle_scope">选择可以接受的权限</string>
     <string name="oauth_page_subtitle_login">输入账号并登录</string>
+
+    <array name="sort">
+        <item>最新</item>
+        <item>反序</item>
+        <item>受欢迎</item>
+    </array>
 
     <array name="scopeList">
         <item>默认项，读取公共数据|true|true|public</item>
