@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     /**
      * 显示排序对话框
      */
-    private AlertDialog showSortDialog() {
+    private void showSortDialog() {
         final String[] sorts = getResources().getStringArray(R.array.sort);
         int checkedItem = 0;
         if (orderBy.equals(Constants.ORDER_BY_LATEST)) {
@@ -149,7 +149,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         } else if (orderBy.equals(Constants.ORDER_BY_POPULAR)) {
             checkedItem = 2;
         }
-        return new AlertDialog
+        sortDialog = new AlertDialog
                 .Builder(getActivity())
                 .setSingleChoiceItems(sorts, checkedItem, new DialogInterface.OnClickListener() {
                     @Override
@@ -165,13 +165,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                                 orderBy = Constants.ORDER_BY_POPULAR;
                                 break;
                         }
-                        sortDialog.dismiss();
                         //记录当前的排序
                         ACache.get(getActivity()).put(Constants.ORDER_BY_KEY, orderBy);
                         //刷新列表
                         refreshLayout.startRefreshing();
                         //滚动到首位
                         jRecyclerView.getLayoutManager().scrollToPosition(0);
+                        //关闭当前dialog
+                        if (null != sortDialog) {
+                            sortDialog.dismiss();
+                        }
                     }
                 }).show();
     }
@@ -234,11 +237,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 Snackbar.make(content, "搜索按钮", Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.menu_main_sort://排序
-                if (null == sortDialog) {
-                    sortDialog = showSortDialog();
-                } else {
-                    sortDialog.show();
-                }
+                showSortDialog();
                 break;
             case R.id.menu_main_imagesize://图片加载策略
                 Snackbar.make(content, "图片加载策略", Snackbar.LENGTH_SHORT).show();
