@@ -60,7 +60,7 @@ public class PhotoAdapter extends BaseJAdapter<ParallaxViewHolder, PhotoModel> {
         //显示图片
         ParallaxImageView parallaxImageView = holder.getImageView(R.id.imageview_photo);
         //根据图片加载策略，获取合适的图片url
-        String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), photoModel.getUrls().getFull(), screenWidth);
+        String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), photoModel.getUrls().getRaw(), screenWidth);
         ImageUtils.showImage(getActivity(), imageUrl, parallaxImageView);
         //设置为背景视差滚动图片
         holder.setBackgroundImage(parallaxImageView);

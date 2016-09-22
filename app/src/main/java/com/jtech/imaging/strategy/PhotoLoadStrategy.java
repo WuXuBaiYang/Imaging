@@ -79,13 +79,13 @@ public class PhotoLoadStrategy {
         if (strategy == PHOTO_LOAD_STRATEGY_FIXED_FULL) {//全尺寸
             return originUrl;
         } else if (strategy == PHOTO_LOAD_STRATEGY_FIXED_1080) {//最高1080
-            return originUrl + "&w=" + (1080 > outWidth ? outWidth : 1080);
+            return originUrl + "?w=" + (1080 > outWidth ? outWidth : 1080);
         } else if (strategy == PHOTO_LOAD_STRATEGY_FIXED_720) {//最高720
-            return originUrl + "&w=" + (720 > outWidth ? outWidth : 720);
+            return originUrl + "?w=" + (720 > outWidth ? outWidth : 720);
         } else if (strategy == PHOTO_LOAD_STRATEGY_FIXED_480) {//最高480
-            return originUrl + "&w=" + (480 > outWidth ? outWidth : 480);
+            return originUrl + "?w=" + (480 > outWidth ? outWidth : 480);
         } else if (strategy == PHOTO_LOAD_STRATEGY_FIXED_200) {//最高200
-            return originUrl + "&w=" + (200 > outWidth ? outWidth : 200);
+            return originUrl + "?w=" + (200 > outWidth ? outWidth : 200);
         }
         return originUrl;
     }
@@ -125,6 +125,6 @@ public class PhotoLoadStrategy {
      * @return
      */
     private static String getAutoUrl(String originUrl, int outWidth) {
-        return originUrl + "&w=" + outWidth;
+        return originUrl + "?w=" + outWidth;
     }
 }
