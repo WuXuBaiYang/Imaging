@@ -16,6 +16,7 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.cache.PhotoCache;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.MainContract;
+import com.jtech.imaging.event.NetStateEvent;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.MainPresenter;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
@@ -26,6 +27,9 @@ import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -63,6 +67,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     protected void initVariables(Bundle bundle) {
+        //注册eventbus
+        EventBus.getDefault().register(this);
         //绑定VP
         presenter = new MainPresenter(getActivity(), this);
     }
@@ -117,6 +123,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                         }
                     }
                 });
+    }
+
+    /**
+     * 网络状态变化监听
+     *
+     * @param event
+     */
+    @Subscribe
+    public void onNetStateChange(NetStateEvent event) {
+        Snackbar.make(content, event.getTypeName(), Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
