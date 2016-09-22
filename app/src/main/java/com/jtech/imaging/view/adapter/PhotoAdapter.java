@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.jtech.adapter.BaseJAdapter;
 import com.jtech.imaging.R;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.viewholder.ParallaxViewHolder;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
@@ -58,7 +59,10 @@ public class PhotoAdapter extends BaseJAdapter<ParallaxViewHolder, PhotoModel> {
         holder.itemView.setBackgroundColor(Color.parseColor(photoModel.getColor()));
         //显示图片
         ParallaxImageView parallaxImageView = holder.getImageView(R.id.imageview_photo);
-        ImageUtils.showImage(getActivity(), photoModel.getUrls().getRegular(), parallaxImageView);
+        //根据图片加载策略，获取合适的图片url
+        String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), photoModel.getUrls().getFull(), screenWidth);
+        ImageUtils.showImage(getActivity(), imageUrl, parallaxImageView);
+        //设置为背景视差滚动图片
         holder.setBackgroundImage(parallaxImageView);
         //设置作者
         holder.setText(R.id.textview_photo, photoModel.getUser().getUsername());

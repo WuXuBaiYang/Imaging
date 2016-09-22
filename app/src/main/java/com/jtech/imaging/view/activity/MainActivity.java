@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
      */
     @Subscribe
     public void onNetStateChange(NetStateEvent event) {
-        Snackbar.make(content, event.getTypeName(), Snackbar.LENGTH_SHORT).show();
+        
     }
 
     @Override
