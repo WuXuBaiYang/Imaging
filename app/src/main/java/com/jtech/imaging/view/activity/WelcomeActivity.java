@@ -2,6 +2,7 @@ package com.jtech.imaging.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -98,10 +99,10 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
                         OauthActivity.class), activityOptionsCompat.toBundle());
             }
             //一秒后关闭，看起来比较优雅
-            floatingActionButton.postDelayed(new Runnable() {
+            new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    keyBack();
+                    finish();
                 }
             }, 1000);
         }
