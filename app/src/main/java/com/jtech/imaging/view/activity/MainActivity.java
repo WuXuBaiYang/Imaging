@@ -1,10 +1,13 @@
 package com.jtech.imaging.view.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -334,14 +337,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
      * 列表的滚动监听
      */
     private class OnScrollListener extends RecyclerView.OnScrollListener {
+        private boolean fabShowing = true;
+
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             //视差滚动
             photoAdapter.animateImage(recyclerView);
             //隐藏或显示fab
-            if (dy > 0) {
+            if (dy > 0 && fabShowing) {
+                fabShowing = false;
                 floatingActionButton.hide();
-            } else {
+            } else if (dy < 0 && !fabShowing) {
+                fabShowing = true;
                 floatingActionButton.show();
             }
         }
@@ -353,7 +360,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            Snackbar.make(content, "随机", Snackbar.LENGTH_SHORT).show();
+            //跳转到主页
+            ActivityOptionsCompat activityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                            floatingActionButton, getString(R.string.fab));
+            ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
+                    RandomActivity.class), activityOptionsCompat.toBundle());
         }
     }
 }

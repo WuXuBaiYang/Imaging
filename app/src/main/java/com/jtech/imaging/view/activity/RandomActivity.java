@@ -3,6 +3,7 @@ package com.jtech.imaging.view.activity;
 import android.animation.Animator;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
@@ -64,5 +65,10 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     @Override
     public void fail(String message) {
 
+    }
+
+    @Override
+    public void keyBack() {
+        ActivityCompat.finishAfterTransition(this);
     }
 }
