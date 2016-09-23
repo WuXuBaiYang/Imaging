@@ -103,7 +103,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         jRecyclerView.addOnScrollListener(new OnScrollListener());
     }
 
-
     @Override
     protected void loadData() {
         //加载缓存数据，没有则下拉刷新
@@ -192,6 +191,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                             } else if (which == 2) {
                                 photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO;
                             }
+                            //清空欢迎页数据
+                            PhotoCache.get(getActivity()).clearWelcomeUrl();
+                            //存储策略
                             PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
                             //刷新列表
                             photoAdapter.notifyDataSetChanged();
@@ -250,6 +252,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                                 photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200;
                                 break;
                         }
+                        //清空欢迎页数据
+                        PhotoCache.get(getActivity()).clearWelcomeUrl();
                         //存储策略
                         PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
                         //刷新列表

@@ -1,6 +1,17 @@
 package com.jtech.imaging.presenter;
 
+import android.content.Context;
+import android.text.TextUtils;
+
+import com.jtech.imaging.cache.PhotoCache;
 import com.jtech.imaging.contract.WelcomeContract;
+import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.net.API;
+
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * 加载页业务类
@@ -12,5 +23,45 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
 
     public WelcomePresenter(WelcomeContract.View view) {
         this.view = view;
+    }
+
+    /**
+     * @param context
+     * @param category
+     * @param collections
+     * @param featured
+     * @param username
+     * @param query
+     * @param width
+     * @param height
+     * @param orientation Valid values are landscape, portrait, and squarish
+     */
+    @Override
+    public void getWelcomePagePhoto(final Context context, String category, String collections, String featured, String username, String query, int width, int height, String orientation) {
+        //请求图片
+        String url = PhotoCache.get(context).getWelcomeUrl();
+        if (!TextUtils.isEmpty(url)) {
+            view.showWelcomePagePhoto(url);
+        } else {
+            API.get()
+                    .unsplashApi()
+                    .randomPhoto(category, collections, featured, username, query, width, height, orientation)
+                    .subscribeOn(Schedulers.io())
+                    .map(new Func1<PhotoModel, PhotoModel>() {
+                        @Override
+                        public PhotoModel call(PhotoModel photoModel) {
+                            //存储图片信息
+                            PhotoCache.get(context).setWelcomeUrl(photoModel.getUrls().getCustom());
+                            return photoModel;
+                        }
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<PhotoModel>() {
+                        @Override
+                        public void call(PhotoModel photoModel) {
+                            view.showWelcomePagePhoto(photoModel.getUrls().getCustom());
+                        }
+                    });
+        }
     }
 }

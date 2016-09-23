@@ -132,7 +132,7 @@ public class PhotoModel extends BaseModel {
         this.categories = categories;
     }
 
-    public static class UserModel {
+    public static class UserModel extends BaseModel {
         @SerializedName("id")
         private String id;
         @SerializedName("username")
@@ -140,7 +140,7 @@ public class PhotoModel extends BaseModel {
         @SerializedName("name")
         private String name;
         @SerializedName("portfolio_url")
-        private Object portfolioUrl;
+        private String portfolioUrl;
         @SerializedName("profile_image")
         private ProfileImageModel profileImage;
         @SerializedName("links")
@@ -170,11 +170,11 @@ public class PhotoModel extends BaseModel {
             this.name = name;
         }
 
-        public Object getPortfolioUrl() {
+        public String getPortfolioUrl() {
             return portfolioUrl;
         }
 
-        public void setPortfolioUrl(Object portfolioUrl) {
+        public void setPortfolioUrl(String portfolioUrl) {
             this.portfolioUrl = portfolioUrl;
         }
 
@@ -194,7 +194,7 @@ public class PhotoModel extends BaseModel {
             this.links = links;
         }
 
-        public static class LinksModel {
+        public static class LinksModel extends BaseModel {
             @SerializedName("self")
             private String self;
             @SerializedName("html")
@@ -248,7 +248,7 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class UrlsModel {
+    public static class UrlsModel extends BaseModel {
         @SerializedName("raw")
         private String raw;
         @SerializedName("full")
@@ -259,6 +259,8 @@ public class PhotoModel extends BaseModel {
         private String small;
         @SerializedName("thumb")
         private String thumb;
+        @SerializedName("custom")
+        private String custom;
 
         public String getRaw() {
             return raw;
@@ -299,9 +301,17 @@ public class PhotoModel extends BaseModel {
         public void setThumb(String thumb) {
             this.thumb = thumb;
         }
+
+        public String getCustom() {
+            return custom;
+        }
+
+        public void setCustom(String custom) {
+            this.custom = custom;
+        }
     }
 
-    public static class LinksModel {
+    public static class LinksModel extends BaseModel {
         @SerializedName("self")
         private String self;
         @SerializedName("html")
@@ -344,7 +354,7 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class CurrentUserCollectionsModel {
+    public static class CurrentUserCollectionsModel extends BaseModel {
         @SerializedName("id")
         private int id;
         @SerializedName("title")

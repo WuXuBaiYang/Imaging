@@ -13,6 +13,9 @@ import com.jtech.imaging.cache.OauthCache;
 import com.jtech.imaging.contract.WelcomeContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.presenter.WelcomePresenter;
+import com.jtech.imaging.strategy.PhotoLoadStrategy;
+import com.jtechlib.Util.DeviceUtils;
+import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -63,7 +66,18 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
 
     @Override
     protected void loadData() {
+        //获取欢迎页图片
+        int screenWidth = DeviceUtils.getScreenWidth(getActivity());
+        int screenHeight = DeviceUtils.getScreenHeight(getActivity());
+        int width = PhotoLoadStrategy.getStrategyWidth(getActivity(), screenWidth);
+        double ratio = (1.0 * width) / screenWidth;
+        int height = (int) (ratio * screenHeight);
+        presenter.getWelcomePagePhoto(getActivity(), "", "", "", "", "", width, height, "portrait");
+    }
 
+    @Override
+    public void showWelcomePagePhoto(String imageUrl) {
+        ImageUtils.showImage(getActivity(), imageUrl, imageView);
     }
 
     /**

@@ -10,6 +10,7 @@ import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.net.API;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
+import com.jtechlib.cache.ACache;
 import com.jtechlib.cache.BaseCacheManager;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class PhotoCache extends BaseCacheManager {
     private static final int PHOTO_CACHE_TIME = 60 * 10;
     //图片加载策略，缓存key
     private static final String PHOTO_LOAD_STRATEGY = "photoLoadStrategy";
+    //欢迎页图片url缓存Key
+    private static final String PHOTO_WELCOME_PAGE = "photoWelcomePage";
 
     private static PhotoCache INSTANCE;
     private SharedPreferences sharedPreferences;
@@ -45,6 +48,34 @@ public class PhotoCache extends BaseCacheManager {
             INSTANCE = new PhotoCache(context);
         }
         return INSTANCE;
+    }
+
+    /**
+     * 清除欢迎页图片url
+     *
+     * @return
+     */
+    public boolean clearWelcomeUrl() {
+        return delete(PHOTO_WELCOME_PAGE);
+    }
+
+    /**
+     * 获取欢迎页图片
+     *
+     * @return
+     */
+    public String getWelcomeUrl() {
+        return queryString(PHOTO_WELCOME_PAGE);
+    }
+
+    /**
+     * 保存欢迎页图片（一天）
+     *
+     * @param url
+     * @return
+     */
+    public boolean setWelcomeUrl(String url) {
+        return insert(PHOTO_WELCOME_PAGE, url, ACache.TIME_DAY);
     }
 
     /**
