@@ -62,7 +62,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     @Bind(R.id.content)
     CoordinatorLayout content;
 
-    private AlertDialog sortDialog;
     private PhotoAdapter photoAdapter;
     private MainContract.Presenter presenter;
 
@@ -133,15 +132,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
      */
     private void showSortDialog() {
         String[] sorts = getResources().getStringArray(R.array.sort);
-        sortDialog = new AlertDialog
+        new AlertDialog
                 .Builder(getActivity())
                 .setSingleChoiceItems(sorts, OrderByCache.get(getActivity()).getOrderByIndex(), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //关闭dialog
-                        if (null != sortDialog) {
-                            sortDialog.dismiss();
-                        }
+                        //关闭当前的dialog
+                        dialog.dismiss();
                         //记录当前的排序
                         OrderByCache.get(getActivity()).setOrderBy(which);
                         //设置标题栏

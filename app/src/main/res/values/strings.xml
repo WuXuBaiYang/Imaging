@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">Imaging</string>
     <string name="fab">fab</string>
-    <string name="menu_main_search">搜索</string>
-    <string name="menu_main_sort">排序</string>
-    <string name="menu_main_imagesize">图片加载策略</string>
+    <string name="menu_main_search">Search</string>
+    <string name="menu_main_sort">Sort</string>
+    <string name="menu_main_imagesize">ImageLoadStrategy</string>
+
+    <string name="cancel">cancel</string>
+    <string name="done">done</string>
+    <string name="submit">submit</string>
 
     <string name="oauth_page_title">授权登陆</string>
     <string name="oauth_page_subtitle_scope">选择可以接受的权限</string>

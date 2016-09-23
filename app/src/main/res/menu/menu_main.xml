@@ -24,7 +24,6 @@
     <item
         android:id="@id/menu_main_imagesize"
         android:enabled="true"
-        android:icon="@drawable/ic_photo_size_select_small_white_24dp"
         android:orderInCategory="100"
         android:title="@string/menu_main_imagesize"
         android:visible="true"
