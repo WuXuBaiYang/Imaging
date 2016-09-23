@@ -18,4 +18,5 @@
     <item name="textview_photo" type="id"></item>
     <item name="statusbar" type="id"></item>
     <item name="content" type="id"></item>
+    <item name="imageview_random" type="id"></item>
 </resources>

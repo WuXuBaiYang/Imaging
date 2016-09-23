@@ -25,6 +25,8 @@
         <activity android:name=".view.activity.MainActivity" />
         //授权认证
         <activity android:name=".view.activity.OauthActivity" />
+        //随机页面
+        <activity android:name=".view.activity.RandomActivity" />
         //网络状态变化广播接收
         <receiver
             android:name=".receiver.ConnectionChangeReceiver"
