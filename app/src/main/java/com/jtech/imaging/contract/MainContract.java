@@ -16,6 +16,12 @@ public interface MainContract {
     }
 
     interface View extends BaseContract.View {
+        void showSortDialog();
+
+        void showImageLoadStrategyDialog();
+
+        void showImageLoadStrategyFixedDialog(int photoLoadStrategy);
+
         void success(List<PhotoModel> photoModels, boolean loadMore);
 
         void fail(String message);

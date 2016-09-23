@@ -19,6 +19,20 @@
         <item>Popular</item>
     </array>
 
+    <array name="image_load_strategy">
+        <item>Fixed definition</item>
+        <item>Automatic adjustment according to the network</item>
+        <item>Ignore the automatic adjustment of the network</item>
+    </array>
+
+    <array name="image_load_strategy_fixed">
+        <item>Full size</item>
+        <item>Maximum no more than 1080P</item>
+        <item>Maximum no more than 720P</item>
+        <item>Maximum no more than 480P</item>
+        <item>Maximum no more than 200P</item>
+    </array>
+
     <array name="scopeList">
         <item>默认项，读取公共数据|true|true|public</item>
         <item>读取私人数据|false|true|read_user</item>

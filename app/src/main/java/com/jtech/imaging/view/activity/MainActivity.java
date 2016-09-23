@@ -21,6 +21,7 @@ import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.event.NetStateEvent;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.MainPresenter;
+import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
@@ -130,7 +131,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     /**
      * 显示排序对话框
      */
-    private void showSortDialog() {
+    @Override
+    public void showSortDialog() {
         String[] sorts = getResources().getStringArray(R.array.sort);
         new AlertDialog
                 .Builder(getActivity())
@@ -147,6 +149,112 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                         refreshLayout.startRefreshing();
                         //滚动到首位
                         jRecyclerView.getLayoutManager().scrollToPosition(0);
+                    }
+                }).show();
+    }
+
+    /**
+     * 显示图片加载策略选择对话框
+     */
+    @Override
+    public void showImageLoadStrategyDialog() {
+        String[] imageLoadStrategies = getResources().getStringArray(R.array.image_load_strategy);
+        final int photoLoadStrategy = PhotoCache.get(getActivity()).getPhotoLoadStrategy();
+        int checkedItem = 0;
+        switch (photoLoadStrategy) {
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL://全尺寸
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080://最高1080
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720://最高720
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480://最高480
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200://最高200
+                checkedItem = 0;
+                break;
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_NET_AUTO://根据网络自动调整
+                checkedItem = 1;
+                break;
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO://无视网络自动调整
+                checkedItem = 2;
+                break;
+        }
+        new AlertDialog.Builder(getActivity())
+                .setSingleChoiceItems(imageLoadStrategies, checkedItem, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //关闭对话框
+                        dialog.dismiss();
+                        //设置选择的策略
+                        if (which == 0) {
+                            showImageLoadStrategyFixedDialog(photoLoadStrategy);
+                        } else {
+                            int photoLoadStrategy = 0;
+                            if (which == 1) {
+                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_NET_AUTO;
+                            } else if (which == 2) {
+                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO;
+                            }
+                            PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
+                            //刷新列表
+                            photoAdapter.notifyDataSetChanged();
+                            photoAdapter.animateImage(jRecyclerView);
+                        }
+                    }
+                }).show();
+    }
+
+    /**
+     * 显示图片加载策略选择的固定模式对话框
+     */
+    @Override
+    public void showImageLoadStrategyFixedDialog(int photoLoadStrategy) {
+        String[] imageLoadStrategyFixeds = getResources().getStringArray(R.array.image_load_strategy_fixed);
+        int checkedItem = 0;
+        switch (photoLoadStrategy) {
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL://全尺寸
+                checkedItem = 0;
+                break;
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080://最高1080
+                checkedItem = 1;
+                break;
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720://最高720
+                checkedItem = 2;
+                break;
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480://最高480
+                checkedItem = 3;
+                break;
+            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200://最高200
+                checkedItem = 4;
+                break;
+        }
+        new AlertDialog.Builder(getActivity())
+                .setSingleChoiceItems(imageLoadStrategyFixeds, checkedItem, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //关闭对话框
+                        dialog.dismiss();
+                        int photoLoadStrategy = 0;
+                        //设置策略
+                        switch (which) {
+                            case 0://全尺寸
+                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL;
+                                break;
+                            case 1://最高1080
+                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080;
+                                break;
+                            case 2://最高720
+                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720;
+                                break;
+                            case 3://最高480
+                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480;
+                                break;
+                            case 4://最高200
+                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200;
+                                break;
+                        }
+                        //存储策略
+                        PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
+                        //刷新列表
+                        photoAdapter.notifyDataSetChanged();
+                        photoAdapter.animateImage(jRecyclerView);
                     }
                 }).show();
     }
@@ -212,7 +320,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 showSortDialog();
                 break;
             case R.id.menu_main_imagesize://图片加载策略
-                Snackbar.make(content, "图片加载策略", Snackbar.LENGTH_SHORT).show();
+                showImageLoadStrategyDialog();
                 break;
         }
         return true;
