@@ -5,26 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="#e0000000">
+    android:background="@color/content_transparent_black"
+    android:clickable="true">
 
     <ImageView
         android:id="@id/imageview_random"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         android:layout_gravity="center"
-        android:background="@color/color_accent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_shuffle_transparent_36dp" />
+        android:clickable="true"
+        android:scaleType="centerCrop" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/recyclerview_default_margin"
         android:src="@drawable/ic_shuffle_white_36dp"
         android:transitionName="@string/fab"
-        app:layout_anchor="@id/imageview_random"
-        app:layout_anchorGravity="bottom|right|end"
         app:useCompatPadding="true" />
 </android.support.design.widget.CoordinatorLayout>

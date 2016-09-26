@@ -2,6 +2,7 @@ package com.jtech.imaging.presenter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.jtech.imaging.cache.PhotoCache;
 import com.jtech.imaging.contract.WelcomeContract;
@@ -60,6 +61,11 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
                         @Override
                         public void call(PhotoModel photoModel) {
                             view.showWelcomePagePhoto(photoModel.getUrls().getCustom());
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            Log.e("WelcomePresenter", throwable.getMessage());
                         }
                     });
         }
