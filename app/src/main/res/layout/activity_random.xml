@@ -16,6 +16,13 @@
         android:clickable="true"
         android:scaleType="centerCrop" />
 
+    <com.jtech.imaging.view.widget.LoadingView
+        android:id="@id/contentloading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/imageview_random"
+        app:layout_anchorGravity="center" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@id/fab"
         android:layout_width="wrap_content"

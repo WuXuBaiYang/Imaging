@@ -44,4 +44,6 @@ dependencies {
     compile 'com.github.WuXuBaiYang:JTechLib:0.2.4'
     //消息总线
     compile 'org.greenrobot:eventbus:3.0.0'
+    //加载动画
+    compile 'com.github.ybq:Android-SpinKit:1.1.0'
 }
