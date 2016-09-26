@@ -21,7 +21,6 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OrderByCache;
 import com.jtech.imaging.cache.PhotoCache;
 import com.jtech.imaging.contract.MainContract;
-import com.jtech.imaging.event.NetStateEvent;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.MainPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
@@ -35,7 +34,6 @@ import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -266,19 +264,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 }).show();
     }
 
-    /**
-     * 网络状态变化监听
-     *
-     * @param event
-     */
-    @Subscribe
-    public void onNetStateChange(NetStateEvent event) {
-
-    }
-
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
-
+        // TODO: 2016/9/26 点击跳转到详情 
     }
 
     @Override
@@ -321,7 +309,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_main_search://搜索按钮
-                Snackbar.make(content, "搜索按钮", Snackbar.LENGTH_SHORT).show();
+                // TODO: 2016/9/26 点击跳转到搜索页面
                 break;
             case R.id.menu_main_sort://排序
                 showSortDialog();

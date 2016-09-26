@@ -26,6 +26,7 @@ import com.jtechlib.view.activity.BaseActivity;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import butterknife.OnTouch;
 import rx.functions.Action1;
 
@@ -138,6 +139,17 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     boolean onContentTouch() {
         onBackPressed();
         return true;
+    }
+
+    /**
+     * 图片点击事件
+     *
+     * @return
+     */
+
+    @OnClick(R.id.imageview_random)
+    void onImageClick() {
+        // TODO: 2016/9/26 点击跳转到详情 
     }
 
     /**
