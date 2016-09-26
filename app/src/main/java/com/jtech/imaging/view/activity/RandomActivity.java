@@ -105,7 +105,8 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
                     fail("ImageLoadError");
                 }
             }
-        }, new Action1<Throwable>() {
+        },new Action1<Throwable>(){
+
             @Override
             public void call(Throwable throwable) {
                 fail(throwable.getMessage());
