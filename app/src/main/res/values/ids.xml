@@ -12,6 +12,7 @@
     <item name="menu_main_search" type="id"></item>
     <item name="menu_main_sort" type="id"></item>
     <item name="menu_main_imagesize" type="id"></item>
+    <item name="menu_search_search" type="id"></item>
     <item name="appbar" type="id"></item>
     <item name="imageview_photo" type="id"></item>
     <item name="background" type="id"></item>

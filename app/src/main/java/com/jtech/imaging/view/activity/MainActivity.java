@@ -332,9 +332,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     public boolean onQueryTextSubmit(String query) {
         if (!TextUtils.isEmpty(query.trim())) {
             //跳转到搜索页
-//            Intent intent = new Intent(getActivity(), );
-//            intent.putExtra("", query);
-//            startActivity(intent);
+            Bundle bundle = new Bundle();
+            bundle.putString(SearchActivity.SEARCH_QUERY_KEY, query);
+            ActivityOptionsCompat activityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                            floatingActionButton, getString(R.string.fab));
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            intent.putExtras(bundle);
+            ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
             //收回搜索框
             searchView.onActionViewCollapsed();
             return true;
