@@ -102,9 +102,9 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    finish();
+                    ActivityCompat.finishAfterTransition(WelcomeActivity.this);
                 }
-            }, 1000);
+            }, getWindow().getTransitionBackgroundFadeDuration());
         }
     }
 }
