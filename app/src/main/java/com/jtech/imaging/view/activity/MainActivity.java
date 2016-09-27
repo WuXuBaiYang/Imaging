@@ -356,6 +356,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     public void onFocusChange(View v, boolean hasFocus) {
         if (!hasFocus) {//失去焦点则收回搜索框
             searchView.onActionViewCollapsed();
+        } else {
         }
     }
 
