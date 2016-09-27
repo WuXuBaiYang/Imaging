@@ -18,5 +18,5 @@
         android:animateLayoutChanges="true"
         android:background="@color/color_primary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 </RelativeLayout>

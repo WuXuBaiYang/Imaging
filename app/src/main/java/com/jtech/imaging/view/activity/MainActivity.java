@@ -8,10 +8,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,8 +36,6 @@ import com.jtech.view.RefreshLayout;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -49,7 +50,7 @@ import rx.schedulers.Schedulers;
  * 主页
  * Created by jianghan on 2016/9/20.
  */
-public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener, Toolbar.OnMenuItemClickListener {
+public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener, Toolbar.OnMenuItemClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener {
 
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
@@ -64,13 +65,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     @Bind(R.id.content)
     CoordinatorLayout content;
 
+    private SearchView searchView;
     private PhotoAdapter photoAdapter;
     private MainContract.Presenter presenter;
 
     @Override
     protected void initVariables(Bundle bundle) {
-        //注册eventbus
-        EventBus.getDefault().register(this);
         //绑定VP
         presenter = new MainPresenter(getActivity(), this);
     }
@@ -301,16 +301,23 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //实例化menu
         toolbar.inflateMenu(R.menu.menu_main);
+        //获取到搜索框的视图
+        MenuItem menuItem = menu.findItem(R.id.menu_main_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        //设置默认信息
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
+        //设置搜索确定监听
+        searchView.setOnQueryTextListener(this);
+        //设置焦点变化监听
+        searchView.setOnQueryTextFocusChangeListener(this);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_main_search://搜索按钮
-                // TODO: 2016/9/26 点击跳转到搜索页面
-                break;
             case R.id.menu_main_sort://排序
                 showSortDialog();
                 break;
@@ -319,6 +326,32 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 break;
         }
         return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (!TextUtils.isEmpty(query.trim())) {
+            //跳转到搜索页
+//            Intent intent = new Intent(getActivity(), );
+//            intent.putExtra("", query);
+//            startActivity(intent);
+            //收回搜索框
+            searchView.onActionViewCollapsed();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        if (!hasFocus) {//失去焦点则收回搜索框
+            searchView.onActionViewCollapsed();
+        }
     }
 
     /**

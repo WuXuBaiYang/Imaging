@@ -11,20 +11,21 @@
         android:orderInCategory="100"
         android:title="@string/menu_main_search"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always" />
     <item
         android:id="@id/menu_main_sort"
         android:enabled="true"
         android:icon="@drawable/ic_sort_white_24dp"
-        android:orderInCategory="100"
+        android:orderInCategory="50"
         android:title="@string/menu_main_sort"
         android:visible="true"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
 
     <item
         android:id="@id/menu_main_imagesize"
         android:enabled="true"
-        android:orderInCategory="100"
+        android:orderInCategory="80"
         android:title="@string/menu_main_imagesize"
         android:visible="true"
         app:showAsAction="never" />
