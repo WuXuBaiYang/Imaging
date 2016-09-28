@@ -366,9 +366,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
             searchView.onActionViewCollapsed();
             //隐藏覆盖层
             coverView.hideContentCover();
+            //显示fab
+            floatingActionButton.show();
         } else {
             //显示覆盖层
             coverView.showContentCover();
+            //隐藏fab
+            floatingActionButton.hide();
         }
     }
 
@@ -396,6 +400,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 floatingActionButton.show();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //动画后关闭activity
+        ActivityCompat.finishAffinity(getActivity());
     }
 
     /**
