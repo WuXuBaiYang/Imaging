@@ -28,6 +28,7 @@ import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.MainPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
+import com.jtech.imaging.view.widget.CoverView;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
@@ -50,7 +51,7 @@ import rx.schedulers.Schedulers;
  * 主页
  * Created by jianghan on 2016/9/20.
  */
-public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener, Toolbar.OnMenuItemClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener {
+public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener, Toolbar.OnMenuItemClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener, CoverView.OnCoverCancelListener {
 
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
@@ -64,6 +65,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     View statusBar;
     @Bind(R.id.content)
     CoordinatorLayout content;
+    @Bind(R.id.content_cover)
+    CoverView coverView;
 
     private SearchView searchView;
     private PhotoAdapter photoAdapter;
@@ -102,6 +105,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         refreshLayout.setOnRefreshListener(this);
         jRecyclerView.setOnItemClickListener(this);
         jRecyclerView.addOnScrollListener(new OnScrollListener());
+        //设置覆盖层取消事件
+        coverView.setOnCoverCancelListener(this);
     }
 
     @Override
@@ -317,6 +322,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        //收回搜索框
+        searchView.onActionViewCollapsed();
         switch (item.getItemId()) {
             case R.id.menu_main_sort://排序
                 showSortDialog();
@@ -354,10 +361,20 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (!hasFocus) {//失去焦点则收回搜索框
+        if (!hasFocus) {
+            //失去焦点则收回搜索框
             searchView.onActionViewCollapsed();
+            //隐藏覆盖层
+            coverView.hideContentCover();
         } else {
+            //显示覆盖层
+            coverView.showContentCover();
         }
+    }
+
+    @Override
+    public void onCancel() {
+        searchView.onActionViewCollapsed();
     }
 
     /**

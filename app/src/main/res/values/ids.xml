@@ -20,4 +20,5 @@
     <item name="statusbar" type="id"></item>
     <item name="content" type="id"></item>
     <item name="imageview_random" type="id"></item>
+    <item name="content_cover" type="id"></item>
 </resources>
