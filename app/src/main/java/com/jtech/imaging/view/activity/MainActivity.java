@@ -239,29 +239,34 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                     public void onClick(DialogInterface dialog, int which) {
                         //关闭对话框
                         dialog.dismiss();
-                        int photoLoadStrategy = 0;
+                        //默认为0
+                        int checkStrategy = 0;
                         //设置策略
                         switch (which) {
                             case 0://全尺寸
-                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL;
+                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL;
                                 break;
                             case 1://最高1080
-                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080;
+                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080;
                                 break;
                             case 2://最高720
-                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720;
+                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720;
                                 break;
                             case 3://最高480
-                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480;
+                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480;
                                 break;
                             case 4://最高200
-                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200;
+                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200;
                                 break;
+                        }
+                        if (which == 0) {
+                            Snackbar.make(content, "no,you can't choose it", Snackbar.LENGTH_SHORT).show();
+                            return;
                         }
                         //清空欢迎页数据
                         PhotoCache.get(getActivity()).clearWelcomeUrl();
                         //存储策略
-                        PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
+                        PhotoCache.get(getActivity()).setPhotoLoadStrategy(checkStrategy);
                         //刷新列表
                         photoAdapter.notifyDataSetChanged();
                         photoAdapter.animateImage(jRecyclerView);
