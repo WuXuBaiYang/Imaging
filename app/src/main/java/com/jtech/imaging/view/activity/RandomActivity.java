@@ -19,6 +19,7 @@ import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.RandomPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
+import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
@@ -64,9 +65,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     protected void initViews(Bundle bundle) {
         setContentView(R.layout.activity_random);
         //设置fab的点击事件
-        RxView.clicks(floatingActionButton)
-                .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new FabClick());
+        RxCompat.clickThrottleFirst(floatingActionButton,new FabClick());
     }
 
     @Override

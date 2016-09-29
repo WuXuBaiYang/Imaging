@@ -15,11 +15,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.SearchContract;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.presenter.SearchPresenter;
+import com.jtech.imaging.view.widget.CoverView;
+import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
@@ -27,8 +28,6 @@ import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -38,7 +37,7 @@ import rx.functions.Action1;
  * Created by jianghan on 2016/9/27.
  */
 
-public class SearchActivity extends BaseActivity implements SearchContract.View, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener, RefreshLayout.OnRefreshListener, OnLoadListener, OnItemClickListener {
+public class SearchActivity extends BaseActivity implements SearchContract.View, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener, RefreshLayout.OnRefreshListener, OnLoadListener, OnItemClickListener, CoverView.OnCoverCancelListener {
 
     public static final String SEARCH_QUERY_KEY = "searchQuerykey";
 
@@ -54,6 +53,8 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     FloatingActionButton floatingActionButton;
     @Bind(R.id.statusbar)
     View statusBar;
+    @Bind(R.id.content_cover)
+    CoverView coverView;
 
     private SearchContract.Presenter presenter;
     private SearchView searchView;
@@ -72,15 +73,10 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         setContentView(R.layout.activity_search);
         //设置toolbar
         setupToolbar(toolbar)
-                .setNavigationIcon(R.drawable.ic_keyboard_backspace_white_24dp, this)
-                .setTitle(R.string.search_page_title)
-                .setTitleTextColor(R.color.toolbar_title);
+                .setContentInsetStartWithNavigation(0)
+                .setNavigationIcon(R.drawable.ic_keyboard_backspace_white_24dp, this);
         //设置状态栏
         StatusBarCompat.setStatusBar(getActivity(), statusBar);
-        //设置fab的点击事件
-        RxView.clicks(floatingActionButton)
-                .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new FabClick());
         // TODO: 2016/9/27 设置适配器
         //设置layoutmanagaer
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -92,12 +88,14 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         jRecyclerView.setOnItemClickListener(this);
         //列表滚动事件
         jRecyclerView.addOnScrollListener(new OnScrollListener());
+        //设置fab的点击事件
+        RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
+        //设置覆盖层取消监听
+        coverView.setOnCoverCancelListener(this);
     }
 
     @Override
     protected void loadData() {
-        //发起下拉刷新
-        refreshLayout.startRefreshing();
     }
 
     @Override
@@ -107,16 +105,14 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         //获取到搜索框的视图
         MenuItem menuItem = menu.findItem(R.id.menu_search_search);
         searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
-        //设置默认信息
-        searchView.setQueryHint(getResources().getString(R.string.search_hint));
-        //设置搜索信息
-        if (!TextUtils.isEmpty(query)) {
-            searchView.setQuery(query, false);
-        }
         //设置搜索确定监听
         searchView.setOnQueryTextListener(this);
         //设置焦点变化监听
         searchView.setOnQueryTextFocusChangeListener(this);
+        //设置默认信息
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
+        //设置搜索内容
+        searchView.setQuery(query, true);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -124,6 +120,10 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     public boolean onQueryTextSubmit(String query) {
         if (!TextUtils.isEmpty(query.trim())) {
             this.query = query;
+            //设置标题栏
+            toolbar.setTitle(query);
+            //关闭搜索状态
+            searchView.onActionViewCollapsed();
             //发起下拉刷新
             refreshLayout.startRefreshing();
             return true;
@@ -138,8 +138,18 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if (!hasFocus) {//当失去焦点的时候，收回搜索框
+        if (!hasFocus) {
+            //失去焦点则收回搜索框
             searchView.onActionViewCollapsed();
+            //隐藏覆盖层
+            coverView.hideContentCover();
+            //显示fab
+            floatingActionButton.show();
+        } else {
+            //显示覆盖层
+            coverView.showContentCover();
+            //隐藏fab
+            floatingActionButton.hide();
         }
     }
 
@@ -150,7 +160,9 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
     @Override
     public void success(SearchPhotoModel searchPhotoModel, boolean loadMore) {
-// TODO: 2016/9/27 设置适配器
+        refreshLayout.refreshingComplete();
+        jRecyclerView.setLoadCompleteState();
+        // TODO: 2016/9/27 设置适配器
     }
 
     @Override
@@ -179,6 +191,11 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int i) {
         // TODO: 2016/9/27 点击跳转到详情
+    }
+
+    @Override
+    public void onCancel() {
+        searchView.onActionViewCollapsed();
     }
 
     /**

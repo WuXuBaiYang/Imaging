@@ -16,7 +16,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OauthCache;
 import com.jtech.imaging.common.Constants;
@@ -24,10 +23,9 @@ import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.presenter.OauthPresenter;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
+import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.activity.BaseActivity;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -77,9 +75,7 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new mWebChromeClient());
         //设置fab点击事件
-        RxView.clicks(floatingActionButton)
-                .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new FabClick());
+        RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
     }
 
     @Override

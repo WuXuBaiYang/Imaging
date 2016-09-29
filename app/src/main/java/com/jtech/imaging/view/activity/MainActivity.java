@@ -29,6 +29,7 @@ import com.jtech.imaging.presenter.MainPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.widget.CoverView;
+import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
@@ -90,9 +91,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         //设置状态栏
         StatusBarCompat.setStatusBar(getActivity(), statusBar);
         //fab点击
-        RxView.clicks(floatingActionButton)
-                .throttleFirst(500, TimeUnit.MILLISECONDS)
-                .subscribe(new FabClick());
+        RxCompat.clickThrottleFirst(floatingActionButton,new FabClick());
         //设置layoutmanager
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //设置适配器
