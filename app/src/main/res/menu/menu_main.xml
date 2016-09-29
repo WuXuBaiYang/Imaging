@@ -16,7 +16,6 @@
     <item
         android:id="@id/menu_main_sort"
         android:enabled="true"
-        android:icon="@drawable/ic_sort_white_24dp"
         android:orderInCategory="50"
         android:title="@string/menu_main_sort"
         android:visible="true"

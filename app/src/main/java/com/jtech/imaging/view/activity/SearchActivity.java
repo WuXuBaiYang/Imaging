@@ -19,6 +19,7 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.contract.SearchContract;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.presenter.SearchPresenter;
+import com.jtech.imaging.view.adapter.SearchAdapter;
 import com.jtech.imaging.view.widget.CoverView;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.listener.OnItemClickListener;
@@ -57,6 +58,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     CoverView coverView;
 
     private SearchContract.Presenter presenter;
+    private SearchAdapter searchAdapter;
     private SearchView searchView;
     private String query;
 
@@ -77,7 +79,9 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
                 .setNavigationIcon(R.drawable.ic_keyboard_backspace_white_24dp, this);
         //设置状态栏
         StatusBarCompat.setStatusBar(getActivity(), statusBar);
-        // TODO: 2016/9/27 设置适配器
+        //实例化适配器并设置
+        searchAdapter = new SearchAdapter(getActivity());
+        jRecyclerView.setAdapter(searchAdapter);
         //设置layoutmanagaer
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //设置下拉刷新
@@ -162,7 +166,13 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     public void success(SearchPhotoModel searchPhotoModel, boolean loadMore) {
         refreshLayout.refreshingComplete();
         jRecyclerView.setLoadCompleteState();
-        // TODO: 2016/9/27 设置适配器
+        searchAdapter.setDatas(searchPhotoModel.getResults(), loadMore);
+        //显示搜索结果
+        if (searchPhotoModel.getTotal() > 0) {
+            Snackbar.make(content, searchPhotoModel.getTotal() + " image and " + searchPhotoModel.getTotalPages() + " page", Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(content, "none for this", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -204,7 +214,8 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            // TODO: 2016/9/27 点击弹出图片浏览样式选择
+            //点击开启搜索
+            searchView.onActionViewExpanded();
         }
     }
 
@@ -217,8 +228,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             //视差滚动
-            // TODO: 2016/9/27 视差滚动
-//            photoAdapter.animateImage(recyclerView);
+            searchAdapter.animateImage(recyclerView);
             //隐藏或显示fab
             if (dy > 0 && fabShowing) {
                 fabShowing = false;
