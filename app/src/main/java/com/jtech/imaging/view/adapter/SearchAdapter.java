@@ -22,11 +22,36 @@ import com.yayandroid.parallaxlistview.ParallaxImageView;
 public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, SearchPhotoModel.ResultsModel> {
 
     private int screenWidth;
+    private SearchPhotoModel searchPhotoModel;
 
     public SearchAdapter(Activity activity) {
         super(activity);
         //获取屏幕宽度
         screenWidth = DeviceUtils.getScreenWidth(getActivity());
+    }
+
+    public void setSearchPhotoModel(SearchPhotoModel searchPhotoModel, boolean loadMore) {
+        this.searchPhotoModel = searchPhotoModel;
+        //设置数据
+        setDatas(searchPhotoModel.getResults(), loadMore);
+    }
+
+    /**
+     * 获取总页数
+     *
+     * @return
+     */
+    public int getTotalPage() {
+        return null != searchPhotoModel ? searchPhotoModel.getTotalPages() : 0;
+    }
+
+    /**
+     * 获取总数
+     *
+     * @return
+     */
+    public int getTotalCount() {
+        return null != searchPhotoModel ? searchPhotoModel.getTotal() : 0;
     }
 
     /**
@@ -61,7 +86,7 @@ public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, SearchPhotoM
         ParallaxImageView parallaxImageView = holder.getImageView(R.id.imageview_photo);
         //根据图片加载策略，获取合适的图片url
         String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), resultsModel.getUrls().getRaw(), screenWidth);
-        ImageUtils.showImage(getActivity(), imageUrl, parallaxImageView);
+//        ImageUtils.showImage(getActivity(), imageUrl, parallaxImageView);
         //设置为背景视差滚动图片
         holder.setBackgroundImage(parallaxImageView);
         //设置作者

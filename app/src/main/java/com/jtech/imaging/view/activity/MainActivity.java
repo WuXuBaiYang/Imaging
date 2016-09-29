@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OrderByCache;
 import com.jtech.imaging.cache.PhotoCache;
@@ -27,6 +26,7 @@ import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.MainPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
+import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.widget.CoverView;
 import com.jtech.imaging.view.widget.RxCompat;
@@ -39,7 +39,6 @@ import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import rx.Observable;
@@ -91,12 +90,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         //设置状态栏
         StatusBarCompat.setStatusBar(getActivity(), statusBar);
         //fab点击
-        RxCompat.clickThrottleFirst(floatingActionButton,new FabClick());
+        RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
         //设置layoutmanager
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //设置适配器
         photoAdapter = new PhotoAdapter(getActivity());
-        jRecyclerView.setAdapter(photoAdapter);
+        jRecyclerView.setAdapter(photoAdapter, new LoadMoreFooterAdapter());
         //开启下拉刷新
         jRecyclerView.setLoadMore(true);
         //设置点击事件
@@ -303,8 +302,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public void fail(String message) {
+        jRecyclerView.setLoadFailState();
         refreshLayout.refreshingComplete();
-        jRecyclerView.setLoadCompleteState();
         Snackbar.make(content, message, Snackbar.LENGTH_SHORT).show();
     }
 
