@@ -46,13 +46,11 @@ public class API extends BaseApi {
     public UnsplashApi unsplashApi() {
         if (null == unsplashApi) {
             //获取token
-            String authToken = "";
+            Map<String, String> headerMap = new HashMap<>();
             if (OauthCache.hasOauthModel()) {
                 OauthModel oauthModel = OauthCache.get().getOauthModel();
-                authToken = oauthModel.getTokenType() + " " + oauthModel.getAccessToken();
+                headerMap.put("Authorization", oauthModel.getTokenType() + " " + oauthModel.getAccessToken());
             }
-            Map<String, String> headerMap = new HashMap<>();
-            headerMap.put("Authorization", authToken);
             //创建retrofit
             unsplashApi = createRxApi(headerMap, Constants.BASE_UNSPLASH_URL, UnsplashApi.class);
         }
