@@ -4,9 +4,8 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/recyclerview_default_margin">
 
-    <ProgressBar
-        android:id="@id/loadmore_progress"
-        style="@android:style/Widget.Material.ProgressBar"
+    <com.jtech.imaging.view.widget.LoadingView
+        android:id="@id/contentloading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />

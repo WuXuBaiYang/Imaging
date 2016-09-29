@@ -1,7 +1,6 @@
 package com.jtech.imaging.presenter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.jtech.imaging.cache.PhotoCache;
@@ -40,9 +39,9 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
     @Override
     public void getWelcomePagePhoto(final Context context, String category, String collections, String featured, String username, String query, int width, int height, String orientation) {
         //请求图片
-        String url = PhotoCache.get(context).getWelcomeUrl();
-        if (!TextUtils.isEmpty(url)) {
-            view.showWelcomePagePhoto(url);
+        PhotoModel photoModel = PhotoCache.get(context).getWelcomePhoto();
+        if (null != photoModel) {
+            view.success(photoModel);
         } else {
             API.get()
                     .unsplashApi()
@@ -52,7 +51,7 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
                         @Override
                         public PhotoModel call(PhotoModel photoModel) {
                             //存储图片信息
-                            PhotoCache.get(context).setWelcomeUrl(photoModel.getUrls().getCustom());
+                            PhotoCache.get(context).setWelcomePhoto(photoModel);
                             return photoModel;
                         }
                     })
@@ -60,11 +59,12 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
                     .subscribe(new Action1<PhotoModel>() {
                         @Override
                         public void call(PhotoModel photoModel) {
-                            view.showWelcomePagePhoto(photoModel.getUrls().getCustom());
+                            view.success(photoModel);
                         }
                     }, new Action1<Throwable>() {
                         @Override
                         public void call(Throwable throwable) {
+                            view.fail(throwable.getMessage());
                             Log.e("WelcomePresenter", throwable.getMessage());
                         }
                     });

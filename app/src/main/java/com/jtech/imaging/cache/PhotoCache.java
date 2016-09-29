@@ -26,7 +26,7 @@ public class PhotoCache extends BaseCacheManager {
     private static final int PHOTO_CACHE_TIME = 60 * 10;
     //图片加载策略，缓存key
     private static final String PHOTO_LOAD_STRATEGY = "photoLoadStrategy";
-    //欢迎页图片url缓存Key
+    //欢迎页图片缓存Key
     private static final String PHOTO_WELCOME_PAGE = "photoWelcomePage";
 
     private static PhotoCache INSTANCE;
@@ -55,7 +55,7 @@ public class PhotoCache extends BaseCacheManager {
      *
      * @return
      */
-    public boolean clearWelcomeUrl() {
+    public boolean clearWelcomePhoto() {
         return delete(PHOTO_WELCOME_PAGE);
     }
 
@@ -64,18 +64,18 @@ public class PhotoCache extends BaseCacheManager {
      *
      * @return
      */
-    public String getWelcomeUrl() {
-        return queryString(PHOTO_WELCOME_PAGE);
+    public PhotoModel getWelcomePhoto() {
+        return queryObject(PHOTO_WELCOME_PAGE);
     }
 
     /**
      * 保存欢迎页图片（一天）
      *
-     * @param url
+     * @param photoModel
      * @return
      */
-    public boolean setWelcomeUrl(String url) {
-        return insert(PHOTO_WELCOME_PAGE, url, ACache.TIME_DAY);
+    public boolean setWelcomePhoto(PhotoModel photoModel) {
+        return insert(PHOTO_WELCOME_PAGE, photoModel, ACache.TIME_DAY);
     }
 
     /**

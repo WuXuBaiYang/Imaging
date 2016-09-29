@@ -3,6 +3,7 @@ package com.jtech.imaging.contract;
 
 import android.content.Context;
 
+import com.jtech.imaging.model.PhotoModel;
 import com.jtechlib.contract.BaseContract;
 
 /**
@@ -11,7 +12,9 @@ import com.jtechlib.contract.BaseContract;
  */
 public interface WelcomeContract {
     interface View extends BaseContract.View {
-        void showWelcomePagePhoto(String imageUrl);
+        void success(PhotoModel photoModel);
+
+        void fail(String message);
     }
 
     interface Presenter extends BaseContract.Presenter {

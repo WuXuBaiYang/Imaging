@@ -196,7 +196,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                                 photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO;
                             }
                             //清空欢迎页数据
-                            PhotoCache.get(getActivity()).clearWelcomeUrl();
+                            PhotoCache.get(getActivity()).clearWelcomePhoto();
                             //存储策略
                             PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
                             //刷新列表
@@ -262,7 +262,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                             return;
                         }
                         //清空欢迎页数据
-                        PhotoCache.get(getActivity()).clearWelcomeUrl();
+                        PhotoCache.get(getActivity()).clearWelcomePhoto();
                         //存储策略
                         PhotoCache.get(getActivity()).setPhotoLoadStrategy(checkStrategy);
                         //刷新列表

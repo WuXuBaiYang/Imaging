@@ -22,5 +22,7 @@
     <item name="imageview_random" type="id"></item>
     <item name="content_cover" type="id"></item>
     <item name="loadmore_text" type="id"></item>
-    <item name="loadmore_progress" type="id"></item>
+    <item name="content_welcome_info" type="id"></item>
+    <item name="textview_welcome_info" type="id"></item>
+    <item name="button_welcome_next" type="id"></item>
 </resources>

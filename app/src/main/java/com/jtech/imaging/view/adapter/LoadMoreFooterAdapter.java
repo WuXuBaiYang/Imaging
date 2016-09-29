@@ -21,25 +21,25 @@ public class LoadMoreFooterAdapter extends LoadFooterAdapter {
 
     @Override
     public void loadFailState(RecyclerHolder recyclerHolder) {
-        recyclerHolder.hideViewGone(R.id.loadmore_progress);
+        recyclerHolder.hideViewGone(R.id.contentloading);
         recyclerHolder.setText(R.id.loadmore_text, "request fail");
     }
 
     @Override
     public void loadingState(RecyclerHolder recyclerHolder) {
-        recyclerHolder.showView(R.id.loadmore_progress);
+        recyclerHolder.showView(R.id.contentloading);
         recyclerHolder.setText(R.id.loadmore_text, "");
     }
 
     @Override
     public void noMoreDataState(RecyclerHolder recyclerHolder) {
-        recyclerHolder.hideViewGone(R.id.loadmore_progress);
+        recyclerHolder.hideViewGone(R.id.contentloading);
         recyclerHolder.setText(R.id.loadmore_text, "no more");
     }
 
     @Override
     public void normalState(RecyclerHolder recyclerHolder) {
-        recyclerHolder.hideViewGone(R.id.loadmore_progress);
+        recyclerHolder.hideViewGone(R.id.contentloading);
         recyclerHolder.setText(R.id.loadmore_text, "");
     }
 }
