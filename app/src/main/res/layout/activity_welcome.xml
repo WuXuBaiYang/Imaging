@@ -23,37 +23,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_wallpaper_white_36dp"
+        android:layout_margin="@dimen/recyclerview_default_margin"
+        android:src="@drawable/ic_arrow_forward_white_36dp"
         android:transitionName="@string/fab"
         app:useCompatPadding="true" />
 
-    <LinearLayout
-        android:id="@id/content_welcome_info"
-        android:layout_width="match_parent"
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@id/textview_welcome_info"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/color_accent"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:padding="@dimen/recyclerview_default_margin"
+        android:textColor="@color/toolbar_subtitle"
+        android:textSize="@dimen/text_size_normal" />
 
-        <TextView
-            android:id="@id/textview_welcome_info"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/recyclerview_default_margin"
-            android:singleLine="true"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_normal" />
-
-        <ImageButton
-            android:id="@id/button_welcome_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:padding="@dimen/recyclerview_default_margin"
-            android:src="@drawable/ic_arrow_forward_white_36dp" />
-    </LinearLayout>
 </RelativeLayout>

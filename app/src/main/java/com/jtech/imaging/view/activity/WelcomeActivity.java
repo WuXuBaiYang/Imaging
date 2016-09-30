@@ -1,6 +1,5 @@
 package com.jtech.imaging.view.activity;
 
-import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -9,10 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.AppCompatImageView;
-import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jtech.imaging.R;
@@ -22,7 +18,6 @@ import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.WelcomePresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
-import com.jtech.imaging.util.Utils;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.Util.DeviceUtils;
@@ -30,7 +25,6 @@ import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 import rx.functions.Action1;
 
 /**
@@ -45,8 +39,6 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     FloatingActionButton floatingActionButton;
     @Bind(R.id.imageview_welcome)
     AppCompatImageView imageView;
-    @Bind(R.id.content_welcome_info)
-    LinearLayout contentInfo;
     @Bind(R.id.textview_welcome_info)
     TextView textviewInfo;
     @Bind(R.id.contentloading)
@@ -89,10 +81,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
 
     @Override
     public void success(PhotoModel photoModel) {
-        //隐藏fab
-        floatingActionButton.hide();
         //设置图片信息
-        textviewInfo.setText(photoModel.getUser().getName() + "\t" + Utils.dateFormat(photoModel.getCreatedAt()));
+        textviewInfo.setText(photoModel.getUser().getName());
         //显示图片
         ImageUtils.requestImage(getActivity(), photoModel.getUrls().getCustom(), new Action1<Bitmap>() {
             @Override
@@ -111,27 +101,11 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
                 }
             }
         });
-        //显示信息视图
-        contentInfo.setVisibility(View.VISIBLE);
-        //显示动画
-        int centerX = contentInfo.getWidth() / 2;
-        int centerY = contentInfo.getHeight() / 2;
-        float startRadius = 0f;
-        float endRadius = contentInfo.getWidth();
-        Animator animator = ViewAnimationUtils.createCircularReveal(contentInfo, centerX, centerY, startRadius, endRadius);
-        animator.setDuration(INFO_ANIMATION_DURATION);
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
-        animator.start();
     }
 
     @Override
     public void fail(String message) {
         // TODO: 2016/9/29 nothing
-    }
-
-    @OnClick(R.id.button_welcome_next)
-    public void onNextClick() {
-        jumpToNext();
     }
 
     private void jumpToNext() {
