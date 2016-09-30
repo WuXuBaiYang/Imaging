@@ -7,4 +7,5 @@
     <color name="toolbar_subtitle">#f5f5f5</color>
     <color name="text_cover">#20000000</color>
     <color name="content_transparent_black">#99000000</color>
+    <color name="content_half_transparent_black">#e0000000</color>
 </resources>

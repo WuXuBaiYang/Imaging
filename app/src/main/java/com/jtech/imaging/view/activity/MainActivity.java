@@ -412,7 +412,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         ActivityCompat.finishAffinity(getActivity());
     }
 
-
     /**
      * fab的点击事件
      */

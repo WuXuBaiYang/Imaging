@@ -1,18 +1,15 @@
 package com.jtech.imaging.view.activity;
 
-import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.view.ViewAnimationUtils;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.widget.ImageView;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.RandomContract;
 import com.jtech.imaging.model.PhotoModel;
@@ -23,8 +20,6 @@ import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -40,7 +35,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     private static final long IMAGE_SHOW_ANIMATION_DURATION = 350;
 
     @Bind(R.id.imageview_random)
-    ImageView imageView;
+    AppCompatImageView imageView;
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
     @Bind(R.id.content)
@@ -65,7 +60,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     protected void initViews(Bundle bundle) {
         setContentView(R.layout.activity_random);
         //设置fab的点击事件
-        RxCompat.clickThrottleFirst(floatingActionButton,new FabClick());
+        RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
     }
 
     @Override
@@ -99,7 +94,14 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
                     layoutParams.width = screenWidth;
                     layoutParams.height = imageHeight;
                     imageView.setLayoutParams(layoutParams);
-                    startImageShowAnimation(imageHeight);
+                    //设置图片透明度为0
+                    imageView.setAlpha(0f);
+                    //显示图片动画
+                    imageView.animate()
+                            .alphaBy(1f)
+                            .setDuration(IMAGE_SHOW_ANIMATION_DURATION)
+                            .setInterpolator(new AccelerateDecelerateInterpolator())
+                            .start();
                 } else {
                     fail("ImageLoadError");
                 }
@@ -150,22 +152,6 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     @OnClick(R.id.imageview_random)
     void onImageClick() {
         // TODO: 2016/9/26 点击跳转到详情 
-    }
-
-    /**
-     * 图片显示时的动画
-     *
-     * @param imageHeight
-     */
-    private void startImageShowAnimation(int imageHeight) {
-        //开启动画
-        int startRadius = 0;
-        int endRadius = Math.max(imageHeight, screenWidth);
-        Animator animator = ViewAnimationUtils
-                .createCircularReveal(imageView, screenWidth / 2, imageHeight / 2, startRadius, endRadius);
-        animator.setDuration(IMAGE_SHOW_ANIMATION_DURATION)
-                .setInterpolator(new AccelerateInterpolator());
-        animator.start();
     }
 
     /**

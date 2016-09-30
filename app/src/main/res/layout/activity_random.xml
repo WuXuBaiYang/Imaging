@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:background="@color/content_transparent_black"
+    android:background="@color/content_half_transparent_black"
     android:clickable="true">
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@id/imageview_random"
         android:layout_width="match_parent"
         android:layout_height="0dp"
