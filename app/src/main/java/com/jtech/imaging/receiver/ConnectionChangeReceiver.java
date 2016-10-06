@@ -76,7 +76,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
     private String getTopActivityName(Context context) {
         String topActivityClassName = null;
         ActivityManager activityManager =
-                (ActivityManager) (context.getSystemService(android.content.Context.ACTIVITY_SERVICE));
+                (ActivityManager) (context.getSystemService(Context.ACTIVITY_SERVICE));
         List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(1);
         if (runningTaskInfos != null) {
             ComponentName f = runningTaskInfos.get(0).topActivity;

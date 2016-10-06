@@ -1,15 +1,15 @@
-﻿apply plugin: 'com.android.application'
+apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
-
+    buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.jtech.imaging"
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -34,7 +34,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
     //recycleerview分割线
     compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     //视差滚动
