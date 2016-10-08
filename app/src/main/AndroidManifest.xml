@@ -27,6 +27,8 @@
         <activity android:name=".view.activity.OauthActivity" />
         //搜索页
         <activity android:name=".view.activity.SearchActivity" />
+        //图片详情
+        <activity android:name=".view.activity.PhotoDetailActivity" />
         //随机页面
         <activity
             android:name=".view.activity.RandomActivity"

@@ -274,7 +274,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
-        // TODO: 2016/9/26 点击跳转到详情 
+        // TODO: 2016/9/26 点击跳转到详情
     }
 
     @Override

@@ -105,7 +105,6 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
 
     @Override
     public void fail(String message) {
-        // TODO: 2016/9/29 nothing
     }
 
     private void jumpToNext() {
