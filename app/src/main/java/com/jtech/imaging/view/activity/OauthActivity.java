@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -149,7 +150,8 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
      */
     private class mWebViewClient extends WebViewClient {
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            String url = request.getUrl().toString();
             if (url.startsWith(Constants.UNSPLASH_REDIRECT_URI)) {
                 String code = url.replace(Constants.UNSPLASH_REDIRECT_URI + "?code=", "");
                 presenter.requestToken(Constants.UNSPLASH_CLIENT_ID,
@@ -157,8 +159,7 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
                         code, Constants.GRANT_TYPE);
             }
             view.loadUrl(url);
-            return true;
+            return shouldOverrideUrlLoading(view, request);
         }
     }
-
 }
