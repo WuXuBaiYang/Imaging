@@ -159,7 +159,7 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
                         code, Constants.GRANT_TYPE);
             }
             view.loadUrl(url);
-            return shouldOverrideUrlLoading(view, request);
+            return super.shouldOverrideUrlLoading(view, request);
         }
     }
 }
