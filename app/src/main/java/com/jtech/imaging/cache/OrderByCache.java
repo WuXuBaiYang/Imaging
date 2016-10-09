@@ -1,7 +1,6 @@
 package com.jtech.imaging.cache;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.common.Constants;
@@ -16,7 +15,6 @@ public class OrderByCache extends BaseCacheManager {
     private static final String ORDER_BY_KEY = "orderByKey";
 
     private static OrderByCache INSTANCE;
-    private SharedPreferences sharedPreferences;
 
     private int orderBy = -1;
     private String[] sorts;
@@ -24,7 +22,6 @@ public class OrderByCache extends BaseCacheManager {
     public OrderByCache(Context context) {
         super(context);
         this.sorts = context.getResources().getStringArray(R.array.sort);
-        this.sharedPreferences = context.getSharedPreferences(getCacheName(), Context.MODE_PRIVATE);
     }
 
     public static OrderByCache get(Context context) {
@@ -41,7 +38,7 @@ public class OrderByCache extends BaseCacheManager {
      */
     public int getOrderByIndex() {
         if (-1 == orderBy) {
-            this.orderBy = sharedPreferences.getInt(ORDER_BY_KEY, 0);
+            this.orderBy = queryInt(ORDER_BY_KEY, 0);
         }
         return orderBy;
     }
@@ -71,9 +68,7 @@ public class OrderByCache extends BaseCacheManager {
      */
     public void setOrderBy(int orderBy) {
         this.orderBy = orderBy;
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(ORDER_BY_KEY, orderBy);
-        editor.commit();
+        insertInt(ORDER_BY_KEY, orderBy);
     }
 
     @Override

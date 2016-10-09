@@ -1,7 +1,6 @@
 package com.jtech.imaging.cache;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.text.TextUtils;
 
 import com.google.gson.Gson;
@@ -30,7 +29,6 @@ public class PhotoCache extends BaseCacheManager {
     private static final String PHOTO_WELCOME_PAGE = "photoWelcomePage";
 
     private static PhotoCache INSTANCE;
-    private SharedPreferences sharedPreferences;
 
     //图片加载策略
     private int photoLoadStrategy;
@@ -40,7 +38,6 @@ public class PhotoCache extends BaseCacheManager {
     public PhotoCache(Context context) {
         super(context);
         this.context = context;
-        this.sharedPreferences = context.getSharedPreferences(getCacheName(), Context.MODE_PRIVATE);
     }
 
     public static PhotoCache get(Context context) {
@@ -65,7 +62,7 @@ public class PhotoCache extends BaseCacheManager {
      * @return
      */
     public PhotoModel getWelcomePhoto() {
-        return queryObject(PHOTO_WELCOME_PAGE);
+        return querySerializable(PHOTO_WELCOME_PAGE);
     }
 
     /**
@@ -118,7 +115,7 @@ public class PhotoCache extends BaseCacheManager {
      */
     public int getPhotoLoadStrategy() {
         if (photoLoadStrategy == 0) {
-            this.photoLoadStrategy = sharedPreferences.getInt(PHOTO_LOAD_STRATEGY, PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480);
+            this.photoLoadStrategy = queryInt(PHOTO_LOAD_STRATEGY, PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480);
         }
         return photoLoadStrategy;
     }
@@ -130,9 +127,7 @@ public class PhotoCache extends BaseCacheManager {
      */
     public void setPhotoLoadStrategy(int strategy) {
         this.photoLoadStrategy = strategy;
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(PHOTO_LOAD_STRATEGY, strategy);
-        editor.commit();
+        insertInt(PHOTO_LOAD_STRATEGY, strategy);
     }
 
     @Override

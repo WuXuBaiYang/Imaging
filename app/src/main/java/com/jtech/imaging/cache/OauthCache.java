@@ -54,7 +54,7 @@ public class OauthCache extends BaseCacheManager {
      */
     public OauthModel getOauthModel() {
         if (null == oauthModel) {
-            oauthModel = queryObject(OauthModel.class.getSimpleName());
+            oauthModel = querySerializable(OauthModel.class.getSimpleName());
         }
         return oauthModel;
     }
