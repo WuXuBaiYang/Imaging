@@ -6,6 +6,7 @@
     <string name="menu_main_imagesize">ImageLoadStrategy</string>
     <string name="search_hint">Search...</string>
     <string name="search_page_title">Search</string>
+    <string name="search_record_clear">clear all</string>
 
     <string name="cancel">cancel</string>
     <string name="done">done</string>

@@ -17,6 +17,7 @@
     <item name="imageview_photo" type="id"></item>
     <item name="background" type="id"></item>
     <item name="textview_photo" type="id"></item>
+    <item name="textview_clear" type="id"></item>
     <item name="statusbar" type="id"></item>
     <item name="content" type="id"></item>
     <item name="imageview_random" type="id"></item>
@@ -25,4 +26,6 @@
     <item name="content_welcome_info" type="id"></item>
     <item name="textview_welcome_info" type="id"></item>
     <item name="button_welcome_next" type="id"></item>
+    <item name="textview_search_record" type="id"></item>
+    <item name="close" type="id"></item>
 </resources>

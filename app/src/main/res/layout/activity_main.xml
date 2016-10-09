@@ -23,7 +23,9 @@
         android:layout_height="match_parent"
         android:background="@color/content_transparent_black" />
 
+
     <android.support.design.widget.AppBarLayout
+        android:id="@id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

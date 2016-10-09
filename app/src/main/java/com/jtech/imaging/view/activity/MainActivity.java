@@ -30,6 +30,7 @@ import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.widget.CoverView;
 import com.jtech.imaging.view.widget.RxCompat;
+import com.jtech.imaging.view.widget.SearchRecordPopup;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
@@ -51,7 +52,7 @@ import rx.schedulers.Schedulers;
  * 主页
  * Created by jianghan on 2016/9/20.
  */
-public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener, Toolbar.OnMenuItemClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener, CoverView.OnCoverCancelListener {
+public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener, Toolbar.OnMenuItemClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener, CoverView.OnCoverCancelListener, SearchRecordPopup.OnSearchRecordClick {
 
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
@@ -71,6 +72,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     private SearchView searchView;
     private PhotoAdapter photoAdapter;
     private MainContract.Presenter presenter;
+    private SearchRecordPopup searchRecordPopup;
 
     @Override
     protected void initVariables(Bundle bundle) {
@@ -91,6 +93,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         StatusBarCompat.setStatusBar(getActivity(), statusBar);
         //fab点击
         RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
+        //实例化popup
+        searchRecordPopup = new SearchRecordPopup(getActivity());
+        //设置搜索事件
+        searchRecordPopup.setOnSearchRecordClick(this);
         //设置layoutmanager
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //设置适配器
@@ -278,6 +284,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     }
 
     @Override
+    public void onRecordClick(String keyword) {
+        searchSubmit(keyword);
+    }
+
+    @Override
     public void onRefresh() {
         presenter.requestPhotoList(photoAdapter.getPage(false)
                 , photoAdapter.getDisplayNumber()
@@ -340,6 +351,21 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if (searchSubmit(query)) {
+            //存储搜索记录
+            searchRecordPopup.addSearchRecord(query);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 搜索提交
+     *
+     * @param query
+     * @return
+     */
+    private boolean searchSubmit(String query) {
         if (!TextUtils.isEmpty(query.trim())) {
             //跳转到搜索页
             Bundle bundle = new Bundle();
@@ -371,11 +397,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
             coverView.hideContentCover();
             //显示fab
             floatingActionButton.show();
+            //取消popup
+//            searchRecordPopup.dismiss();
         } else {
             //显示覆盖层
             coverView.showContentCover();
             //隐藏fab
             floatingActionButton.hide();
+            //显示popup
+//            searchRecordPopup.showSearchRecord(toolbar);
         }
     }
 
