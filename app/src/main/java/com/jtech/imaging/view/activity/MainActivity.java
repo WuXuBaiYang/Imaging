@@ -398,14 +398,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
             //显示fab
             floatingActionButton.show();
             //取消popup
-//            searchRecordPopup.dismiss();
+            searchRecordPopup.dismiss();
         } else {
             //显示覆盖层
             coverView.showContentCover();
             //隐藏fab
             floatingActionButton.hide();
             //显示popup
-//            searchRecordPopup.showSearchRecord(toolbar);
+            searchRecordPopup.showSearchRecord(toolbar);
         }
     }
 

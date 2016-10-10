@@ -102,7 +102,11 @@ public class SearchRecordCache extends BaseCacheManager {
      * @return
      */
     private List<String> convertToList(String origin) {
-        return TextUtils.isEmpty(origin) ? new ArrayList<String>() : Arrays.asList(origin.split("\\|"));
+        List<String> list = new ArrayList<>();
+        if (!TextUtils.isEmpty(origin)) {
+            list.addAll(Arrays.asList(origin.split("\\|")));
+        }
+        return list;
     }
 
     /**

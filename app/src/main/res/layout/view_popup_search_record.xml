@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/recyclerview_default_margin"
+    android:paddingRight="@dimen/recyclerview_default_margin">
 
     <com.jtech.view.JRecyclerView
         android:id="@id/jrecyclerview"
@@ -12,11 +14,11 @@
 
     <TextView
         android:id="@id/textview_clear"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
+        android:gravity="center"
         android:padding="@dimen/recyclerview_default_margin"
         android:text="@string/search_record_clear"
-        android:textSize="@dimen/text_size_small"
-        android:visibility="gone" />
+        android:textSize="@dimen/text_size_small" />
 </LinearLayout>

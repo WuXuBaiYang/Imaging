@@ -17,7 +17,6 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:text="文字"
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_normal" />
 
@@ -27,5 +26,6 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ripple"
         android:padding="@dimen/recyclerview_default_margin"
-        android:src="@drawable/ic_close_white_24dp" />
+        android:src="@drawable/ic_close_white_24dp"
+        android:visibility="gone" />
 </LinearLayout>

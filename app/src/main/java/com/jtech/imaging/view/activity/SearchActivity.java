@@ -23,6 +23,7 @@ import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.SearchAdapter;
 import com.jtech.imaging.view.widget.CoverView;
 import com.jtech.imaging.view.widget.RxCompat;
+import com.jtech.imaging.view.widget.SearchRecordPopup;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
@@ -39,7 +40,7 @@ import rx.functions.Action1;
  * Created by jianghan on 2016/9/27.
  */
 
-public class SearchActivity extends BaseActivity implements SearchContract.View, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener, RefreshLayout.OnRefreshListener, OnLoadListener, OnItemClickListener, CoverView.OnCoverCancelListener {
+public class SearchActivity extends BaseActivity implements SearchContract.View, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener, RefreshLayout.OnRefreshListener, OnLoadListener, OnItemClickListener, CoverView.OnCoverCancelListener, SearchRecordPopup.OnSearchRecordClick {
 
     public static final String SEARCH_QUERY_KEY = "searchQuerykey";
 
@@ -58,10 +59,11 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     @Bind(R.id.content_cover)
     CoverView coverView;
 
-    private SearchContract.Presenter presenter;
-    private SearchAdapter searchAdapter;
-    private SearchView searchView;
     private String query;
+    private SearchView searchView;
+    private SearchAdapter searchAdapter;
+    private SearchContract.Presenter presenter;
+    private SearchRecordPopup searchRecordPopup;
 
     @Override
     protected void initVariables(Bundle bundle) {
@@ -80,11 +82,15 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
                 .setNavigationIcon(R.drawable.ic_keyboard_backspace_white_24dp, this);
         //设置状态栏
         StatusBarCompat.setStatusBar(getActivity(), statusBar);
+        //实例化popup
+        searchRecordPopup = new SearchRecordPopup(getActivity());
         //实例化适配器并设置
         searchAdapter = new SearchAdapter(getActivity());
         jRecyclerView.setAdapter(searchAdapter, new LoadMoreFooterAdapter());
         //设置layoutmanagaer
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //设置搜索事件
+        searchRecordPopup.setOnSearchRecordClick(this);
         //设置下拉刷新
         refreshLayout.setOnRefreshListener(this);
         //设置加载更多
@@ -119,12 +125,27 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         //设置默认信息
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         //设置搜索内容
-        searchView.setQuery(query, true);
+        searchSubmit(query);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        if (searchSubmit(query)) {
+            //存储搜索记录
+            searchRecordPopup.addSearchRecord(query);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 搜索提交
+     *
+     * @param query
+     * @return
+     */
+    private boolean searchSubmit(String query) {
         if (!TextUtils.isEmpty(query.trim())) {
             this.query = query;
             //设置标题栏
@@ -152,11 +173,15 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
             coverView.hideContentCover();
             //显示fab
             floatingActionButton.show();
+            //取消popup
+            searchRecordPopup.dismiss();
         } else {
             //显示覆盖层
             coverView.showContentCover();
             //隐藏fab
             floatingActionButton.hide();
+            //显示popup
+            searchRecordPopup.showSearchRecord(toolbar);
         }
     }
 
@@ -212,6 +237,11 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int i) {
         // TODO: 2016/9/27 点击跳转到详情
+    }
+
+    @Override
+    public void onRecordClick(String keyword) {
+        searchSubmit(keyword);
     }
 
     @Override
