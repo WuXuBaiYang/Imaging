@@ -42,11 +42,7 @@ import com.jtechlib.view.widget.StatusBarCompat;
 import java.util.List;
 
 import butterknife.Bind;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * 主页
@@ -116,25 +112,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     @Override
     protected void loadData() {
         //加载缓存数据，没有则下拉刷新
-        Observable.just("")
-                .subscribeOn(Schedulers.io())
-                .map(new Func1<String, List<PhotoModel>>() {
-                    @Override
-                    public List<PhotoModel> call(String s) {
-                        return PhotoCache.get(getActivity()).getFirstPagePhotos();
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<PhotoModel>>() {
-                    @Override
-                    public void call(List<PhotoModel> photoModels) {
-                        if (null != photoModels) {//设置缓存
-                            photoAdapter.setDatas(photoModels);
-                        } else {//发起下拉刷新
-                            refreshLayout.startRefreshing();
-                        }
-                    }
-                });
+        presenter.requestCachePhotoList();
     }
 
     /**
@@ -302,6 +280,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 , photoAdapter.getDisplayNumber()
                 , OrderByCache.get(getActivity()).getOrderByLowerCase()
                 , true);
+    }
+
+    @Override
+    public void cacheSuccess(List<PhotoModel> photoModels) {
+        if (null != photoModels) {//设置缓存
+            photoAdapter.setDatas(photoModels);
+        } else {//发起下拉刷新
+            refreshLayout.startRefreshing();
+        }
     }
 
     @Override

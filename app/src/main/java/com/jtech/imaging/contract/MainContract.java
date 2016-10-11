@@ -13,6 +13,8 @@ public interface MainContract {
 
     interface Presenter extends BaseContract.Presenter {
         void requestPhotoList(int pageIndex, int displayNumber, String orderBy, boolean loadMore);
+
+        void requestCachePhotoList();
     }
 
     interface View extends BaseContract.View {
@@ -25,5 +27,7 @@ public interface MainContract {
         void success(List<PhotoModel> photoModels, boolean loadMore);
 
         void fail(String message);
+
+        void cacheSuccess(List<PhotoModel> photoModels);
     }
 }
