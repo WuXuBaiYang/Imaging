@@ -163,7 +163,7 @@ public interface UnsplashApi {
             @Path("id") String id,
             @Query("width") int width,
             @Query("height") int height,
-            @Query("rect") int rect);
+            @Query("rect") String rect);
 
     /**
      * 获取一张随机的图片 PASS

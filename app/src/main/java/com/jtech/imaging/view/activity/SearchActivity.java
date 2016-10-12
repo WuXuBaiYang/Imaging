@@ -29,6 +29,7 @@ import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
+import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
 
@@ -85,7 +86,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         //实例化popup
         searchRecordPopup = new SearchRecordPopup(getActivity());
         //实例化适配器并设置
-        searchAdapter = new SearchAdapter(getActivity());
+        searchAdapter = new SearchAdapter(getActivity(), DeviceUtils.getScreenWidth(getActivity()));
         jRecyclerView.setAdapter(searchAdapter, new LoadMoreFooterAdapter());
         //设置layoutmanagaer
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -187,6 +188,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
     @Override
     public void onClick(View v) {
+        //后退
         onBackPressed();
     }
 

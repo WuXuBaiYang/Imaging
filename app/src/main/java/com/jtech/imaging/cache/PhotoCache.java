@@ -130,6 +130,32 @@ public class PhotoCache extends BaseCacheManager {
         insertInt(PHOTO_LOAD_STRATEGY, strategy);
     }
 
+    /**
+     * 获取本地缓存的图片详情
+     *
+     * @param imageId
+     * @return
+     */
+    public PhotoModel getPhotoDetail(String imageId) {
+        if (TextUtils.isEmpty(imageId)) {
+            return null;
+        }
+        return querySerializable(imageId);
+    }
+
+    /**
+     * 缓存图片详情
+     *
+     * @param imageId
+     * @param photoModel
+     */
+    public void setPhotoDetail(String imageId, PhotoModel photoModel) {
+        if (TextUtils.isEmpty(imageId) || null == photoModel) {
+            return;
+        }
+        insertSerializable(imageId, photoModel);
+    }
+
     @Override
     public String getCacheName() {
         return Constants.CACHE_NAME;

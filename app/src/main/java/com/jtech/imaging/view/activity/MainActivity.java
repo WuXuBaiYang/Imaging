@@ -36,6 +36,7 @@ import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
+import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
 
@@ -96,7 +97,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         //设置layoutmanager
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         //设置适配器
-        photoAdapter = new PhotoAdapter(getActivity());
+        photoAdapter = new PhotoAdapter(getActivity(), DeviceUtils.getScreenWidth(getActivity()));
         jRecyclerView.setAdapter(photoAdapter, new LoadMoreFooterAdapter());
         //开启下拉刷新
         jRecyclerView.setLoadMore(true);
@@ -258,7 +259,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
-        // TODO: 2016/9/26 点击跳转到详情
+        Bundle bundle = new Bundle();
+        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoAdapter.getItem(position).getId());
+        ActivityOptionsCompat activityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), floatingActionButton, getString(R.string.fab));
+        Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
+        intent.putExtras(bundle);
+        ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
     }
 
     @Override

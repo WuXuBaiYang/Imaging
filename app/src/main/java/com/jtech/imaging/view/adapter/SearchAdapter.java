@@ -1,6 +1,6 @@
 package com.jtech.imaging.view.adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.viewholder.ParallaxViewHolder;
-import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.yayandroid.parallaxlistview.ParallaxImageView;
 
@@ -24,10 +23,9 @@ public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, SearchPhotoM
     private int screenWidth;
     private SearchPhotoModel searchPhotoModel;
 
-    public SearchAdapter(Activity activity) {
-        super(activity);
-        //获取屏幕宽度
-        screenWidth = DeviceUtils.getScreenWidth(getActivity());
+    public SearchAdapter(Context context, int screenWidth) {
+        super(context);
+        this.screenWidth = screenWidth;
     }
 
     public void setSearchPhotoModel(SearchPhotoModel searchPhotoModel, boolean loadMore) {
@@ -85,8 +83,8 @@ public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, SearchPhotoM
         //显示图片
         ParallaxImageView parallaxImageView = holder.getImageView(R.id.imageview_photo);
         //根据图片加载策略，获取合适的图片url
-        String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), resultsModel.getUrls().getRaw(), screenWidth);
-        ImageUtils.showImage(getActivity(), imageUrl, parallaxImageView);
+        String imageUrl = PhotoLoadStrategy.getUrl(getContext(), resultsModel.getUrls().getRaw(), screenWidth);
+        ImageUtils.showImage(getContext(), imageUrl, parallaxImageView);
         //设置为背景视差滚动图片
         holder.setBackgroundImage(parallaxImageView);
         //设置作者

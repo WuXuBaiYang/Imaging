@@ -1,6 +1,6 @@
 package com.jtech.imaging.view.adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +20,8 @@ import java.util.List;
  * Created by jianghan on 2016/8/30.
  */
 public class ScopesAdapter extends RecyclerAdapter<ScopeModel> {
-
-    public ScopesAdapter(Activity activity) {
-        super(activity);
+    public ScopesAdapter(Context context) {
+        super(context);
     }
 
     /**

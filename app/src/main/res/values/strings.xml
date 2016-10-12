@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Imaging</string>
     <string name="fab">fab</string>
+    <string name="image">image</string>
     <string name="menu_main_search">Search</string>
     <string name="menu_main_sort">Sort</string>
     <string name="menu_main_imagesize">ImageLoadStrategy</string>
