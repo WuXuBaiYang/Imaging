@@ -125,21 +125,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     public void showSortDialog() {
         PhotoSortDialog
                 .build(getActivity())
-                .setSingleChoiceItems(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //关闭当前的dialog
-                        dialog.dismiss();
-                        //记录当前的排序
-                        OrderByCache.get(getActivity()).setOrderBy(which);
-                        //设置标题栏
-                        toolbar.setTitle(OrderByCache.get(getActivity()).getOrderByString());
-                        //刷新列表
-                        refreshLayout.startRefreshing();
-                        //滚动到首位
-                        jRecyclerView.getLayoutManager().scrollToPosition(0);
-                    }
-                })
+                .setSingleChoiceItems(new OnSordDialogClick())
                 .show();
     }
 
@@ -150,31 +136,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     public void showImageLoadStrategyDialog() {
         ImageLoadStrategyDialog
                 .build(getActivity())
-                .setSingleChoiceItems(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //关闭对话框
-                        dialog.dismiss();
-                        //设置选择的策略
-                        if (which == 0) {
-                            showImageLoadStrategyFixedDialog(PhotoCache.get(getActivity()).getPhotoLoadStrategy());
-                        } else {
-                            int photoLoadStrategy = 0;
-                            if (which == 1) {
-                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_NET_AUTO;
-                            } else if (which == 2) {
-                                photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO;
-                            }
-                            //清空欢迎页数据
-                            PhotoCache.get(getActivity()).clearWelcomePhoto();
-                            //存储策略
-                            PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
-                            //刷新列表
-                            photoAdapter.notifyItemRangeChanged(0, photoAdapter.getItemCount());
-                            photoAdapter.animateImage(jRecyclerView);
-                        }
-                    }
-                })
+                .setSingleChoiceItems(new OnImageLoadStrategyDialogClick())
                 .show();
     }
 
@@ -185,44 +147,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     public void showImageLoadStrategyFixedDialog(int photoLoadStrategy) {
         ImageLoadStrategyFixedDialog
                 .build(getActivity(), photoLoadStrategy)
-                .setSingleChoiceItems(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //关闭对话框
-                        dialog.dismiss();
-                        //默认为0
-                        int checkStrategy = 0;
-                        //设置策略
-                        switch (which) {
-                            case 0://全尺寸
-                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL;
-                                break;
-                            case 1://最高1080
-                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080;
-                                break;
-                            case 2://最高720
-                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720;
-                                break;
-                            case 3://最高480
-                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480;
-                                break;
-                            case 4://最高200
-                                checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200;
-                                break;
-                        }
-                        if (which == 0) {
-                            Snackbar.make(content, "no,you can't choose it", Snackbar.LENGTH_SHORT).show();
-                            return;
-                        }
-                        //清空欢迎页数据
-                        PhotoCache.get(getActivity()).clearWelcomePhoto();
-                        //存储策略
-                        PhotoCache.get(getActivity()).setPhotoLoadStrategy(checkStrategy);
-                        //刷新列表
-                        photoAdapter.notifyItemRangeChanged(0, photoAdapter.getItemCount());
-                        photoAdapter.animateImage(jRecyclerView);
-                    }
-                })
+                .setSingleChoiceItems(new OnImageLoadStrategyFixedDialogClick())
                 .show();
     }
 
@@ -395,6 +320,96 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 fabShowing = true;
                 floatingActionButton.show();
             }
+        }
+    }
+
+    /**
+     * 排序对话框点击
+     */
+    private class OnSordDialogClick implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            //关闭当前的dialog
+            dialog.dismiss();
+            //记录当前的排序
+            OrderByCache.get(getActivity()).setOrderBy(which);
+            //设置标题栏
+            toolbar.setTitle(OrderByCache.get(getActivity()).getOrderByString());
+            //刷新列表
+            refreshLayout.startRefreshing();
+            //滚动到首位
+            jRecyclerView.getLayoutManager().scrollToPosition(0);
+        }
+    }
+
+    /**
+     * 图片加载策略对话框点击
+     */
+    private class OnImageLoadStrategyDialogClick implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            //关闭对话框
+            dialog.dismiss();
+            //设置选择的策略
+            if (which == 0) {
+                showImageLoadStrategyFixedDialog(PhotoCache.get(getActivity()).getPhotoLoadStrategy());
+            } else {
+                int photoLoadStrategy = 0;
+                if (which == 1) {
+                    photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_NET_AUTO;
+                } else if (which == 2) {
+                    photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO;
+                }
+                //清空欢迎页数据
+                PhotoCache.get(getActivity()).clearWelcomePhoto();
+                //存储策略
+                PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
+                //刷新列表
+                photoAdapter.notifyItemRangeChanged(0, photoAdapter.getItemCount());
+                photoAdapter.animateImage(jRecyclerView);
+            }
+        }
+    }
+
+    /**
+     * 图片加载策略，固定分辨率对话框点击
+     */
+    private class OnImageLoadStrategyFixedDialogClick implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            //关闭对话框
+            dialog.dismiss();
+            //默认为0
+            int checkStrategy = 0;
+            //设置策略
+            switch (which) {
+                case 0://全尺寸
+                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL;
+                    break;
+                case 1://最高1080
+                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080;
+                    break;
+                case 2://最高720
+                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720;
+                    break;
+                case 3://最高480
+                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480;
+                    break;
+                case 4://最高200
+                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200;
+                    break;
+            }
+            if (which == 0) {
+                Snackbar.make(content, "no,you can't choose it", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            //清空欢迎页数据
+            PhotoCache.get(getActivity()).clearWelcomePhoto();
+            //存储策略
+            PhotoCache.get(getActivity()).setPhotoLoadStrategy(checkStrategy);
+            //刷新列表
+            photoAdapter.notifyItemRangeChanged(0, photoAdapter.getItemCount());
+            photoAdapter.animateImage(jRecyclerView);
         }
     }
 

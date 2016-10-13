@@ -137,34 +137,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     public void showResolutionDialog() {
         PhotoResolutionDialog
                 .build(getActivity())
-                .setSingleChoiceItems(new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //关闭对话框
-                        dialog.dismiss();
-                        //默认为0
-                        int checkStrategy = 0;
-                        //设置策略
-                        switch (which) {
-                            case 0://1080p
-                                checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_1080;
-                                break;
-                            case 1://720p
-                                checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_720;
-                                break;
-                            case 2://480p
-                                checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_480;
-                                break;
-                            case 3://200p
-                                checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_200;
-                                break;
-                        }
-                        //存储策略
-                        PhotoCache.get(getActivity()).setPhotoResolutionStrategy(checkStrategy);
-                        //刷新页面
-                        loadData();
-                    }
-                })
+                .setSingleChoiceItems(new OnResolutionDialogClick())
                 .show();
     }
 
@@ -196,6 +169,39 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
             }
             //隐藏sheet
             bottomSheetDialog.dismiss();
+        }
+    }
+
+    /**
+     * 清晰度选择
+     */
+    private class OnResolutionDialogClick implements DialogInterface.OnClickListener {
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            //关闭对话框
+            dialog.dismiss();
+            //默认为0
+            int checkStrategy = 0;
+            //设置策略
+            switch (which) {
+                case 0://1080p
+                    checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_1080;
+                    break;
+                case 1://720p
+                    checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_720;
+                    break;
+                case 2://480p
+                    checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_480;
+                    break;
+                case 3://200p
+                    checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_200;
+                    break;
+            }
+            //存储策略
+            PhotoCache.get(getActivity()).setPhotoResolutionStrategy(checkStrategy);
+            //刷新页面
+            loadData();
         }
     }
 
