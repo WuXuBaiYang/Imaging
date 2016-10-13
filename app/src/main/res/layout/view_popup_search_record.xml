@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/recyclerview_default_margin"
-    android:paddingRight="@dimen/recyclerview_default_margin">
+    android:orientation="vertical">
 
     <com.jtech.view.JRecyclerView
         android:id="@id/jrecyclerview"

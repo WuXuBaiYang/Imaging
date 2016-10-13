@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_marginTop="@dimen/card_margin"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardElevation="@dimen/cardview_default_elevation">
 
-    <ImageView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/recyclerview_default_margin"
-        android:src="@drawable/ic_history_white_24dp" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@id/textview_search_record"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/text_size_normal" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/recyclerview_default_margin"
+            android:src="@drawable/ic_history_white_24dp" />
 
-    <android.support.v7.widget.AppCompatImageButton
-        android:id="@id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ripple"
-        android:padding="@dimen/recyclerview_default_margin"
-        android:src="@drawable/ic_close_white_24dp"
-        android:visibility="gone" />
-</LinearLayout>
+        <TextView
+            android:id="@id/textview_search_record"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_normal" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

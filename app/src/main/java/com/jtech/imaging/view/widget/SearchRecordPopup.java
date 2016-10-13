@@ -21,7 +21,7 @@ import butterknife.OnClick;
  * Created by jianghan on 2016/10/9.
  */
 
-public class SearchRecordPopup extends BasePopupWindow implements OnItemClickListener, SearchRecordAdapter.OnSearchRecordRemove {
+public class SearchRecordPopup extends BasePopupWindow implements OnItemClickListener {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
@@ -57,8 +57,6 @@ public class SearchRecordPopup extends BasePopupWindow implements OnItemClickLis
         jRecyclerView.setAdapter(searchRecordAdapter);
         //设置item点击事件
         jRecyclerView.setOnItemClickListener(this);
-        //设置记录移除事件
-        searchRecordAdapter.setOnSearchRecordRemove(this);
     }
 
     /**
@@ -102,19 +100,6 @@ public class SearchRecordPopup extends BasePopupWindow implements OnItemClickLis
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         if (null != onSearchRecordClick) {
             onSearchRecordClick.onRecordClick(searchRecordAdapter.getItem(position));
-        }
-    }
-
-    @Override
-    public void onRecordRemove(String keyword, int position) {
-        //从适配器中移除数据
-        searchRecordAdapter.removeData(position);
-        //移除本地的数据缓存
-        searchRecordCache.removeSearchRecord(keyword);
-        //无历史纪录则关闭popup
-        if (0 == searchRecordAdapter.getItemCount()) {
-            //关闭popup
-            dismiss();
         }
     }
 
