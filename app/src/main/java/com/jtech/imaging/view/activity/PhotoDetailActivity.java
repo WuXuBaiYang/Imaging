@@ -129,12 +129,14 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
             float scale = photoView.getScale();
             float targetTranslationY = 0f;
             float appBarTranslationY = appBarLayout.getTranslationY();
+            //计算位移位置
             if (scale > 1f) {
                 targetTranslationY = -appBarLayout.getHeight();
             } else if (scale < 1f) {
                 targetTranslationY = 0;
             }
             if (!isAnimatorRunning && targetTranslationY != appBarTranslationY) {
+                //现实或隐藏appbar
                 appBarLayout
                         .animate()
                         .translationY(targetTranslationY)
