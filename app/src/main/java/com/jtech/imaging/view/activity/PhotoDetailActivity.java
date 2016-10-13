@@ -161,6 +161,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     showResolutionDialog();
                     break;
                 case 2://设置为壁纸
+//                    WallpaperManager.getInstance(getActivity()).setBitmap(bitmap);
                     Snackbar.make(content, "设置为壁纸", Snackbar.LENGTH_SHORT).show();
                     break;
                 case 3://下载
