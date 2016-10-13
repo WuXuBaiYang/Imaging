@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.LinearLayout;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.PhotoDetailContract;
@@ -125,11 +126,12 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
         View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.view_sheet_photo_detail, null, false);
         bottomSheetDialog.setContentView(contentView);
         bottomSheetDialog.show();
-        //设置点击事件
-        RxCompat.clickThrottleFirst(contentView.findViewById(R.id.sheet_photo_detail_info), new PhotoInfoAction());
-        RxCompat.clickThrottleFirst(contentView.findViewById(R.id.sheet_photo_detail_resolution), new PhotoResolutionAction());
-        RxCompat.clickThrottleFirst(contentView.findViewById(R.id.sheet_photo_detail_wallpaper), new PhotoWallpaperAction());
-        RxCompat.clickThrottleFirst(contentView.findViewById(R.id.sheet_photo_detail_wallpaper), new PhotoDownloadAction());
+        //便利父容器
+        LinearLayout linearLayout = (LinearLayout) contentView.findViewById(R.id.sheet_photo_detail);
+        for (int i = 0; i < linearLayout.getChildCount(); i++) {
+            //设置点击事件
+            RxCompat.clickThrottleFirst(linearLayout.getChildAt(i), new SheetItemClick(bottomSheetDialog, i));
+        }
     }
 
     @Override
@@ -139,46 +141,34 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     }
 
     /**
-     * 图片信息事件
+     * sheet菜单的点击事件
      */
-    private class PhotoInfoAction implements Action1 {
+    private class SheetItemClick implements Action1 {
+        private BottomSheetDialog bottomSheetDialog;
+        private int itemIndex;
 
-        @Override
-        public void call(Object o) {
-
+        public SheetItemClick(BottomSheetDialog bottomSheetDialog, int itemIndex) {
+            this.bottomSheetDialog = bottomSheetDialog;
+            this.itemIndex = itemIndex;
         }
-    }
-
-    /**
-     * 图片清晰度选择
-     */
-    private class PhotoResolutionAction implements Action1 {
 
         @Override
         public void call(Object o) {
-
-        }
-    }
-
-    /**
-     * 设置为壁纸
-     */
-    private class PhotoWallpaperAction implements Action1 {
-
-        @Override
-        public void call(Object o) {
-
-        }
-    }
-
-    /**
-     * 图片下载
-     */
-    private class PhotoDownloadAction implements Action1 {
-
-        @Override
-        public void call(Object o) {
-
+            switch (itemIndex) {
+                case 0://图片信息
+                    Snackbar.make(content, "图片信息", Snackbar.LENGTH_SHORT).show();
+                    break;
+                case 1://图片清晰度选择
+                    Snackbar.make(content, "清晰度选择", Snackbar.LENGTH_SHORT).show();
+                    break;
+                case 2://设置为壁纸
+                    Snackbar.make(content, "设置为壁纸", Snackbar.LENGTH_SHORT).show();
+                    break;
+                case 3://下载
+                    Snackbar.make(content, "下载", Snackbar.LENGTH_SHORT).show();
+                    break;
+            }
+            bottomSheetDialog.dismiss();
         }
     }
 

@@ -29,8 +29,4 @@
     <item name="textview_search_record" type="id"></item>
     <item name="photoview_detail" type="id"></item>
     <item name="sheet_photo_detail" type="id"></item>
-    <item name="sheet_photo_detail_info" type="id"></item>
-    <item name="sheet_photo_detail_resolution" type="id"></item>
-    <item name="sheet_photo_detail_wallpaper" type="id"></item>
-    <item name="sheet_photo_detail_download" type="id"></item>
 </resources>
