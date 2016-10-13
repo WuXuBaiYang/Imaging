@@ -32,7 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:padding="@dimen/recyclerview_default_margin"
+        android:layout_marginLeft="@dimen/margin_default_leftright"
+        android:layout_marginBottom="@dimen/margin_default_topbottom"
         android:textColor="@color/toolbar_subtitle"
         android:textSize="@dimen/text_size_normal" />
 

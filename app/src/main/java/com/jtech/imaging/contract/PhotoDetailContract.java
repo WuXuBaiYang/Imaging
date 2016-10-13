@@ -18,6 +18,9 @@ public interface PhotoDetailContract {
     }
 
     interface View extends BaseContract.View {
+
+        void showSheetDialog();
+
         void success(PhotoModel photoModel);
 
         void fail(String message);

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom|center"
+    android:background="@color/cardview_dark_background"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/margin_default_topbottom"
+    android:paddingTop="@dimen/margin_default_topbottom">
+
+    <com.jtech.imaging.view.widget.RippleView
+        android:id="@id/sheet_photo_detail_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sheet_default_height"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/margin_default_leftright"
+            android:paddingRight="@dimen/margin_default_leftright">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_default_leftright"
+                android:src="@drawable/ic_info_outline_white_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_default_leftright"
+                android:text="@string/photo_detail_sheet_info"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_normal" />
+        </LinearLayout>
+    </com.jtech.imaging.view.widget.RippleView>
+
+    <com.jtech.imaging.view.widget.RippleView
+        android:id="@id/sheet_photo_detail_resolution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sheet_default_height"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/margin_default_leftright"
+            android:paddingRight="@dimen/margin_default_leftright">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_default_leftright"
+                android:src="@drawable/ic_filter_white_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_default_leftright"
+                android:text="@string/photo_detail_sheet_resolution"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_normal" />
+        </LinearLayout>
+    </com.jtech.imaging.view.widget.RippleView>
+
+    <com.jtech.imaging.view.widget.RippleView
+        android:id="@id/sheet_photo_detail_wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sheet_default_height"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/margin_default_leftright"
+            android:paddingRight="@dimen/margin_default_leftright">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_default_leftright"
+                android:src="@drawable/ic_wallpaper_white_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_default_leftright"
+                android:text="@string/photo_detail_sheet_wallpaper"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_normal" />
+        </LinearLayout>
+    </com.jtech.imaging.view.widget.RippleView>
+
+    <com.jtech.imaging.view.widget.RippleView
+        android:id="@id/sheet_photo_detail_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/sheet_default_height"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/margin_default_leftright"
+            android:paddingRight="@dimen/margin_default_leftright">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/margin_default_leftright"
+                android:src="@drawable/ic_get_app_white_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_default_leftright"
+                android:text="@string/photo_detail_sheet_download"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_normal" />
+        </LinearLayout>
+    </com.jtech.imaging.view.widget.RippleView>
+</LinearLayout>

@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:gravity="center"
-        android:padding="@dimen/recyclerview_default_margin"
+        android:padding="@dimen/margin_default_topbottom"
         android:text="@string/search_record_clear"
         android:textSize="@dimen/text_size_small" />
 </LinearLayout>

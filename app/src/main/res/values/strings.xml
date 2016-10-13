@@ -9,6 +9,11 @@
     <string name="search_page_title">Search</string>
     <string name="search_record_clear">clear all</string>
 
+    <string name="photo_detail_sheet_info">Photo info</string>
+    <string name="photo_detail_sheet_resolution">Resolution to choose</string>
+    <string name="photo_detail_sheet_wallpaper">Set as wallpaper</string>
+    <string name="photo_detail_sheet_download">Download</string>
+
     <string name="cancel">cancel</string>
     <string name="done">done</string>
     <string name="submit">submit</string>

@@ -13,8 +13,8 @@
         android:id="@id/jrecyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/recyclerview_default_margin"
-        android:layout_marginRight="@dimen/recyclerview_default_margin"
+        android:layout_marginLeft="@dimen/margin_default_leftright"
+        android:layout_marginRight="@dimen/margin_default_leftright"
         android:layout_marginTop="?attr/actionBarSize" />
 
     <WebView
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/recyclerview_default_margin"
+        android:layout_margin="@dimen/fab_default_margin"
         android:src="@drawable/ic_done_white_36dp"
         android:transitionName="@string/fab"
         app:useCompatPadding="true" />

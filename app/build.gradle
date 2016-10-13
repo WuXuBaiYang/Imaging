@@ -46,4 +46,6 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     //加载动画
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
+    //波纹扩散效果
+    compile 'com.balysv:material-ripple:1.0.2'
 }

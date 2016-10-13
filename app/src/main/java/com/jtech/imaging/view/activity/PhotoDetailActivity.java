@@ -4,9 +4,12 @@ import android.animation.Animator;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
@@ -50,6 +53,8 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     AppBarLayout appBarLayout;
     @Bind(R.id.statusbar)
     View statusBar;
+    @Bind(R.id.content)
+    CoordinatorLayout content;
 
     private String imageId;
 
@@ -113,9 +118,66 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     }
 
     @Override
+    public void showSheetDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
+        View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.view_sheet_photo_detail, null, false);
+        bottomSheetDialog.setContentView(contentView);
+        bottomSheetDialog.show();
+        //设置点击事件
+        RxCompat.clickThrottleFirst(contentView.findViewById(R.id.sheet_photo_detail_info), new PhotoInfoAction());
+        RxCompat.clickThrottleFirst(contentView.findViewById(R.id.sheet_photo_detail_resolution), new PhotoResolutionAction());
+        RxCompat.clickThrottleFirst(contentView.findViewById(R.id.sheet_photo_detail_wallpaper), new PhotoWallpaperAction());
+        RxCompat.clickThrottleFirst(contentView.findViewById(R.id.sheet_photo_detail_wallpaper), new PhotoDownloadAction());
+    }
+
+    @Override
     public void onClick(View v) {
         //后退
         onBackPressed();
+    }
+
+    /**
+     * 图片信息事件
+     */
+    private class PhotoInfoAction implements Action1 {
+
+        @Override
+        public void call(Object o) {
+
+        }
+    }
+
+    /**
+     * 图片清晰度选择
+     */
+    private class PhotoResolutionAction implements Action1 {
+
+        @Override
+        public void call(Object o) {
+
+        }
+    }
+
+    /**
+     * 设置为壁纸
+     */
+    private class PhotoWallpaperAction implements Action1 {
+
+        @Override
+        public void call(Object o) {
+
+        }
+    }
+
+    /**
+     * 图片下载
+     */
+    private class PhotoDownloadAction implements Action1 {
+
+        @Override
+        public void call(Object o) {
+
+        }
     }
 
     /**
@@ -179,7 +241,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     private class FabClick implements Action1 {
         @Override
         public void call(Object o) {
-
+            showSheetDialog();
         }
     }
 }

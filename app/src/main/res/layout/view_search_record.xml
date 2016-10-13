@@ -15,7 +15,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/recyclerview_default_margin"
+            android:layout_marginBottom="@dimen/margin_default_topbottom"
+            android:layout_marginLeft="@dimen/margin_default_leftright"
+            android:layout_marginRight="@dimen/margin_default_leftright"
+            android:layout_marginTop="@dimen/margin_default_topbottom"
             android:src="@drawable/ic_history_white_24dp" />
 
         <TextView
