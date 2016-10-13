@@ -1,6 +1,7 @@
 package com.jtech.imaging.view.activity;
 
 import android.animation.Animator;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -9,19 +10,19 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.LinearLayout;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.cache.PhotoCache;
 import com.jtech.imaging.contract.PhotoDetailContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.PhotoDetailPresenter;
-import com.jtech.imaging.strategy.PhotoLoadStrategy;
+import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
+import com.jtech.imaging.view.widget.PhotoDetailSheetDialog;
+import com.jtech.imaging.view.widget.PhotoResolutionDialog;
 import com.jtech.imaging.view.widget.RxCompat;
-import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
@@ -88,6 +89,8 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
 
     @Override
     protected void loadData() {
+        //显示加载动画
+        loadingView.show();
         //获取图片缓存
         presenter.getPhotoDetailCache(getActivity(), imageId);
     }
@@ -96,9 +99,10 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     public void success(final PhotoModel photoModel) {
         this.photoModel = photoModel;
         //设置标题
-        toolbar.setTitle(photoModel.getUser().getName());
-        //显示图片
-        ImageUtils.requestImage(getActivity(), PhotoLoadStrategy.getUrl(getActivity(), photoModel.getUrls().getRaw(), DeviceUtils.getScreenWidth(getActivity())), new Action1<Bitmap>() {
+        toolbar.setTitle(photoModel.getUser().getName() + "(" + PhotoResolutionStrategy.getStrategyString(getActivity()) + ")");
+        //显示图片(详情页的图片缓存策略是独立的，与列表中的策略不同)
+        String imageUrl = PhotoResolutionStrategy.getUrl(getActivity(), photoModel.getUrls().getRaw());
+        ImageUtils.requestImage(getActivity(), imageUrl, new Action1<Bitmap>() {
             @Override
             public void call(Bitmap bitmap) {
                 if (null != bitmap) {
@@ -122,16 +126,46 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
 
     @Override
     public void showSheetDialog() {
-        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
-        View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.view_sheet_photo_detail, null, false);
-        bottomSheetDialog.setContentView(contentView);
-        bottomSheetDialog.show();
-        //便利父容器
-        LinearLayout linearLayout = (LinearLayout) contentView.findViewById(R.id.sheet_photo_detail);
-        for (int i = 0; i < linearLayout.getChildCount(); i++) {
-            //设置点击事件
-            RxCompat.clickThrottleFirst(linearLayout.getChildAt(i), new SheetItemClick(bottomSheetDialog, i));
-        }
+        PhotoDetailSheetDialog
+                .build(getActivity())
+                .setOnPhotoDetailSheetItemClick(new OnSheetItemClick())
+                .setResolution(PhotoResolutionStrategy.getStrategyString(getActivity()))
+                .show();
+    }
+
+    @Override
+    public void showResolutionDialog() {
+        PhotoResolutionDialog
+                .build(getActivity())
+                .setSingleChoiceItems(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //关闭对话框
+                        dialog.dismiss();
+                        //默认为0
+                        int checkStrategy = 0;
+                        //设置策略
+                        switch (which) {
+                            case 0://1080p
+                                checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_1080;
+                                break;
+                            case 1://720p
+                                checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_720;
+                                break;
+                            case 2://480p
+                                checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_480;
+                                break;
+                            case 3://200p
+                                checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_200;
+                                break;
+                        }
+                        //存储策略
+                        PhotoCache.get(getActivity()).setPhotoResolutionStrategy(checkStrategy);
+                        //刷新页面
+                        loadData();
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -141,25 +175,17 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     }
 
     /**
-     * sheet菜单的点击事件
+     * sheet的item点击事件
      */
-    private class SheetItemClick implements Action1 {
-        private BottomSheetDialog bottomSheetDialog;
-        private int itemIndex;
-
-        public SheetItemClick(BottomSheetDialog bottomSheetDialog, int itemIndex) {
-            this.bottomSheetDialog = bottomSheetDialog;
-            this.itemIndex = itemIndex;
-        }
-
+    private class OnSheetItemClick implements PhotoDetailSheetDialog.OnPhotoDetailSheetItemClick {
         @Override
-        public void call(Object o) {
-            switch (itemIndex) {
+        public void onItemClick(BottomSheetDialog bottomSheetDialog, int position) {
+            switch (position) {
                 case 0://图片信息
                     Snackbar.make(content, "图片信息", Snackbar.LENGTH_SHORT).show();
                     break;
                 case 1://图片清晰度选择
-                    Snackbar.make(content, "清晰度选择", Snackbar.LENGTH_SHORT).show();
+                    showResolutionDialog();
                     break;
                 case 2://设置为壁纸
                     Snackbar.make(content, "设置为壁纸", Snackbar.LENGTH_SHORT).show();
@@ -168,6 +194,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     Snackbar.make(content, "下载", Snackbar.LENGTH_SHORT).show();
                     break;
             }
+            //隐藏sheet
             bottomSheetDialog.dismiss();
         }
     }
@@ -233,7 +260,11 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     private class FabClick implements Action1 {
         @Override
         public void call(Object o) {
-            showSheetDialog();
+            if (null != photoModel) {
+                showSheetDialog();
+            } else {
+                Snackbar.make(content, "Please wait for loading", Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 }

@@ -42,6 +42,13 @@
         <item>Maximum no more than 200P</item>
     </array>
 
+    <array name="image_resolutiorn_strategy">
+        <item>1080P</item>
+        <item>720P</item>
+        <item>480P</item>
+        <item>200P</item>
+    </array>
+
     <array name="scopeList">
         <item>默认项，读取公共数据|true|true|public</item>
         <item>读取私人数据|false|true|read_user</item>

@@ -21,6 +21,8 @@ public interface PhotoDetailContract {
 
         void showSheetDialog();
 
+        void showResolutionDialog();
+
         void success(PhotoModel photoModel);
 
         void fail(String message);

@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -29,6 +28,9 @@ import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.widget.CoverView;
+import com.jtech.imaging.view.widget.ImageLoadStrategyDialog;
+import com.jtech.imaging.view.widget.ImageLoadStrategyFixedDialog;
+import com.jtech.imaging.view.widget.PhotoSortDialog;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.imaging.view.widget.SearchRecordPopup;
 import com.jtech.listener.OnItemClickListener;
@@ -121,10 +123,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
      */
     @Override
     public void showSortDialog() {
-        String[] sorts = getResources().getStringArray(R.array.sort);
-        new AlertDialog
-                .Builder(getActivity())
-                .setSingleChoiceItems(sorts, OrderByCache.get(getActivity()).getOrderByIndex(), new DialogInterface.OnClickListener() {
+        PhotoSortDialog
+                .build(getActivity())
+                .setSingleChoiceItems(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //关闭当前的dialog
@@ -138,7 +139,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                         //滚动到首位
                         jRecyclerView.getLayoutManager().scrollToPosition(0);
                     }
-                }).show();
+                })
+                .show();
     }
 
     /**
@@ -146,33 +148,16 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
      */
     @Override
     public void showImageLoadStrategyDialog() {
-        String[] imageLoadStrategies = getResources().getStringArray(R.array.image_load_strategy);
-        final int photoLoadStrategy = PhotoCache.get(getActivity()).getPhotoLoadStrategy();
-        int checkedItem = 0;
-        switch (photoLoadStrategy) {
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL://全尺寸
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080://最高1080
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720://最高720
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480://最高480
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200://最高200
-                checkedItem = 0;
-                break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_NET_AUTO://根据网络自动调整
-                checkedItem = 1;
-                break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO://无视网络自动调整
-                checkedItem = 2;
-                break;
-        }
-        new AlertDialog.Builder(getActivity())
-                .setSingleChoiceItems(imageLoadStrategies, checkedItem, new DialogInterface.OnClickListener() {
+        ImageLoadStrategyDialog
+                .build(getActivity())
+                .setSingleChoiceItems(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //关闭对话框
                         dialog.dismiss();
                         //设置选择的策略
                         if (which == 0) {
-                            showImageLoadStrategyFixedDialog(photoLoadStrategy);
+                            showImageLoadStrategyFixedDialog(PhotoCache.get(getActivity()).getPhotoLoadStrategy());
                         } else {
                             int photoLoadStrategy = 0;
                             if (which == 1) {
@@ -185,11 +170,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                             //存储策略
                             PhotoCache.get(getActivity()).setPhotoLoadStrategy(photoLoadStrategy);
                             //刷新列表
-                            photoAdapter.notifyDataSetChanged();
+                            photoAdapter.notifyItemRangeChanged(0, photoAdapter.getItemCount());
                             photoAdapter.animateImage(jRecyclerView);
                         }
                     }
-                }).show();
+                })
+                .show();
     }
 
     /**
@@ -197,27 +183,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
      */
     @Override
     public void showImageLoadStrategyFixedDialog(int photoLoadStrategy) {
-        String[] imageLoadStrategyFixeds = getResources().getStringArray(R.array.image_load_strategy_fixed);
-        int checkedItem = 0;
-        switch (photoLoadStrategy) {
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL://全尺寸
-                checkedItem = 0;
-                break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080://最高1080
-                checkedItem = 1;
-                break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720://最高720
-                checkedItem = 2;
-                break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480://最高480
-                checkedItem = 3;
-                break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200://最高200
-                checkedItem = 4;
-                break;
-        }
-        new AlertDialog.Builder(getActivity())
-                .setSingleChoiceItems(imageLoadStrategyFixeds, checkedItem, new DialogInterface.OnClickListener() {
+        ImageLoadStrategyFixedDialog
+                .build(getActivity(), photoLoadStrategy)
+                .setSingleChoiceItems(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //关闭对话框
@@ -251,10 +219,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                         //存储策略
                         PhotoCache.get(getActivity()).setPhotoLoadStrategy(checkStrategy);
                         //刷新列表
-                        photoAdapter.notifyDataSetChanged();
+                        photoAdapter.notifyItemRangeChanged(0, photoAdapter.getItemCount());
                         photoAdapter.animateImage(jRecyclerView);
                     }
-                }).show();
+                })
+                .show();
     }
 
     @Override

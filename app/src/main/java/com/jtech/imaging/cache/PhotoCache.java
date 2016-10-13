@@ -9,6 +9,7 @@ import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.net.API;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
+import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtechlib.cache.ACache;
 import com.jtechlib.cache.BaseCacheManager;
 
@@ -25,6 +26,8 @@ public class PhotoCache extends BaseCacheManager {
     private static final int PHOTO_CACHE_TIME = 60 * 10;
     //图片加载策略，缓存key
     private static final String PHOTO_LOAD_STRATEGY = "photoLoadStrategy";
+    //图片清晰度加载策略，缓存key(图片详情)
+    private static final String PHOTO_RESOLUTION_STRATEGY = "photoResolutionStrategy";
     //欢迎页图片缓存Key
     private static final String PHOTO_WELCOME_PAGE = "photoWelcomePage";
 
@@ -32,6 +35,8 @@ public class PhotoCache extends BaseCacheManager {
 
     //图片加载策略
     private int photoLoadStrategy;
+    //图片清晰度加载策略(图片详情页)
+    private int photoResolutionStrategy;
 
     private Context context;
 
@@ -128,6 +133,28 @@ public class PhotoCache extends BaseCacheManager {
     public void setPhotoLoadStrategy(int strategy) {
         this.photoLoadStrategy = strategy;
         insertInt(PHOTO_LOAD_STRATEGY, strategy);
+    }
+
+    /**
+     * 获取图片清晰度缓存策略(图片详情)
+     *
+     * @return
+     */
+    public int getPhotoResolution() {
+        if (photoResolutionStrategy == 0) {
+            this.photoResolutionStrategy = queryInt(PHOTO_RESOLUTION_STRATEGY, PhotoResolutionStrategy.PHOTO_RESOLUTION_480);
+        }
+        return photoResolutionStrategy;
+    }
+
+    /**
+     * 设置并存储图片清晰度缓存策略
+     *
+     * @param strategy
+     */
+    public void setPhotoResolutionStrategy(int strategy) {
+        this.photoResolutionStrategy = strategy;
+        insertInt(PHOTO_RESOLUTION_STRATEGY, strategy);
     }
 
     /**
