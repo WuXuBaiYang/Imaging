@@ -1,11 +1,13 @@
 package com.jtech.imaging.view.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -43,6 +45,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     @Bind(R.id.contentloading)
     LoadingView loadingView;
 
+    private PhotoModel photoModel;
     private int maxHeight, screenWidth;
     private RandomContract.Presenter presenter;
 
@@ -75,6 +78,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
 
     @Override
     public void success(final PhotoModel photoModel) {
+        this.photoModel = photoModel;
         //显示图片
         String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), photoModel.getUrls().getRaw(), screenWidth);
         ImageUtils.requestImage(getActivity(), imageUrl, new Action1<Bitmap>() {
@@ -151,7 +155,17 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
 
     @OnClick(R.id.imageview_random)
     void onImageClick() {
-        // TODO: 2016/9/26 点击跳转到详情 
+        if (null != photoModel) {
+            Bundle bundle = new Bundle();
+            bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
+            ActivityOptionsCompat activityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), floatingActionButton, getString(R.string.fab));
+            Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
+            intent.putExtras(bundle);
+            ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+        } else {
+            Snackbar.make(content, "Please wait the request success", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     /**

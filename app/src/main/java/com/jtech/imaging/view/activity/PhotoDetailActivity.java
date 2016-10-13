@@ -57,6 +57,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     CoordinatorLayout content;
 
     private String imageId;
+    private PhotoModel photoModel;
 
     private PhotoDetailContract.Presenter presenter;
 
@@ -92,6 +93,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
 
     @Override
     public void success(final PhotoModel photoModel) {
+        this.photoModel = photoModel;
         //设置标题
         toolbar.setTitle(photoModel.getUser().getName());
         //显示图片
