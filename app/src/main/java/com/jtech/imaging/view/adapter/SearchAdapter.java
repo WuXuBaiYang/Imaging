@@ -81,10 +81,10 @@ public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, SearchPhotoM
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         layoutParams.height = itemHeight / 3 * 2;
         holder.itemView.setLayoutParams(layoutParams);
-        //设置背景主题色
-        holder.itemView.setBackgroundColor(Color.parseColor(resultsModel.getColor()));
         //显示图片
         ParallaxImageView parallaxImageView = holder.getImageView(R.id.imageview_photo);
+        //设置背景主题色
+        parallaxImageView.setBackgroundColor(Color.parseColor(resultsModel.getColor()));
         //根据图片加载策略，获取合适的图片url
         String imageUrl = PhotoLoadStrategy.getUrl(getContext(), resultsModel.getUrls().getRaw(), screenWidth);
         ImageUtils.showImage(getContext(), imageUrl, parallaxImageView);

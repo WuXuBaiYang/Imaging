@@ -13,4 +13,9 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
     public WallpaperPresenter(WallpaperContract.View view) {
         this.view = view;
     }
+
+    @Override
+    public String getUrl(String originUrl, String width) {
+        return null;
+    }
 }

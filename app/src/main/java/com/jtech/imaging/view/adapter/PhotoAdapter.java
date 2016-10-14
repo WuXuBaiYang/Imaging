@@ -57,10 +57,10 @@ public class PhotoAdapter extends BaseJAdapter<ParallaxViewHolder, PhotoModel> {
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         layoutParams.height = itemHeight / 3 * 2;
         holder.itemView.setLayoutParams(layoutParams);
-        //设置背景主题色
-        holder.itemView.setBackgroundColor(Color.parseColor(photoModel.getColor()));
         //显示图片
         ParallaxImageView parallaxImageView = holder.getImageView(R.id.imageview_photo);
+        //设置背景主题色
+        parallaxImageView.setBackgroundColor(Color.parseColor(photoModel.getColor()));
         //根据图片加载策略，获取合适的图片url
         String imageUrl = PhotoLoadStrategy.getUrl(getContext(), photoModel.getUrls().getRaw(), screenWidth);
         ImageUtils.showImage(getContext(), imageUrl, parallaxImageView);
