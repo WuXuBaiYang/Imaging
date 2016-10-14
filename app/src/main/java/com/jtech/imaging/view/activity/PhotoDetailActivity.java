@@ -21,6 +21,7 @@ import com.jtech.imaging.presenter.PhotoDetailPresenter;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.PhotoDetailSheetDialog;
+import com.jtech.imaging.view.widget.PhotoExifDialog;
 import com.jtech.imaging.view.widget.PhotoResolutionDialog;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.Util.ImageUtils;
@@ -142,6 +143,14 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     }
 
     @Override
+    public void showPhotoExifDialog() {
+        PhotoExifDialog
+                .build(getActivity(), photoModel)
+                .setDoneClick(new OnPhotoExifDoneClick())
+                .show();
+    }
+
+    @Override
     public void onClick(View v) {
         //后退
         onBackPressed();
@@ -155,7 +164,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
         public void onItemClick(BottomSheetDialog bottomSheetDialog, int position) {
             switch (position) {
                 case 0://图片信息
-                    Snackbar.make(content, "图片信息", Snackbar.LENGTH_SHORT).show();
+                    showPhotoExifDialog();
                     break;
                 case 1://图片清晰度选择
                     showResolutionDialog();
@@ -258,6 +267,16 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
             public void onAnimationRepeat(Animator animation) {
                 isAnimatorRunning = true;
             }
+        }
+    }
+
+    /**
+     * 图片参数dialog的完成按钮点击事件
+     */
+    private class OnPhotoExifDoneClick implements DialogInterface.OnClickListener {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
         }
     }
 

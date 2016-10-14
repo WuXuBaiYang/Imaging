@@ -23,6 +23,8 @@ public interface PhotoDetailContract {
 
         void showResolutionDialog();
 
+        void showPhotoExifDialog();
+
         void success(PhotoModel photoModel);
 
         void fail(String message);

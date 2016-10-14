@@ -21,16 +21,22 @@ public class PhotoModel extends BaseModel {
     private int height;
     @SerializedName("color")
     private String color;
+    @SerializedName("downloads")
+    private int downloads;
     @SerializedName("likes")
     private int likes;
     @SerializedName("liked_by_user")
     private boolean likedByUser;
-    @SerializedName("user")
-    private UserModel user;
+    @SerializedName("exif")
+    private ExifModel exif;
+    @SerializedName("location")
+    private LocationModel location;
     @SerializedName("urls")
     private UrlsModel urls;
     @SerializedName("links")
     private LinksModel links;
+    @SerializedName("user")
+    private UserModel user;
     @SerializedName("current_user_collections")
     private List<CurrentUserCollectionsModel> currentUserCollections;
     @SerializedName("categories")
@@ -76,6 +82,14 @@ public class PhotoModel extends BaseModel {
         this.color = color;
     }
 
+    public int getDownloads() {
+        return downloads;
+    }
+
+    public void setDownloads(int downloads) {
+        this.downloads = downloads;
+    }
+
     public int getLikes() {
         return likes;
     }
@@ -92,12 +106,20 @@ public class PhotoModel extends BaseModel {
         this.likedByUser = likedByUser;
     }
 
-    public UserModel getUser() {
-        return user;
+    public ExifModel getExif() {
+        return exif;
     }
 
-    public void setUser(UserModel user) {
-        this.user = user;
+    public void setExif(ExifModel exif) {
+        this.exif = exif;
+    }
+
+    public LocationModel getLocation() {
+        return location;
+    }
+
+    public void setLocation(LocationModel location) {
+        this.location = location;
     }
 
     public UrlsModel getUrls() {
@@ -116,6 +138,14 @@ public class PhotoModel extends BaseModel {
         this.links = links;
     }
 
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
+    }
+
     public List<CurrentUserCollectionsModel> getCurrentUserCollections() {
         return currentUserCollections;
     }
@@ -132,123 +162,126 @@ public class PhotoModel extends BaseModel {
         this.categories = categories;
     }
 
-    public static class UserModel extends BaseModel {
-        @SerializedName("id")
-        private String id;
-        @SerializedName("username")
-        private String username;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("portfolio_url")
-        private String portfolioUrl;
-        @SerializedName("profile_image")
-        private ProfileImageModel profileImage;
-        @SerializedName("links")
-        private LinksModel links;
+    public static class ExifModel {
+        @SerializedName("make")
+        private String make;
+        @SerializedName("model")
+        private String model;
+        @SerializedName("exposure_time")
+        private String exposureTime;
+        @SerializedName("aperture")
+        private String aperture;
+        @SerializedName("focal_length")
+        private String focalLength;
+        @SerializedName("iso")
+        private int iso;
 
-        public String getId() {
-            return id;
+        public String getMake() {
+            return make;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public void setMake(String make) {
+            this.make = make;
         }
 
-        public String getUsername() {
-            return username;
+        public String getModel() {
+            return model;
         }
 
-        public void setUsername(String username) {
-            this.username = username;
+        public void setModel(String model) {
+            this.model = model;
         }
 
-        public String getName() {
-            return name;
+        public String getExposureTime() {
+            return exposureTime;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public void setExposureTime(String exposureTime) {
+            this.exposureTime = exposureTime;
         }
 
-        public String getPortfolioUrl() {
-            return portfolioUrl;
+        public String getAperture() {
+            return aperture;
         }
 
-        public void setPortfolioUrl(String portfolioUrl) {
-            this.portfolioUrl = portfolioUrl;
+        public void setAperture(String aperture) {
+            this.aperture = aperture;
         }
 
-        public ProfileImageModel getProfileImage() {
-            return profileImage;
+        public String getFocalLength() {
+            return focalLength;
         }
 
-        public void setProfileImage(ProfileImageModel profileImage) {
-            this.profileImage = profileImage;
+        public void setFocalLength(String focalLength) {
+            this.focalLength = focalLength;
         }
 
-        public LinksModel getLinks() {
-            return links;
+        public int getIso() {
+            return iso;
         }
 
-        public void setLinks(LinksModel links) {
-            this.links = links;
+        public void setIso(int iso) {
+            this.iso = iso;
+        }
+    }
+
+    public static class LocationModel {
+        @SerializedName("city")
+        private String city;
+        @SerializedName("country")
+        private String country;
+        @SerializedName("position")
+        private PositionModel position;
+
+        public String getCity() {
+            return city;
         }
 
-        public static class LinksModel extends BaseModel {
-            @SerializedName("self")
-            private String self;
-            @SerializedName("html")
-            private String html;
-            @SerializedName("photos")
-            private String photos;
-            @SerializedName("likes")
-            private String likes;
-            @SerializedName("portfolio")
-            private String portfolio;
+        public void setCity(String city) {
+            this.city = city;
+        }
 
-            public String getSelf() {
-                return self;
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public PositionModel getPosition() {
+            return position;
+        }
+
+        public void setPosition(PositionModel position) {
+            this.position = position;
+        }
+
+        public static class PositionModel {
+            @SerializedName("latitude")
+            private double latitude;
+            @SerializedName("longitude")
+            private double longitude;
+
+            public double getLatitude() {
+                return latitude;
             }
 
-            public void setSelf(String self) {
-                this.self = self;
+            public void setLatitude(double latitude) {
+                this.latitude = latitude;
             }
 
-            public String getHtml() {
-                return html;
+            public double getLongitude() {
+                return longitude;
             }
 
-            public void setHtml(String html) {
-                this.html = html;
-            }
-
-            public String getPhotos() {
-                return photos;
-            }
-
-            public void setPhotos(String photos) {
-                this.photos = photos;
-            }
-
-            public String getLikes() {
-                return likes;
-            }
-
-            public void setLikes(String likes) {
-                this.likes = likes;
-            }
-
-            public String getPortfolio() {
-                return portfolio;
-            }
-
-            public void setPortfolio(String portfolio) {
-                this.portfolio = portfolio;
+            public void setLongitude(double longitude) {
+                this.longitude = longitude;
             }
         }
     }
 
-    public static class UrlsModel extends BaseModel {
+    public static class UrlsModel {
         @SerializedName("raw")
         private String raw;
         @SerializedName("full")
@@ -311,7 +344,7 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class LinksModel extends BaseModel {
+    public static class LinksModel {
         @SerializedName("self")
         private String self;
         @SerializedName("html")
@@ -354,7 +387,226 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class CurrentUserCollectionsModel extends BaseModel {
+    public static class UserModel {
+        @SerializedName("id")
+        private String id;
+        @SerializedName("username")
+        private String username;
+        @SerializedName("name")
+        private String name;
+        @SerializedName("portfolio_url")
+        private Object portfolioUrl;
+        @SerializedName("bio")
+        private String bio;
+        @SerializedName("location")
+        private String location;
+        @SerializedName("total_likes")
+        private int totalLikes;
+        @SerializedName("total_photos")
+        private int totalPhotos;
+        @SerializedName("total_collections")
+        private int totalCollections;
+        @SerializedName("profile_image")
+        private ProfileImageModel profileImage;
+        @SerializedName("links")
+        private LinksModel links;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public Object getPortfolioUrl() {
+            return portfolioUrl;
+        }
+
+        public void setPortfolioUrl(Object portfolioUrl) {
+            this.portfolioUrl = portfolioUrl;
+        }
+
+        public String getBio() {
+            return bio;
+        }
+
+        public void setBio(String bio) {
+            this.bio = bio;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public int getTotalLikes() {
+            return totalLikes;
+        }
+
+        public void setTotalLikes(int totalLikes) {
+            this.totalLikes = totalLikes;
+        }
+
+        public int getTotalPhotos() {
+            return totalPhotos;
+        }
+
+        public void setTotalPhotos(int totalPhotos) {
+            this.totalPhotos = totalPhotos;
+        }
+
+        public int getTotalCollections() {
+            return totalCollections;
+        }
+
+        public void setTotalCollections(int totalCollections) {
+            this.totalCollections = totalCollections;
+        }
+
+        public ProfileImageModel getProfileImage() {
+            return profileImage;
+        }
+
+        public void setProfileImage(ProfileImageModel profileImage) {
+            this.profileImage = profileImage;
+        }
+
+        public LinksModel getLinks() {
+            return links;
+        }
+
+        public void setLinks(LinksModel links) {
+            this.links = links;
+        }
+
+        public static class ProfileImageModel {
+            @SerializedName("small")
+            private String small;
+            @SerializedName("medium")
+            private String medium;
+            @SerializedName("large")
+            private String large;
+
+            public String getSmall() {
+                return small;
+            }
+
+            public void setSmall(String small) {
+                this.small = small;
+            }
+
+            public String getMedium() {
+                return medium;
+            }
+
+            public void setMedium(String medium) {
+                this.medium = medium;
+            }
+
+            public String getLarge() {
+                return large;
+            }
+
+            public void setLarge(String large) {
+                this.large = large;
+            }
+        }
+
+        public static class LinksModel {
+            @SerializedName("self")
+            private String self;
+            @SerializedName("html")
+            private String html;
+            @SerializedName("photos")
+            private String photos;
+            @SerializedName("likes")
+            private String likes;
+            @SerializedName("portfolio")
+            private String portfolio;
+            @SerializedName("following")
+            private String following;
+            @SerializedName("followers")
+            private String followers;
+
+            public String getSelf() {
+                return self;
+            }
+
+            public void setSelf(String self) {
+                this.self = self;
+            }
+
+            public String getHtml() {
+                return html;
+            }
+
+            public void setHtml(String html) {
+                this.html = html;
+            }
+
+            public String getPhotos() {
+                return photos;
+            }
+
+            public void setPhotos(String photos) {
+                this.photos = photos;
+            }
+
+            public String getLikes() {
+                return likes;
+            }
+
+            public void setLikes(String likes) {
+                this.likes = likes;
+            }
+
+            public String getPortfolio() {
+                return portfolio;
+            }
+
+            public void setPortfolio(String portfolio) {
+                this.portfolio = portfolio;
+            }
+
+            public String getFollowing() {
+                return following;
+            }
+
+            public void setFollowing(String following) {
+                this.following = following;
+            }
+
+            public String getFollowers() {
+                return followers;
+            }
+
+            public void setFollowers(String followers) {
+                this.followers = followers;
+            }
+        }
+    }
+
+    public static class CurrentUserCollectionsModel {
         @SerializedName("id")
         private int id;
         @SerializedName("title")
@@ -629,79 +881,6 @@ public class PhotoModel extends BaseModel {
                 public void setLinks(LinksModel links) {
                     this.links = links;
                 }
-            }
-        }
-
-        public static class UserModel {
-            @SerializedName("id")
-            private String id;
-            @SerializedName("username")
-            private String username;
-            @SerializedName("name")
-            private String name;
-            @SerializedName("portfolio_url")
-            private String portfolioUrl;
-            @SerializedName("bio")
-            private String bio;
-            @SerializedName("profile_image")
-            private ProfileImageModel profileImage;
-            @SerializedName("links")
-            private LinksModel links;
-
-            public String getId() {
-                return id;
-            }
-
-            public void setId(String id) {
-                this.id = id;
-            }
-
-            public String getUsername() {
-                return username;
-            }
-
-            public void setUsername(String username) {
-                this.username = username;
-            }
-
-            public String getName() {
-                return name;
-            }
-
-            public void setName(String name) {
-                this.name = name;
-            }
-
-            public String getPortfolioUrl() {
-                return portfolioUrl;
-            }
-
-            public void setPortfolioUrl(String portfolioUrl) {
-                this.portfolioUrl = portfolioUrl;
-            }
-
-            public String getBio() {
-                return bio;
-            }
-
-            public void setBio(String bio) {
-                this.bio = bio;
-            }
-
-            public ProfileImageModel getProfileImage() {
-                return profileImage;
-            }
-
-            public void setProfileImage(ProfileImageModel profileImage) {
-                this.profileImage = profileImage;
-            }
-
-            public LinksModel getLinks() {
-                return links;
-            }
-
-            public void setLinks(LinksModel links) {
-                this.links = links;
             }
         }
 
