@@ -182,12 +182,6 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     showResolutionDialog();
                     break;
                 case 2://设置为壁纸
-//                    WallpaperManager.getInstance(getActivity()).setBitmap(bitmap);
-                    if (photoModel.getWidth() > photoModel.getHeight()) {//横向的图片才可以设置为壁纸
-
-                    } else {
-                        Snackbar.make(content, "Cannot be longitudinal image set as wallpaper", Snackbar.LENGTH_SHORT).show();
-                    }
                     break;
                 case 3://下载
                     Snackbar.make(content, "下载", Snackbar.LENGTH_SHORT).show();
