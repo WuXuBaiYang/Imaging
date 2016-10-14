@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -158,8 +159,12 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
         if (null != photoModel) {
             Bundle bundle = new Bundle();
             bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
+            bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName());
+            bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
+            Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
+            Pair pairImage = Pair.create(imageView, getString(R.string.image));
             ActivityOptionsCompat activityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), floatingActionButton, getString(R.string.fab));
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab, pairImage);
             Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
             intent.putExtras(bundle);
             ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());

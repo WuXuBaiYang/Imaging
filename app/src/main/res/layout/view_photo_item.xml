@@ -10,7 +10,8 @@
     <com.yayandroid.parallaxlistview.ParallaxImageView
         android:id="@id/imageview_photo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:transitionName="@string/image" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@id/textview_photo"

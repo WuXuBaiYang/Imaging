@@ -57,8 +57,10 @@ public class MainPresenter implements MainContract.Presenter {
                 .map(new Func1<List<PhotoModel>, List<PhotoModel>>() {
                     @Override
                     public List<PhotoModel> call(List<PhotoModel> photoModels) {
-                        //设置缓存
-                        PhotoCache.get(context).setFirstPagePhotos(photoModels);
+                        if (!loadMore) {//下拉刷新的时候才缓存数据
+                            //设置缓存
+                            PhotoCache.get(context).setFirstPagePhotos(photoModels);
+                        }
                         return photoModels;
                     }
                 })

@@ -130,7 +130,7 @@ public class CollectionsModel extends BaseModel {
         this.links = links;
     }
 
-    public static class UserModel {
+    public static class UserModel extends BaseModel {
         @SerializedName("id")
         private String id;
         @SerializedName("username")
@@ -202,7 +202,7 @@ public class CollectionsModel extends BaseModel {
             this.links = links;
         }
 
-        public static class ProfileImageModel {
+        public static class ProfileImageModel extends BaseModel {
             @SerializedName("small")
             private String small;
             @SerializedName("medium")
@@ -235,7 +235,7 @@ public class CollectionsModel extends BaseModel {
             }
         }
 
-        public static class LinksModel {
+        public static class LinksModel extends BaseModel {
             @SerializedName("self")
             private String self;
             @SerializedName("html")
@@ -289,7 +289,7 @@ public class CollectionsModel extends BaseModel {
         }
     }
 
-    public static class LinksModel {
+    public static class LinksModel extends BaseModel{
         @SerializedName("self")
         private String self;
         @SerializedName("html")

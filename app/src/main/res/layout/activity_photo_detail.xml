@@ -9,8 +9,8 @@
         android:id="@id/photoview_detail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:transitionName="@string/image" />
 
     <com.jtech.imaging.view.widget.LoadingView
         android:id="@id/contentloading"

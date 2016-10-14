@@ -41,6 +41,8 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 public class PhotoDetailActivity extends BaseActivity implements PhotoDetailContract.View, View.OnClickListener {
 
     public static final String IMAGE_ID_KEY = "imageIdKey";
+    public static final String IMAGE_NAME_KEY = "imageNameKey";
+    public static final String IMAGE_URL_KEY = "imageUrlKey";
     public static final long IMAGE_ANIMATION_DURATION = 450;
     public static final long APPBAR_ANIMATION_DURATION = 350;
 
@@ -60,6 +62,8 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     CoordinatorLayout content;
 
     private String imageId;
+    private String imageName;
+    private String imageUrl;
     private PhotoModel photoModel;
 
     private PhotoDetailContract.Presenter presenter;
@@ -70,11 +74,17 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
         this.presenter = new PhotoDetailPresenter(this);
         //获取图片id
         this.imageId = bundle.getString(IMAGE_ID_KEY);
+        //获取图片名字
+        this.imageName = bundle.getString(IMAGE_NAME_KEY);
+        //获取图片url
+        this.imageUrl = bundle.getString(IMAGE_URL_KEY);
     }
 
     @Override
     protected void initViews(Bundle bundle) {
         setContentView(R.layout.activity_photo_detail);
+        //设置标题
+        toolbar.setTitle(imageName + "(" + PhotoResolutionStrategy.getStrategyString(getActivity()) + ")");
         //设置标题栏
         setupToolbar(toolbar)
                 .setContentInsetStartWithNavigation(0)
@@ -90,6 +100,25 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
 
     @Override
     protected void loadData() {
+        //显示图片
+        final long startTimeMillis = System.currentTimeMillis();
+        ImageUtils.requestImage(getActivity(), PhotoResolutionStrategy.getUrl(getActivity(), imageUrl), new Action1<Bitmap>() {
+            @Override
+            public void call(Bitmap bitmap) {
+                if (null != bitmap) {
+                    photoView.setImageBitmap(bitmap);
+                    if (System.currentTimeMillis() - startTimeMillis > getWindow().getTransitionBackgroundFadeDuration()) {
+                        photoView.setAlpha(0f);
+                        photoView
+                                .animate()
+                                .alpha(1f)
+                                .setDuration(IMAGE_ANIMATION_DURATION)
+                                .setInterpolator(new AccelerateDecelerateInterpolator())
+                                .start();
+                    }
+                }
+            }
+        });
         //显示加载动画
         loadingView.show();
         //获取图片缓存
@@ -99,25 +128,8 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     @Override
     public void success(final PhotoModel photoModel) {
         this.photoModel = photoModel;
-        //设置标题
-        toolbar.setTitle(photoModel.getUser().getName() + "(" + PhotoResolutionStrategy.getStrategyString(getActivity()) + ")");
-        //显示图片(详情页的图片缓存策略是独立的，与列表中的策略不同)
-        String imageUrl = PhotoResolutionStrategy.getUrl(getActivity(), photoModel.getUrls().getRaw());
-        ImageUtils.requestImage(getActivity(), imageUrl, new Action1<Bitmap>() {
-            @Override
-            public void call(Bitmap bitmap) {
-                if (null != bitmap) {
-                    loadingView.hide();
-                    photoView.setImageBitmap(bitmap);
-                    photoView
-                            .animate()
-                            .alpha(1f)
-                            .setDuration(IMAGE_ANIMATION_DURATION)
-                            .setInterpolator(new AccelerateDecelerateInterpolator())
-                            .start();
-                }
-            }
-        });
+        //隐藏加载动画
+        loadingView.hide();
     }
 
     @Override
@@ -171,7 +183,11 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     break;
                 case 2://设置为壁纸
 //                    WallpaperManager.getInstance(getActivity()).setBitmap(bitmap);
-                    Snackbar.make(content, "设置为壁纸", Snackbar.LENGTH_SHORT).show();
+                    if (photoModel.getWidth() > photoModel.getHeight()) {//横向的图片才可以设置为壁纸
+
+                    } else {
+                        Snackbar.make(content, "Cannot be longitudinal image set as wallpaper", Snackbar.LENGTH_SHORT).show();
+                    }
                     break;
                 case 3://下载
                     Snackbar.make(content, "下载", Snackbar.LENGTH_SHORT).show();

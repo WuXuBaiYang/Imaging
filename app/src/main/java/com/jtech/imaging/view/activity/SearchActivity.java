@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.SearchContract;
@@ -34,6 +36,7 @@ import com.jtech.view.RefreshLayout;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
+import com.yayandroid.parallaxlistview.ParallaxImageView;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -46,6 +49,7 @@ import rx.functions.Action1;
 public class SearchActivity extends BaseActivity implements SearchContract.View, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener, RefreshLayout.OnRefreshListener, OnLoadListener, OnItemClickListener, CoverView.OnCoverCancelListener, SearchRecordPopup.OnSearchRecordClick {
 
     public static final String SEARCH_QUERY_KEY = "searchQuerykey";
+    private static final int REQUEST_PHOTO_DETAIL_CODE = 0x0123;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -241,12 +245,19 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         Bundle bundle = new Bundle();
-        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, searchAdapter.getItem(position).getId());
+        SearchPhotoModel.ResultsModel resultsModel = searchAdapter.getItem(position);
+        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, resultsModel.getId());
+        bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, resultsModel.getUser().getName());
+        bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, resultsModel.getUrls().getRaw());
+        Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
+        ParallaxImageView parallaxImageView = recyclerHolder.getImageView(R.id.imageview_photo);
+        parallaxImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Pair pairImage = Pair.create(parallaxImageView, getString(R.string.image));
         ActivityOptionsCompat activityOptionsCompat =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), floatingActionButton, getString(R.string.fab));
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab, pairImage);
         Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
         intent.putExtras(bundle);
-        ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_PHOTO_DETAIL_CODE, activityOptionsCompat.toBundle());
     }
 
     @Override
@@ -288,6 +299,14 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
                 fabShowing = true;
                 floatingActionButton.show();
             }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_PHOTO_DETAIL_CODE) {//从详情跳转回来的
+            searchAdapter.animateImage(jRecyclerView);
         }
     }
 }

@@ -162,7 +162,7 @@ public class PhotoModel extends BaseModel {
         this.categories = categories;
     }
 
-    public static class ExifModel {
+    public static class ExifModel extends BaseModel {
         @SerializedName("make")
         private String make;
         @SerializedName("model")
@@ -225,7 +225,7 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class LocationModel {
+    public static class LocationModel extends BaseModel{
         @SerializedName("city")
         private String city;
         @SerializedName("country")
@@ -257,7 +257,7 @@ public class PhotoModel extends BaseModel {
             this.position = position;
         }
 
-        public static class PositionModel {
+        public static class PositionModel extends BaseModel{
             @SerializedName("latitude")
             private double latitude;
             @SerializedName("longitude")
@@ -281,7 +281,7 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class UrlsModel {
+    public static class UrlsModel extends BaseModel{
         @SerializedName("raw")
         private String raw;
         @SerializedName("full")
@@ -344,7 +344,7 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class LinksModel {
+    public static class LinksModel extends BaseModel{
         @SerializedName("self")
         private String self;
         @SerializedName("html")
@@ -387,7 +387,7 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class UserModel {
+    public static class UserModel extends BaseModel{
         @SerializedName("id")
         private String id;
         @SerializedName("username")
@@ -499,7 +499,7 @@ public class PhotoModel extends BaseModel {
             this.links = links;
         }
 
-        public static class ProfileImageModel {
+        public static class ProfileImageModel extends BaseModel {
             @SerializedName("small")
             private String small;
             @SerializedName("medium")
@@ -532,7 +532,7 @@ public class PhotoModel extends BaseModel {
             }
         }
 
-        public static class LinksModel {
+        public static class LinksModel extends BaseModel{
             @SerializedName("self")
             private String self;
             @SerializedName("html")
@@ -606,7 +606,7 @@ public class PhotoModel extends BaseModel {
         }
     }
 
-    public static class CurrentUserCollectionsModel {
+    public static class CurrentUserCollectionsModel extends BaseModel {
         @SerializedName("id")
         private int id;
         @SerializedName("title")
@@ -728,7 +728,7 @@ public class PhotoModel extends BaseModel {
             this.links = links;
         }
 
-        public static class CoverPhotoModel {
+        public static class CoverPhotoModel extends BaseModel{
             @SerializedName("id")
             private String id;
             @SerializedName("created_at")
@@ -840,7 +840,7 @@ public class PhotoModel extends BaseModel {
                 this.categories = categories;
             }
 
-            public static class CategoriesModel {
+            public static class CategoriesModel extends BaseModel {
                 @SerializedName("id")
                 private int id;
                 @SerializedName("title")
@@ -884,7 +884,7 @@ public class PhotoModel extends BaseModel {
             }
         }
 
-        public static class LinksModel {
+        public static class LinksModel extends BaseModel{
             @SerializedName("self")
             private String self;
             @SerializedName("html")

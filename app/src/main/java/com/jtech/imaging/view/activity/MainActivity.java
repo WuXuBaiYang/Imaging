@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OrderByCache;
@@ -41,6 +43,7 @@ import com.jtech.view.RefreshLayout;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
+import com.yayandroid.parallaxlistview.ParallaxImageView;
 
 import java.util.List;
 
@@ -52,6 +55,8 @@ import rx.functions.Action1;
  * Created by jianghan on 2016/9/20.
  */
 public class MainActivity extends BaseActivity implements MainContract.View, RefreshLayout.OnRefreshListener, OnItemClickListener, OnLoadListener, Toolbar.OnMenuItemClickListener, SearchView.OnQueryTextListener, View.OnFocusChangeListener, CoverView.OnCoverCancelListener, SearchRecordPopup.OnSearchRecordClick {
+
+    private static final int REQUEST_PHOTO_DETAIL_CODE = 0x0123;
 
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
@@ -154,12 +159,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         Bundle bundle = new Bundle();
-        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoAdapter.getItem(position).getId());
+        PhotoModel photoModel = photoAdapter.getItem(position);
+        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
+        bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName());
+        bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
+        Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
+        ParallaxImageView parallaxImageView = recyclerHolder.getImageView(R.id.imageview_photo);
+        parallaxImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Pair pairImage = Pair.create(parallaxImageView, getString(R.string.image));
         ActivityOptionsCompat activityOptionsCompat =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), floatingActionButton, getString(R.string.fab));
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab, pairImage);
         Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
         intent.putExtras(bundle);
-        ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_PHOTO_DETAIL_CODE, activityOptionsCompat.toBundle());
     }
 
     @Override
@@ -432,6 +444,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                             floatingActionButton, getString(R.string.fab));
             ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
                     RandomActivity.class), activityOptionsCompat.toBundle());
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_PHOTO_DETAIL_CODE) {//从详情跳转回来的
+            photoAdapter.animateImage(jRecyclerView);
         }
     }
 }
