@@ -186,6 +186,8 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                 case 3://下载
                     Snackbar.make(content, "下载", Snackbar.LENGTH_SHORT).show();
                     break;
+                default:
+                    break;
             }
             //隐藏sheet
             bottomSheetDialog.dismiss();
@@ -216,6 +218,8 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     break;
                 case 3://200p
                     checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_200;
+                    break;
+                default:
                     break;
             }
             //存储策略
@@ -283,7 +287,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     /**
      * 图片参数dialog的完成按钮点击事件
      */
-    private class OnPhotoExifDoneClick implements DialogInterface.OnClickListener {
+    private static class OnPhotoExifDoneClick implements DialogInterface.OnClickListener {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             dialog.dismiss();

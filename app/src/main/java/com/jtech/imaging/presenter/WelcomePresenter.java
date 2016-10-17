@@ -20,13 +20,14 @@ import rx.schedulers.Schedulers;
 public class WelcomePresenter implements WelcomeContract.Presenter {
 
     private WelcomeContract.View view;
+    private Context context;
 
-    public WelcomePresenter(WelcomeContract.View view) {
+    public WelcomePresenter(Context context, WelcomeContract.View view) {
+        this.context = context;
         this.view = view;
     }
 
     /**
-     * @param context
      * @param category
      * @param collections
      * @param featured
@@ -37,14 +38,14 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
      * @param orientation Valid values are landscape, portrait, and squarish
      */
     @Override
-    public void getWelcomePagePhoto(final Context context, String category, String collections, String featured, String username, String query, int width, int height, String orientation) {
+    public void getWelcomePagePhoto(String category, String collections, String featured, String username, String query, int width, int height, String orientation) {
         //请求图片
         PhotoModel photoModel = PhotoCache.get(context).getWelcomePhoto();
         if (null != photoModel) {
             view.success(photoModel);
         } else {
             API.get()
-                    .unsplashApi()
+                    .unsplashApi(context)
                     .randomPhoto(category, collections, featured, username, query, width, height, orientation)
                     .subscribeOn(Schedulers.io())
                     .map(new Func1<PhotoModel, PhotoModel>() {

@@ -28,13 +28,13 @@
         <item>Popular</item>
     </array>
 
-    <array name="image_load_strategy">
+    <array name="imageLoadStrategy">
         <item>Fixed definition</item>
         <item>Automatic adjustment according to the network</item>
         <item>Ignore the automatic adjustment of the network</item>
     </array>
 
-    <array name="image_load_strategy_fixed">
+    <array name="imageLoadStrategyFixed">
         <item>Full size</item>
         <item>Maximum no more than 1080P</item>
         <item>Maximum no more than 720P</item>
@@ -42,7 +42,7 @@
         <item>Maximum no more than 200P</item>
     </array>
 
-    <array name="image_resolutiorn_strategy">
+    <array name="imageResolutiornStrategy">
         <item>1080P</item>
         <item>720P</item>
         <item>480P</item>

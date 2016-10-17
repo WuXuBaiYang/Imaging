@@ -38,11 +38,8 @@ public class PhotoCache extends BaseCacheManager {
     //图片清晰度加载策略(图片详情页)
     private int photoResolutionStrategy;
 
-    private Context context;
-
     public PhotoCache(Context context) {
         super(context);
-        this.context = context;
     }
 
     public static PhotoCache get(Context context) {

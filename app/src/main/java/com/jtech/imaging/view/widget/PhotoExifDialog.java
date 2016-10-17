@@ -13,15 +13,11 @@ import com.jtech.imaging.model.PhotoModel;
  */
 
 public class PhotoExifDialog {
-    private Context context;
-    private PhotoModel photoModel;
     private AlertDialog.Builder builder;
 
     public PhotoExifDialog(Context context, PhotoModel photoModel) {
-        this.context = context;
-        this.photoModel = photoModel;
         //实例化builder
-        builder = new AlertDialog.Builder(context);
+        this.builder = new AlertDialog.Builder(context);
         //设置标题
         builder.setTitle("Photo Exif");
         //拼接要显示的参数信息

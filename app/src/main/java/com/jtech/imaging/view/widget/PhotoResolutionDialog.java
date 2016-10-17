@@ -40,7 +40,7 @@ public class PhotoResolutionDialog {
      * @return
      */
     public PhotoResolutionDialog setSingleChoiceItems(DialogInterface.OnClickListener onClickListener) {
-        String[] imageResolutionStrategies = context.getResources().getStringArray(R.array.image_resolutiorn_strategy);
+        String[] imageResolutionStrategies = context.getResources().getStringArray(R.array.imageResolutiornStrategy);
         int photoResolution = PhotoCache.get(context).getPhotoResolution();
         int checkedItem = 0;
         switch (photoResolution) {
@@ -55,6 +55,8 @@ public class PhotoResolutionDialog {
                 break;
             case PhotoResolutionStrategy.PHOTO_RESOLUTION_200://200p
                 checkedItem = 3;
+                break;
+            default:
                 break;
         }
         builder.setSingleChoiceItems(imageResolutionStrategies, checkedItem, onClickListener);

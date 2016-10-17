@@ -58,7 +58,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
     public void getPhotoDetail(final Context context, final String imageId, int imageWidth, int imageHeight, String rect) {
         API
                 .get()
-                .unsplashApi()
+                .unsplashApi(context)
                 .photoDetail(imageId, imageWidth, imageHeight, rect)
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<PhotoModel, PhotoModel>() {

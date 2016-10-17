@@ -40,7 +40,7 @@ public class ImageLoadStrategyDialog {
      * @return
      */
     public ImageLoadStrategyDialog setSingleChoiceItems(DialogInterface.OnClickListener onClickListener) {
-        String[] imageLoadStrategies = context.getResources().getStringArray(R.array.image_load_strategy);
+        String[] imageLoadStrategies = context.getResources().getStringArray(R.array.imageLoadStrategy);
         int photoLoadStrategy = PhotoCache.get(context).getPhotoLoadStrategy();
         int checkedItem = 0;
         switch (photoLoadStrategy) {
@@ -56,6 +56,8 @@ public class ImageLoadStrategyDialog {
                 break;
             case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO://无视网络自动调整
                 checkedItem = 2;
+                break;
+            default:
                 break;
         }
         builder.setSingleChoiceItems(imageLoadStrategies, checkedItem, onClickListener);

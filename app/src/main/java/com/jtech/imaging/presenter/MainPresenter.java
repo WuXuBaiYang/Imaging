@@ -51,7 +51,7 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void requestPhotoList(int pageIndex, int displayNumber, String orderBy, final boolean loadMore) {
         API.get()
-                .unsplashApi()
+                .unsplashApi(context)
                 .photos(pageIndex, displayNumber, orderBy)
                 .subscribeOn(Schedulers.io())
                 .map(new Func1<List<PhotoModel>, List<PhotoModel>>() {

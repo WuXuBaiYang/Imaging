@@ -1,5 +1,7 @@
 package com.jtech.imaging.presenter;
 
+import android.content.Context;
+
 import com.jtech.imaging.contract.SearchContract;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.net.API;
@@ -15,14 +17,16 @@ import rx.schedulers.Schedulers;
 
 public class SearchPresenter implements SearchContract.Presenter {
     private SearchContract.View view;
+    private Context context;
 
-    public SearchPresenter(SearchContract.View view) {
+    public SearchPresenter(Context context, SearchContract.View view) {
+        this.context = context;
         this.view = view;
     }
 
     @Override
     public void searchPhotoList(String query, int page, final boolean loadMore) {
-        API.get().unsplashApi()
+        API.get().unsplashApi(context)
                 .searchPhotos(query, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

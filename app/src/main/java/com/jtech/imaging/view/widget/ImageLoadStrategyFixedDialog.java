@@ -41,7 +41,7 @@ public class ImageLoadStrategyFixedDialog {
      * @return
      */
     public ImageLoadStrategyFixedDialog setSingleChoiceItems(DialogInterface.OnClickListener onClickListener) {
-        String[] imageLoadStrategyFixeds = context.getResources().getStringArray(R.array.image_load_strategy_fixed);
+        String[] imageLoadStrategyFixeds = context.getResources().getStringArray(R.array.imageLoadStrategyFixed);
         int checkedItem = 0;
         switch (photoLoadStrategy) {
             case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL://全尺寸
@@ -58,6 +58,8 @@ public class ImageLoadStrategyFixedDialog {
                 break;
             case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200://最高200
                 checkedItem = 4;
+                break;
+            default:
                 break;
         }
         builder.setSingleChoiceItems(imageLoadStrategyFixeds, checkedItem, onClickListener);

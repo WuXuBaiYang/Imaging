@@ -245,7 +245,10 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
             case R.id.menu_main_imagesize://图片加载策略
                 showImageLoadStrategyDialog();
                 break;
+            default:
+                break;
         }
+
         return true;
     }
 
@@ -409,6 +412,8 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                     break;
                 case 4://最高200
                     checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200;
+                    break;
+                default:
                     break;
             }
             if (which == 0) {

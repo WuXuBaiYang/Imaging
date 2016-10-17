@@ -88,7 +88,7 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
     @Override
     public void oauthSuccess(OauthModel oauthModel) {
         //插入数据
-        OauthCache.get().setOauthModel(oauthModel);
+        OauthCache.get(getActivity()).setOauthModel(oauthModel);
         Snackbar.make(content, "授权成功"
                 , Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
             @Override

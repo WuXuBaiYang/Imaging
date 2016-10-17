@@ -53,7 +53,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     @Override
     protected void initVariables(Bundle bundle) {
         //绑定P类
-        this.presenter = new RandomPresenter(this);
+        this.presenter = new RandomPresenter(getActivity(), this);
         //获取屏幕宽度
         this.screenWidth = DeviceUtils.getScreenWidth(getActivity());
         //计算最大高度

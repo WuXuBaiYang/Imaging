@@ -1,5 +1,7 @@
 package com.jtech.imaging.presenter;
 
+import android.content.Context;
+
 import com.jtech.imaging.contract.RandomContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.net.API;
@@ -14,15 +16,17 @@ import rx.schedulers.Schedulers;
  */
 public class RandomPresenter implements RandomContract.Presenter {
     private RandomContract.View view;
+    private Context context;
 
-    public RandomPresenter(RandomContract.View view) {
+    public RandomPresenter(Context context, RandomContract.View view) {
+        this.context = context;
         this.view = view;
     }
 
     @Override
     public void getRandomPhoto(String category, String collections, String featured, String username, String query, int width, int height, String orientation) {
         API.get()
-                .unsplashApi()
+                .unsplashApi(context)
                 .randomPhoto(category, collections, featured, username, query, width, height, orientation)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

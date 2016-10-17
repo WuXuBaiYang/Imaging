@@ -12,15 +12,11 @@ import com.jtechlib.BaseApplication;
  */
 public class JApplication extends BaseApplication {
 
-    private static JApplication INSTANCE;
-
     private ConnectionChangeReceiver connectionChangeReceiver;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        //赋值当前对象
-        this.INSTANCE = this;
         //注册网络变化广播
         registerConnectReceiver();
     }
@@ -49,14 +45,5 @@ public class JApplication extends BaseApplication {
         super.onTerminate();
         //销毁时反注册网络状态广播
         unregisterConnectReceiver();
-    }
-
-    /**
-     * 获取application实例
-     *
-     * @return
-     */
-    public static JApplication getInstance() {
-        return INSTANCE;
     }
 }

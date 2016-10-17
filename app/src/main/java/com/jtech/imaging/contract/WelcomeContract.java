@@ -1,8 +1,6 @@
 package com.jtech.imaging.contract;
 
 
-import android.content.Context;
-
 import com.jtech.imaging.model.PhotoModel;
 import com.jtechlib.contract.BaseContract;
 
@@ -19,6 +17,6 @@ public interface WelcomeContract {
 
     interface Presenter extends BaseContract.Presenter {
 
-        void getWelcomePagePhoto(Context context, String category, String collections, String featured, String username, String query, int width, int height, String orientation);
+        void getWelcomePagePhoto(String category, String collections, String featured, String username, String query, int width, int height, String orientation);
     }
 }

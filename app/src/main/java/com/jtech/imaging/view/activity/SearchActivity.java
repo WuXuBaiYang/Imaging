@@ -75,7 +75,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     @Override
     protected void initVariables(Bundle bundle) {
         //绑定P类
-        presenter = new SearchPresenter(this);
+        presenter = new SearchPresenter(getActivity(),this);
         //获取搜索信息
         this.query = bundle.getString(SEARCH_QUERY_KEY, "");
     }

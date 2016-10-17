@@ -1,5 +1,7 @@
 package com.jtech.imaging.net;
 
+import android.content.Context;
+
 import com.jtech.imaging.cache.OauthCache;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.model.OauthModel;
@@ -43,12 +45,12 @@ public class API extends BaseApi {
      *
      * @return
      */
-    public UnsplashApi unsplashApi() {
+    public UnsplashApi unsplashApi(Context context) {
         if (null == unsplashApi) {
             //获取token
             Map<String, String> headerMap = new HashMap<>();
-            if (OauthCache.hasOauthModel()) {
-                OauthModel oauthModel = OauthCache.get().getOauthModel();
+            if (OauthCache.hasOauthModel(context)) {
+                OauthModel oauthModel = OauthCache.get(context).getOauthModel();
                 headerMap.put("Authorization", oauthModel.getTokenType() + " " + oauthModel.getAccessToken());
             }
             //创建retrofit

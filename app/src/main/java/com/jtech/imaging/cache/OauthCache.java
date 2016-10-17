@@ -2,7 +2,6 @@ package com.jtech.imaging.cache;
 
 import android.content.Context;
 
-import com.jtech.imaging.JApplication;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.model.OauthModel;
 import com.jtechlib.cache.BaseCacheManager;
@@ -20,9 +19,9 @@ public class OauthCache extends BaseCacheManager {
         super(context);
     }
 
-    public static OauthCache get() {
+    public static OauthCache get(Context context) {
         if (null == INSTANCE) {
-            INSTANCE = new OauthCache(JApplication.getInstance());
+            INSTANCE = new OauthCache(context);
         }
         return INSTANCE;
     }
@@ -32,8 +31,8 @@ public class OauthCache extends BaseCacheManager {
      *
      * @return
      */
-    public static boolean hasOauthModel() {
-        return null != OauthCache.get().getOauthModel();
+    public static boolean hasOauthModel(Context context) {
+        return null != OauthCache.get(context).getOauthModel();
     }
 
     /**

@@ -49,15 +49,15 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     @Override
     protected void initVariables(Bundle bundle) {
         //绑定VP类
-        presenter = new WelcomePresenter(this);
+        presenter = new WelcomePresenter(getActivity(), this);
         //暂时使用已存在数据，不经过授权登陆
-        if (!OauthCache.hasOauthModel()) {
+        if (!OauthCache.hasOauthModel(getActivity())) {
             OauthModel oauthModel = new OauthModel();
             oauthModel.setAccessToken("da20b124d815a82ef0cb79226e991559e6e4c9cdf411fcef4e51acc718c0e44a");
             oauthModel.setCreatedAt(1473643598);
             oauthModel.setScope("public read_user write_user read_photos write_photos write_likes read_collections write_collections");
             oauthModel.setTokenType("bearer");
-            OauthCache.get().setOauthModel(oauthModel);
+            OauthCache.get(getActivity()).setOauthModel(oauthModel);
         }
     }
 
@@ -76,7 +76,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
         int width = PhotoLoadStrategy.getStrategyWidth(getActivity(), screenWidth);
         double ratio = (1.0 * width) / screenWidth;
         int height = (int) (ratio * screenHeight);
-        presenter.getWelcomePagePhoto(getActivity(), "", "", "", "", "", width, height, "portrait");
+        presenter.getWelcomePagePhoto("", "", "", "", "", width, height, "portrait");
     }
 
     @Override
@@ -108,7 +108,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     }
 
     private void jumpToNext() {
-        if (OauthCache.hasOauthModel()) {
+        if (OauthCache.hasOauthModel(getActivity())) {
             //跳转到主页
             ActivityOptionsCompat activityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
