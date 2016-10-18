@@ -27,7 +27,7 @@ import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.SearchAdapter;
 import com.jtech.imaging.view.widget.CoverView;
 import com.jtech.imaging.view.widget.RxCompat;
-import com.jtech.imaging.view.widget.SearchRecordPopup;
+import com.jtech.imaging.view.widget.popup.SearchRecordPopup;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;

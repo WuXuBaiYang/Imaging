@@ -1,4 +1,4 @@
-package com.jtech.imaging.view.widget;
+package com.jtech.imaging.view.widget.dialog;
 
 import android.content.Context;
 import android.support.design.widget.BottomSheetDialog;
@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.view.widget.RxCompat;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

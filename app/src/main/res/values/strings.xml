@@ -47,6 +47,13 @@
         <item>720P</item>
         <item>480P</item>
     </array>
+    
+    <array name="imageWallpaperResolutiorn">
+        <item>480P</item>
+        <item>720P</item>
+        <item>1080P</item>
+        <item>Max</item>
+    </array>
 
     <array name="scopeList">
         <item>默认项，读取公共数据|true|true|public</item>

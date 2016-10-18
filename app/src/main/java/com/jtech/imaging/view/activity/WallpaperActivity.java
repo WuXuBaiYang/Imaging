@@ -13,7 +13,7 @@ import com.jtech.imaging.presenter.WallpaperPresenter;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
-import com.jtech.imaging.view.widget.WallpaperDialog;
+import com.jtech.imaging.view.widget.dialog.WallpaperDialog;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
@@ -99,10 +99,9 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
      */
     private void setupTab() {
         //添加tab
-        tabLayout.addTab(tabLayout.newTab().setText("480p"));
-        tabLayout.addTab(tabLayout.newTab().setText("720p"));
-        tabLayout.addTab(tabLayout.newTab().setText("1080p"));
-        tabLayout.addTab(tabLayout.newTab().setText("Max"));
+        for (String tabName : getResources().getStringArray(R.array.imageWallpaperResolutiorn)) {
+            tabLayout.addTab(tabLayout.newTab().setText(tabName));
+        }
         //选择默认项
         tabLayout
                 .getTabAt(PhotoResolutionStrategy.getSelectStrategyPosition(getActivity()))

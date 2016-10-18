@@ -16,8 +16,14 @@ import com.jtech.view.RecyclerHolder;
 
 public class SearchRecordAdapter extends RecyclerAdapter<String> {
 
+    private OnCloseClick onCloseClick;
+
     public SearchRecordAdapter(Context context) {
         super(context);
+    }
+
+    public void setOnCloseClick(OnCloseClick onCloseClick) {
+        this.onCloseClick = onCloseClick;
     }
 
     @Override
@@ -26,8 +32,24 @@ public class SearchRecordAdapter extends RecyclerAdapter<String> {
     }
 
     @Override
-    protected void convert(RecyclerHolder recyclerHolder, final String s, int i) {
+    protected void convert(RecyclerHolder recyclerHolder, final String s, int position) {
         //设置搜索记录
         recyclerHolder.setText(R.id.textview_search_record, s);
+        //关闭按钮的点击事件
+        recyclerHolder.setClickListener(R.id.close, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != onCloseClick) {
+                    onCloseClick.recordClose(s);
+                }
+            }
+        });
+    }
+
+    /**
+     * 搜索记录关闭点击事件
+     */
+    public interface OnCloseClick {
+        void recordClose(String keyword);
     }
 }

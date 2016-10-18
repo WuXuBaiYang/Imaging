@@ -1,4 +1,4 @@
-package com.jtech.imaging.view.widget;
+package com.jtech.imaging.view.widget.popup;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +21,7 @@ import butterknife.OnClick;
  * Created by jianghan on 2016/10/9.
  */
 
-public class SearchRecordPopup extends BasePopupWindow implements OnItemClickListener {
+public class SearchRecordPopup extends BasePopupWindow implements OnItemClickListener, SearchRecordAdapter.OnCloseClick {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
@@ -57,6 +57,8 @@ public class SearchRecordPopup extends BasePopupWindow implements OnItemClickLis
         jRecyclerView.setAdapter(searchRecordAdapter);
         //设置item点击事件
         jRecyclerView.setOnItemClickListener(this);
+        //设置搜索记录关闭监听
+        searchRecordAdapter.setOnCloseClick(this);
     }
 
     /**
@@ -68,6 +70,18 @@ public class SearchRecordPopup extends BasePopupWindow implements OnItemClickLis
         searchRecordCache.removeAllRecord();
         //关闭popup
         dismiss();
+    }
+
+    @Override
+    public void recordClose(String keyword) {
+        //移除本条记录
+        searchRecordCache.removeSearchRecord(keyword);
+        //设置搜索记录
+        searchRecordAdapter.setDatas(searchRecordCache.getSearchRecords());
+        //判断是否需要关闭popup
+        if (searchRecordAdapter.getItemCount() <= 0) {
+            dismiss();
+        }
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.jtech.imaging.view.widget;
+package com.jtech.imaging.view.widget.dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
