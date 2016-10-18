@@ -2,6 +2,7 @@ package com.jtech.imaging.view.activity;
 
 import android.animation.Animator;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -9,6 +10,9 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -100,12 +104,19 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
 
     @Override
     protected void loadData() {
+        //显示加载动画
+        loadingView.show();
+        //设置标题
+        toolbar.setTitle(imageName + "(" + PhotoResolutionStrategy.getStrategyString(getActivity()) + ")");
         //显示图片
         final long startTimeMillis = System.currentTimeMillis();
         ImageUtils.requestImage(getActivity(), PhotoResolutionStrategy.getUrl(getActivity(), imageUrl), new Action1<Bitmap>() {
             @Override
             public void call(Bitmap bitmap) {
                 if (null != bitmap) {
+                    //隐藏加载动画
+                    loadingView.hide();
+                    //设置图片
                     photoView.setImageBitmap(bitmap);
                     if (System.currentTimeMillis() - startTimeMillis > getWindow().getTransitionBackgroundFadeDuration()) {
                         photoView.setAlpha(0f);
@@ -119,8 +130,6 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                 }
             }
         });
-        //显示加载动画
-        loadingView.show();
         //获取图片缓存
         presenter.getPhotoDetailCache(getActivity(), imageId);
     }
@@ -163,6 +172,19 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     }
 
     @Override
+    public void jumpToWallpaper() {
+        Bundle bundle = new Bundle();
+        bundle.putString(WallpaperActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
+        Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
+        Pair pairImage = Pair.create(photoView, getString(R.string.image));
+        ActivityOptionsCompat activityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab, pairImage);
+        Intent intent = new Intent(getActivity(), WallpaperActivity.class);
+        intent.putExtras(bundle);
+        ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+    }
+
+    @Override
     public void onClick(View v) {
         //后退
         onBackPressed();
@@ -182,6 +204,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     showResolutionDialog();
                     break;
                 case 2://设置为壁纸
+                    jumpToWallpaper();
                     break;
                 case 3://下载
                     Snackbar.make(content, "下载", Snackbar.LENGTH_SHORT).show();
@@ -215,9 +238,6 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     break;
                 case 2://480p
                     checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_480;
-                    break;
-                case 3://200p
-                    checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_200;
                     break;
                 default:
                     break;

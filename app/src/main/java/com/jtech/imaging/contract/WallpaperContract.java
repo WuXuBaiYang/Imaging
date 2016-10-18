@@ -1,5 +1,8 @@
 package com.jtech.imaging.contract;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+
 import com.jtechlib.contract.BaseContract;
 
 /**
@@ -9,10 +12,20 @@ import com.jtechlib.contract.BaseContract;
 
 public interface WallpaperContract {
     interface Presenter extends BaseContract.Presenter {
-        String getUrl(String originUrl,String width);
+        String getUrl(String originUrl, int width);
+
+        void setSelectPosition(int position);
+
+        boolean isRightBitmap(Activity activity, Bitmap bitmap);
+
+        int getSelectWidth(int width);
+
+        void setWallpaper(Bitmap bitmap);
     }
 
     interface View extends BaseContract.View {
+        void setWallpaperSuccess();
 
+        void setWallpaperFail();
     }
 }

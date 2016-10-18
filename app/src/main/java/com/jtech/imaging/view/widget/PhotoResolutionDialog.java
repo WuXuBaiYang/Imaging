@@ -53,9 +53,6 @@ public class PhotoResolutionDialog {
             case PhotoResolutionStrategy.PHOTO_RESOLUTION_480://480p
                 checkedItem = 2;
                 break;
-            case PhotoResolutionStrategy.PHOTO_RESOLUTION_200://200p
-                checkedItem = 3;
-                break;
             default:
                 break;
         }

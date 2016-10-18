@@ -25,6 +25,8 @@ public interface PhotoDetailContract {
 
         void showPhotoExifDialog();
 
+        void jumpToWallpaper();
+
         void success(PhotoModel photoModel);
 
         void fail(String message);

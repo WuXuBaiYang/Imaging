@@ -23,7 +23,7 @@ public class PhotoCache extends BaseCacheManager {
     //首页的首屏图片列表数据缓存key
     private static final String PHOTO_CACHE_FIRSTPAGE = "photosFirstpage";
     //图片缓存时间，10分钟
-    private static final int PHOTO_CACHE_TIME = 60 * 10;
+    private static final int PHOTO_CACHE_TIME = 60 * 60;
     //图片加载策略，缓存key
     private static final String PHOTO_LOAD_STRATEGY = "photoLoadStrategy";
     //图片清晰度加载策略，缓存key(图片详情)

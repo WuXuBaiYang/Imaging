@@ -29,6 +29,8 @@
         <activity android:name=".view.activity.SearchActivity" />
         //图片详情
         <activity android:name=".view.activity.PhotoDetailActivity" />
+        //设置壁纸页面
+        <activity android:name=".view.activity.WallpaperActivity" />
         //随机页面
         <activity
             android:name=".view.activity.RandomActivity"

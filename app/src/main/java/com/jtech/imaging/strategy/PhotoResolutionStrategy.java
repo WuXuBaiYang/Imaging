@@ -13,7 +13,6 @@ public class PhotoResolutionStrategy {
     public static final int PHOTO_RESOLUTION_1080 = 0X0001;
     public static final int PHOTO_RESOLUTION_720 = 0X0002;
     public static final int PHOTO_RESOLUTION_480 = 0X0003;
-    public static final int PHOTO_RESOLUTION_200 = 0X0004;
 
     /**
      * 获取处理过的链接
@@ -36,9 +35,7 @@ public class PhotoResolutionStrategy {
         //获取图片缓存策略
         int strategy = PhotoCache.get(context).getPhotoResolution();
         //判断缓存策略
-        if (strategy == PHOTO_RESOLUTION_200) {//200p
-            return 200;
-        } else if (strategy == PHOTO_RESOLUTION_480) {//480p
+        if (strategy == PHOTO_RESOLUTION_480) {//480p
             return 480;
         } else if (strategy == PHOTO_RESOLUTION_720) {//720p
             return 720;
@@ -46,6 +43,26 @@ public class PhotoResolutionStrategy {
             return 1080;
         }
         return 480;
+    }
+
+    /**
+     * 获得选中策略的position
+     *
+     * @param context
+     * @return
+     */
+    public static int getSelectStrategyPosition(Context context) {
+        //获取图片缓存策略
+        int strategy = PhotoCache.get(context).getPhotoResolution();
+        //判断缓存策略
+        if (strategy == PHOTO_RESOLUTION_480) {//480p
+            return 0;
+        } else if (strategy == PHOTO_RESOLUTION_720) {//720p
+            return 1;
+        } else if (strategy == PHOTO_RESOLUTION_1080) {//1080p
+            return 2;
+        }
+        return 0;
     }
 
     /**
