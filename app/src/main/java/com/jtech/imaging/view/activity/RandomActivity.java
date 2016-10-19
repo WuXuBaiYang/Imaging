@@ -1,14 +1,10 @@
 package com.jtech.imaging.view.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -20,6 +16,7 @@ import com.jtech.imaging.presenter.RandomPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
+import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
@@ -133,8 +130,6 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //退出动画
-        ActivityCompat.finishAfterTransition(RandomActivity.this);
     }
 
     /**
@@ -157,17 +152,16 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     @OnClick(R.id.imageview_random)
     void onImageClick() {
         if (null != photoModel) {
-            Bundle bundle = new Bundle();
-            bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
-            bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName());
-            bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
-            Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
-            Pair pairImage = Pair.create(imageView, getString(R.string.image));
-            ActivityOptionsCompat activityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab, pairImage);
-            Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
-            intent.putExtras(bundle);
-            ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+            ActivityJump
+                    .build(getActivity(), PhotoDetailActivity.class)
+                    .createBundle()
+                    .putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId())
+                    .putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName())
+                    .putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                    .makeSceneTransitionAnimation()
+                    .addPairs(floatingActionButton, getString(R.string.fab))
+                    .addPairs(imageView, getString(R.string.image))
+                    .jump();
         } else {
             Snackbar.make(content, "Please wait the request success", Snackbar.LENGTH_SHORT).show();
         }

@@ -1,12 +1,10 @@
 package com.jtech.imaging.view.activity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
@@ -20,6 +18,7 @@ import com.jtech.imaging.presenter.WelcomePresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
+import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
@@ -110,20 +109,20 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     private void jumpToNext() {
         if (OauthCache.hasOauthModel(getActivity())) {
             //跳转到主页
-            ActivityOptionsCompat activityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                            floatingActionButton, getString(R.string.fab));
-            ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
-                    MainActivity.class), activityOptionsCompat.toBundle());
+            ActivityJump
+                    .build(getActivity(), MainActivity.class)
+                    .makeSceneTransitionAnimation()
+                    .addPairs(floatingActionButton, getString(R.string.fab))
+                    .jump();
         } else {
             //跳转到授权登陆页
-            ActivityOptionsCompat activityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                            floatingActionButton, getString(R.string.fab));
-            ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
-                    OauthActivity.class), activityOptionsCompat.toBundle());
+            ActivityJump
+                    .build(getActivity(), OauthActivity.class)
+                    .makeSceneTransitionAnimation()
+                    .addPairs(floatingActionButton, getString(R.string.fab))
+                    .jump();
         }
-        //动画后关闭，看起来比较优雅
+        //动画后关闭
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

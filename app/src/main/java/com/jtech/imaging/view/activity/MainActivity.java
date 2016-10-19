@@ -7,8 +7,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +16,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OrderByCache;
@@ -40,10 +37,10 @@ import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
+import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
-import com.yayandroid.parallaxlistview.ParallaxImageView;
 
 import java.util.List;
 
@@ -158,29 +155,26 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public void jumpToDownloadManager() {
-        Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
-        ActivityOptionsCompat activityOptionsCompat =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab);
-        Intent intent = new Intent(getActivity(), DownloadActivity.class);
-        ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+        ActivityJump
+                .build(getActivity(), DownloadActivity.class)
+                .makeSceneTransitionAnimation()
+                .addPairs(floatingActionButton, getString(R.string.fab))
+                .jump();
     }
 
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
-        Bundle bundle = new Bundle();
         PhotoModel photoModel = photoAdapter.getItem(position);
-        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
-        bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName());
-        bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
-        Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
-        ParallaxImageView parallaxImageView = recyclerHolder.getImageView(R.id.imageview_photo);
-        parallaxImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        Pair pairImage = Pair.create(parallaxImageView, getString(R.string.image));
-        ActivityOptionsCompat activityOptionsCompat =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab, pairImage);
-        Intent intent = new Intent(getActivity(), PhotoDetailActivity.class);
-        intent.putExtras(bundle);
-        ActivityCompat.startActivityForResult(getActivity(), intent, REQUEST_PHOTO_DETAIL_CODE, activityOptionsCompat.toBundle());
+        ActivityJump
+                .build(getActivity(), PhotoDetailActivity.class)
+                .createBundle()
+                .putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId())
+                .putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName())
+                .putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                .makeSceneTransitionAnimation()
+                .addPairs(floatingActionButton, getString(R.string.fab))
+                .addPairs(photoAdapter.getParallaxView(recyclerHolder), getString(R.string.image))
+                .jumpForResult(REQUEST_PHOTO_DETAIL_CODE);
     }
 
     @Override
@@ -283,14 +277,13 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     private boolean searchSubmit(String query) {
         if (!TextUtils.isEmpty(query.trim())) {
             //跳转到搜索页
-            Bundle bundle = new Bundle();
-            bundle.putString(SearchActivity.SEARCH_QUERY_KEY, query);
-            ActivityOptionsCompat activityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                            floatingActionButton, getString(R.string.fab));
-            Intent intent = new Intent(getActivity(), SearchActivity.class);
-            intent.putExtras(bundle);
-            ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+            ActivityJump
+                    .build(getActivity(), SearchActivity.class)
+                    .createBundle()
+                    .putString(SearchActivity.SEARCH_QUERY_KEY, query)
+                    .makeSceneTransitionAnimation()
+                    .addPairs(floatingActionButton, getString(R.string.fab))
+                    .jump();
             //收回搜索框
             searchView.onActionViewCollapsed();
             return true;
@@ -455,12 +448,12 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            //跳转到主页
-            ActivityOptionsCompat activityOptionsCompat =
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                            floatingActionButton, getString(R.string.fab));
-            ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
-                    RandomActivity.class), activityOptionsCompat.toBundle());
+            //跳转到随机页面
+            ActivityJump
+                    .build(getActivity(), RandomActivity.class)
+                    .makeSceneTransitionAnimation()
+                    .addPairs(floatingActionButton, getString(R.string.fab))
+                    .jump();
         }
     }
 

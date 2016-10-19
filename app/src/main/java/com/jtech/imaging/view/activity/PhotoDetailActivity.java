@@ -2,7 +2,6 @@ package com.jtech.imaging.view.activity;
 
 import android.animation.Animator;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -10,9 +9,6 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -24,10 +20,11 @@ import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.PhotoDetailPresenter;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
+import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.imaging.view.widget.dialog.PhotoDetailSheetDialog;
 import com.jtech.imaging.view.widget.dialog.PhotoExifDialog;
 import com.jtech.imaging.view.widget.dialog.PhotoResolutionDialog;
-import com.jtech.imaging.view.widget.RxCompat;
+import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
@@ -173,15 +170,14 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
 
     @Override
     public void jumpToWallpaper() {
-        Bundle bundle = new Bundle();
-        bundle.putString(WallpaperActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
-        Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
-        Pair pairImage = Pair.create(photoView, getString(R.string.image));
-        ActivityOptionsCompat activityOptionsCompat =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab, pairImage);
-        Intent intent = new Intent(getActivity(), WallpaperActivity.class);
-        intent.putExtras(bundle);
-        ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+        ActivityJump
+                .build(getActivity(), WallpaperActivity.class)
+                .createBundle()
+                .putString(WallpaperActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                .makeSceneTransitionAnimation()
+                .addPairs(floatingActionButton, getString(R.string.fab))
+                .addPairs(photoView, getString(R.string.image))
+                .jump();
     }
 
     @Override

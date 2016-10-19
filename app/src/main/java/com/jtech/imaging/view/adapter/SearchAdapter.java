@@ -12,6 +12,7 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.viewholder.ParallaxViewHolder;
+import com.jtech.view.RecyclerHolder;
 import com.jtechlib.Util.ImageUtils;
 import com.yayandroid.parallaxlistview.ParallaxImageView;
 
@@ -27,6 +28,18 @@ public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, SearchPhotoM
     public SearchAdapter(Context context, int screenWidth) {
         super(context);
         this.screenWidth = screenWidth;
+    }
+
+    /**
+     * 根据holder获取图片视图对象
+     *
+     * @param recyclerHolder
+     * @return
+     */
+    public ParallaxImageView getParallaxView(RecyclerHolder recyclerHolder) {
+        ParallaxImageView parallaxImageView = recyclerHolder.getImageView(R.id.imageview_photo);
+        parallaxImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        return parallaxImageView;
     }
 
     public void setSearchPhotoModel(SearchPhotoModel searchPhotoModel, boolean loadMore) {

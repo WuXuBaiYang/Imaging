@@ -1,12 +1,9 @@
 package com.jtech.imaging.view.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +23,7 @@ import com.jtech.imaging.presenter.OauthPresenter;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.view.JRecyclerView;
+import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.view.activity.BaseActivity;
 
 import butterknife.Bind;
@@ -94,11 +92,11 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 //跳转到主页
-                ActivityOptionsCompat activityOptionsCompat =
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                                floatingActionButton, getString(R.string.fab));
-                ActivityCompat.startActivity(getActivity(), new Intent(getActivity(),
-                        MainActivity.class), activityOptionsCompat.toBundle());
+                ActivityJump
+                        .build(getActivity(), MainActivity.class)
+                        .makeSceneTransitionAnimation()
+                        .addPairs(floatingActionButton, getString(R.string.fab))
+                        .jump();
             }
         }).show();
     }
