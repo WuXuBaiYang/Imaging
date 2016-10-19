@@ -28,4 +28,11 @@
         android:title="@string/menu_main_imagesize"
         android:visible="true"
         app:showAsAction="never" />
+    <item
+        android:id="@id/menu_main_download"
+        android:enabled="true"
+        android:orderInCategory="80"
+        android:title="@string/menu_main_download"
+        android:visible="true"
+        app:showAsAction="never" />
 </menu>

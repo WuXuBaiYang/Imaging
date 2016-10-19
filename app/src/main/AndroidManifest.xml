@@ -31,6 +31,8 @@
         <activity android:name=".view.activity.PhotoDetailActivity" />
         //设置壁纸页面
         <activity android:name=".view.activity.WallpaperActivity" />
+        //下载管理页
+        <activity android:name=".view.activity.DownloadActivity" />
         //随机页面
         <activity
             android:name=".view.activity.RandomActivity"

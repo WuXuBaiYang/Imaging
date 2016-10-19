@@ -5,6 +5,7 @@
     <string name="menu_main_search">Search</string>
     <string name="menu_main_sort">Sort</string>
     <string name="menu_main_imagesize">ImageLoadStrategy</string>
+    <string name="menu_main_download">Download</string>
     <string name="search_hint">Search...</string>
     <string name="search_page_title">Search</string>
     <string name="search_record_clear">clear all</string>
@@ -47,7 +48,7 @@
         <item>720P</item>
         <item>480P</item>
     </array>
-    
+
     <array name="imageWallpaperResolutiorn">
         <item>480P</item>
         <item>720P</item>

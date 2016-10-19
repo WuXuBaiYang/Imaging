@@ -29,5 +29,7 @@ public interface MainContract {
         void fail(String message);
 
         void cacheSuccess(List<PhotoModel> photoModels);
+
+        void jumpToDownloadManager();
     }
 }

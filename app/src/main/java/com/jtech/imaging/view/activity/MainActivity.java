@@ -30,10 +30,10 @@ import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.widget.CoverView;
+import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.imaging.view.widget.dialog.ImageLoadStrategyDialog;
 import com.jtech.imaging.view.widget.dialog.ImageLoadStrategyFixedDialog;
 import com.jtech.imaging.view.widget.dialog.PhotoSortDialog;
-import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.imaging.view.widget.popup.SearchRecordPopup;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnLoadListener;
@@ -157,6 +157,15 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     }
 
     @Override
+    public void jumpToDownloadManager() {
+        Pair pairFab = Pair.create(floatingActionButton, getString(R.string.fab));
+        ActivityOptionsCompat activityOptionsCompat =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), pairFab);
+        Intent intent = new Intent(getActivity(), DownloadActivity.class);
+        ActivityCompat.startActivity(getActivity(), intent, activityOptionsCompat.toBundle());
+    }
+
+    @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         Bundle bundle = new Bundle();
         PhotoModel photoModel = photoAdapter.getItem(position);
@@ -244,6 +253,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 break;
             case R.id.menu_main_imagesize://图片加载策略
                 showImageLoadStrategyDialog();
+                break;
+            case R.id.menu_main_download://下载
+                jumpToDownloadManager();
                 break;
             default:
                 break;
