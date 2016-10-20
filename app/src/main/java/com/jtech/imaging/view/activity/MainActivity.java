@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,8 @@ import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.MainPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
+import com.jtech.imaging.util.ActivityJump;
+import com.jtech.imaging.util.PairChain;
 import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.widget.CoverView;
@@ -37,7 +40,6 @@ import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
-import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
@@ -155,25 +157,28 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public void jumpToDownloadManager() {
-        ActivityJump
-                .build(getActivity(), DownloadActivity.class)
-                .makeSceneTransitionAnimation()
-                .addPairs(floatingActionButton, getString(R.string.fab))
+        Pair[] pairs = PairChain
+                .build(floatingActionButton, getString(R.string.fab))
+                .toArray();
+        ActivityJump.build(getActivity(), DownloadActivity.class)
+                .makeSceneTransitionAnimation(pairs)
                 .jump();
     }
 
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         PhotoModel photoModel = photoAdapter.getItem(position);
-        ActivityJump
-                .build(getActivity(), PhotoDetailActivity.class)
-                .createBundle()
-                .putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId())
-                .putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName())
-                .putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
-                .makeSceneTransitionAnimation()
-                .addPairs(floatingActionButton, getString(R.string.fab))
-                .addPairs(photoAdapter.getParallaxView(recyclerHolder), getString(R.string.image))
+        Bundle bundle = new Bundle();
+        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
+        bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName());
+        bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
+        Pair[] pairs = PairChain
+                .build(floatingActionButton, getString(R.string.fab))
+                .addPair(photoAdapter.getParallaxView(recyclerHolder), getString(R.string.image))
+                .toArray();
+        ActivityJump.build(getActivity(), PhotoDetailActivity.class)
+                .addBundle(bundle)
+                .makeSceneTransitionAnimation(pairs)
                 .jumpForResult(REQUEST_PHOTO_DETAIL_CODE);
     }
 
@@ -277,12 +282,14 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     private boolean searchSubmit(String query) {
         if (!TextUtils.isEmpty(query.trim())) {
             //跳转到搜索页
-            ActivityJump
-                    .build(getActivity(), SearchActivity.class)
-                    .createBundle()
-                    .putString(SearchActivity.SEARCH_QUERY_KEY, query)
-                    .makeSceneTransitionAnimation()
-                    .addPairs(floatingActionButton, getString(R.string.fab))
+            Bundle bundle = new Bundle();
+            bundle.putString(SearchActivity.SEARCH_QUERY_KEY, query);
+            Pair[] pairs = PairChain
+                    .build(floatingActionButton, getString(R.string.fab))
+                    .toArray();
+            ActivityJump.build(getActivity(), SearchActivity.class)
+                    .addBundle(bundle)
+                    .makeSceneTransitionAnimation(pairs)
                     .jump();
             //收回搜索框
             searchView.onActionViewCollapsed();
@@ -449,10 +456,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         @Override
         public void call(Void aVoid) {
             //跳转到随机页面
-            ActivityJump
-                    .build(getActivity(), RandomActivity.class)
-                    .makeSceneTransitionAnimation()
-                    .addPairs(floatingActionButton, getString(R.string.fab))
+            Pair pair = Pair.create(floatingActionButton, getString(R.string.fab));
+            ActivityJump.build(getActivity(), RandomActivity.class)
+                    .makeSceneTransitionAnimation(pair)
                     .jump();
         }
     }

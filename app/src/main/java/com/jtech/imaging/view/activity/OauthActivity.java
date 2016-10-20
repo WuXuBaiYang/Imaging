@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,10 +21,11 @@ import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.presenter.OauthPresenter;
+import com.jtech.imaging.util.ActivityJump;
+import com.jtech.imaging.util.PairChain;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.view.JRecyclerView;
-import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.view.activity.BaseActivity;
 
 import butterknife.Bind;
@@ -92,10 +94,11 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
             @Override
             public void onDismissed(Snackbar snackbar, int event) {
                 //跳转到主页
-                ActivityJump
-                        .build(getActivity(), MainActivity.class)
-                        .makeSceneTransitionAnimation()
-                        .addPairs(floatingActionButton, getString(R.string.fab))
+                Pair[] pairs = PairChain
+                        .build(floatingActionButton, getString(R.string.fab))
+                        .toArray();
+                ActivityJump.build(getActivity(), MainActivity.class)
+                        .makeSceneTransitionAnimation(pairs)
                         .jump();
             }
         }).show();

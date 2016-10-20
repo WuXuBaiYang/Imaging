@@ -6,6 +6,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,8 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.contract.SearchContract;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.presenter.SearchPresenter;
+import com.jtech.imaging.util.ActivityJump;
+import com.jtech.imaging.util.PairChain;
 import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.SearchAdapter;
 import com.jtech.imaging.view.widget.CoverView;
@@ -30,7 +33,6 @@ import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
-import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
@@ -244,15 +246,17 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         //获得当前的数据对象
         SearchPhotoModel.ResultsModel resultsModel = searchAdapter.getItem(position);
         //跳转到详情页
-        ActivityJump
-                .build(getActivity(), PhotoDetailActivity.class)
-                .createBundle()
-                .putString(PhotoDetailActivity.IMAGE_ID_KEY, resultsModel.getId())
-                .putString(PhotoDetailActivity.IMAGE_NAME_KEY, resultsModel.getUser().getName())
-                .putString(PhotoDetailActivity.IMAGE_URL_KEY, resultsModel.getUrls().getRaw())
-                .makeSceneTransitionAnimation()
-                .addPairs(floatingActionButton, getString(R.string.fab))
-                .addPairs(searchAdapter.getParallaxView(recyclerHolder), getString(R.string.image))
+        Bundle bundle = new Bundle();
+        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, resultsModel.getId());
+        bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, resultsModel.getUser().getName());
+        bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, resultsModel.getUrls().getRaw());
+        Pair[] pairs = PairChain
+                .build(floatingActionButton, getString(R.string.fab))
+                .addPair(searchAdapter.getParallaxView(recyclerHolder), getString(R.string.image))
+                .toArray();
+        ActivityJump.build(getActivity(), PhotoDetailActivity.class)
+                .addBundle(bundle)
+                .makeSceneTransitionAnimation(pairs)
                 .jumpForResult(REQUEST_PHOTO_DETAIL_CODE);
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.AppCompatImageView;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -14,9 +15,10 @@ import com.jtech.imaging.contract.RandomContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.RandomPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
+import com.jtech.imaging.util.ActivityJump;
+import com.jtech.imaging.util.PairChain;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
-import com.jtechlib.Util.ActivityJump;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.activity.BaseActivity;
@@ -152,15 +154,17 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     @OnClick(R.id.imageview_random)
     void onImageClick() {
         if (null != photoModel) {
-            ActivityJump
-                    .build(getActivity(), PhotoDetailActivity.class)
-                    .createBundle()
-                    .putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId())
-                    .putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName())
-                    .putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
-                    .makeSceneTransitionAnimation()
-                    .addPairs(floatingActionButton, getString(R.string.fab))
-                    .addPairs(imageView, getString(R.string.image))
+            Bundle bundle = new Bundle();
+            bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
+            bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName());
+            bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
+            Pair[] pairs = PairChain
+                    .build(floatingActionButton, getString(R.string.fab))
+                    .addPair(imageView, getString(R.string.image))
+                    .toArray();
+            ActivityJump.build(getActivity(), PhotoDetailActivity.class)
+                    .addBundle(bundle)
+                    .makeSceneTransitionAnimation(pairs)
                     .jump();
         } else {
             Snackbar.make(content, "Please wait the request success", Snackbar.LENGTH_SHORT).show();
