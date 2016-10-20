@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.jtech.imaging.contract.WallpaperContract;
+import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtechlib.Util.DeviceUtils;
 
 import java.io.IOException;
@@ -30,6 +31,8 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
     public WallpaperPresenter(Context context, WallpaperContract.View view) {
         this.context = context;
         this.view = view;
+        //设置默认选择的清晰度
+        this.position = PhotoResolutionStrategy.getSelectStrategyPosition(context);
     }
 
     @Override
