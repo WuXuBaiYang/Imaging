@@ -3,6 +3,7 @@ package com.jtech.imaging.strategy;
 import android.content.Context;
 
 import com.jtech.imaging.cache.PhotoCache;
+import com.jtech.imaging.common.PhotoResolution;
 
 /**
  * 图片详情页，图片清晰度（分辨率）加载策略
@@ -10,10 +11,6 @@ import com.jtech.imaging.cache.PhotoCache;
  */
 
 public class PhotoResolutionStrategy {
-    public static final int PHOTO_RESOLUTION_1080 = 0X0001;
-    public static final int PHOTO_RESOLUTION_720 = 0X0002;
-    public static final int PHOTO_RESOLUTION_480 = 0X0003;
-
     /**
      * 获取处理过的链接
      *
@@ -35,11 +32,11 @@ public class PhotoResolutionStrategy {
         //获取图片缓存策略
         int strategy = PhotoCache.get(context).getPhotoResolution();
         //判断缓存策略
-        if (strategy == PHOTO_RESOLUTION_480) {//480p
+        if (strategy == PhotoResolution.PHOTO_RESOLUTION_480) {//480p
             return 480;
-        } else if (strategy == PHOTO_RESOLUTION_720) {//720p
+        } else if (strategy == PhotoResolution.PHOTO_RESOLUTION_720) {//720p
             return 720;
-        } else if (strategy == PHOTO_RESOLUTION_1080) {//1080p
+        } else if (strategy == PhotoResolution.PHOTO_RESOLUTION_1080) {//1080p
             return 1080;
         }
         return 480;
@@ -55,11 +52,11 @@ public class PhotoResolutionStrategy {
         //获取图片缓存策略
         int strategy = PhotoCache.get(context).getPhotoResolution();
         //判断缓存策略
-        if (strategy == PHOTO_RESOLUTION_480) {//480p
+        if (strategy == PhotoResolution.PHOTO_RESOLUTION_480) {//480p
             return 0;
-        } else if (strategy == PHOTO_RESOLUTION_720) {//720p
+        } else if (strategy == PhotoResolution.PHOTO_RESOLUTION_720) {//720p
             return 1;
-        } else if (strategy == PHOTO_RESOLUTION_1080) {//1080p
+        } else if (strategy == PhotoResolution.PHOTO_RESOLUTION_1080) {//1080p
             return 2;
         }
         return 0;

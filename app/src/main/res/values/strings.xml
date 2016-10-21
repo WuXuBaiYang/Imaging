@@ -23,6 +23,17 @@
     <string name="oauth_page_subtitle_scope">选择可以接受的权限</string>
     <string name="oauth_page_subtitle_login">输入账号并登录</string>
 
+    <string name="download_state_downloading">Downloading</string>
+    <string name="download_state_downloaded">Downloaded</string>
+    <string name="download_state_stop">Stop</string>
+    <string name="download_state_not_found">FileNotFound</string>
+    <string name="download_state_stoping">Stoping</string>
+    <string name="download_state_connection">Connection</string>
+    <string name="download_state_fail_unknown">Unknown</string>
+    <string name="download_state_fail_intent_change">IntentChange</string>
+    <string name="download_state_fail_intent_error">IntentError</string>
+
+
     <array name="sort">
         <item>Latest</item>
         <item>Oldest</item>
