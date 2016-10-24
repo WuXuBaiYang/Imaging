@@ -21,6 +21,7 @@ import android.view.View;
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OrderByCache;
 import com.jtech.imaging.cache.PhotoCache;
+import com.jtech.imaging.common.PhotoLoad;
 import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.MainPresenter;
@@ -383,9 +384,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
             } else {
                 int photoLoadStrategy = 0;
                 if (which == 1) {
-                    photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_NET_AUTO;
+                    photoLoadStrategy = PhotoLoad.PHOTO_LOAD_STRATEGY_NET_AUTO;
                 } else if (which == 2) {
-                    photoLoadStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_AUTO;
+                    photoLoadStrategy = PhotoLoad.PHOTO_LOAD_STRATEGY_AUTO;
                 }
                 //清空欢迎页数据
                 PhotoCache.get(getActivity()).clearWelcomePhoto();
@@ -411,19 +412,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
             //设置策略
             switch (which) {
                 case 0://全尺寸
-                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL;
+                    checkStrategy = PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_FULL;
                     break;
                 case 1://最高1080
-                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080;
+                    checkStrategy = PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_1080;
                     break;
                 case 2://最高720
-                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720;
+                    checkStrategy = PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_720;
                     break;
                 case 3://最高480
-                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480;
+                    checkStrategy = PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_480;
                     break;
                 case 4://最高200
-                    checkStrategy = PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200;
+                    checkStrategy = PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_200;
                     break;
                 default:
                     break;

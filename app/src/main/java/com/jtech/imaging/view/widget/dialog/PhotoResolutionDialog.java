@@ -6,7 +6,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.PhotoCache;
-import com.jtech.imaging.strategy.PhotoResolutionStrategy;
+import com.jtech.imaging.common.PhotoResolution;
 
 /**
  * 图片分辨率选择(图片详情)dialog
@@ -44,13 +44,13 @@ public class PhotoResolutionDialog {
         int photoResolution = PhotoCache.get(context).getPhotoResolution();
         int checkedItem = 0;
         switch (photoResolution) {
-            case PhotoResolutionStrategy.PHOTO_RESOLUTION_1080://1080p
+            case PhotoResolution.PHOTO_RESOLUTION_1080://1080p
                 checkedItem = 0;
                 break;
-            case PhotoResolutionStrategy.PHOTO_RESOLUTION_720://720p
+            case PhotoResolution.PHOTO_RESOLUTION_720://720p
                 checkedItem = 1;
                 break;
-            case PhotoResolutionStrategy.PHOTO_RESOLUTION_480://480p
+            case PhotoResolution.PHOTO_RESOLUTION_480://480p
                 checkedItem = 2;
                 break;
             default:

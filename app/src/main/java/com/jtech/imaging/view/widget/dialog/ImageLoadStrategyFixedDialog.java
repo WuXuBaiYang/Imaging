@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.common.PhotoLoad;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 
 /**
@@ -44,19 +45,19 @@ public class ImageLoadStrategyFixedDialog {
         String[] imageLoadStrategyFixeds = context.getResources().getStringArray(R.array.imageLoadStrategyFixed);
         int checkedItem = 0;
         switch (photoLoadStrategy) {
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_FULL://全尺寸
+            case PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_FULL://全尺寸
                 checkedItem = 0;
                 break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_1080://最高1080
+            case PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_1080://最高1080
                 checkedItem = 1;
                 break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_720://最高720
+            case PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_720://最高720
                 checkedItem = 2;
                 break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480://最高480
+            case PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_480://最高480
                 checkedItem = 3;
                 break;
-            case PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_200://最高200
+            case PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_200://最高200
                 checkedItem = 4;
                 break;
             default:

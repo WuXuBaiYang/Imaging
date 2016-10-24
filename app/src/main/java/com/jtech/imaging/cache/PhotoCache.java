@@ -6,10 +6,10 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jtech.imaging.common.Constants;
+import com.jtech.imaging.common.PhotoLoad;
+import com.jtech.imaging.common.PhotoResolution;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.net.API;
-import com.jtech.imaging.strategy.PhotoLoadStrategy;
-import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtechlib.cache.ACache;
 import com.jtechlib.cache.BaseCacheManager;
 
@@ -117,7 +117,7 @@ public class PhotoCache extends BaseCacheManager {
      */
     public int getPhotoLoadStrategy() {
         if (photoLoadStrategy == 0) {
-            this.photoLoadStrategy = queryInt(PHOTO_LOAD_STRATEGY, PhotoLoadStrategy.PHOTO_LOAD_STRATEGY_FIXED_480);
+            this.photoLoadStrategy = queryInt(PHOTO_LOAD_STRATEGY, PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_480);
         }
         return photoLoadStrategy;
     }
@@ -139,7 +139,7 @@ public class PhotoCache extends BaseCacheManager {
      */
     public int getPhotoResolution() {
         if (photoResolutionStrategy == 0) {
-            this.photoResolutionStrategy = queryInt(PHOTO_RESOLUTION_STRATEGY, PhotoResolutionStrategy.PHOTO_RESOLUTION_480);
+            this.photoResolutionStrategy = queryInt(PHOTO_RESOLUTION_STRATEGY, PhotoResolution.PHOTO_RESOLUTION_480);
         }
         return photoResolutionStrategy;
     }

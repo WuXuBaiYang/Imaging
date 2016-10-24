@@ -16,6 +16,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.PhotoCache;
+import com.jtech.imaging.common.PhotoResolution;
 import com.jtech.imaging.contract.PhotoDetailContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.PhotoDetailPresenter;
@@ -231,13 +232,13 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
             //设置策略
             switch (which) {
                 case 0://1080p
-                    checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_1080;
+                    checkStrategy = PhotoResolution.PHOTO_RESOLUTION_1080;
                     break;
                 case 1://720p
-                    checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_720;
+                    checkStrategy = PhotoResolution.PHOTO_RESOLUTION_720;
                     break;
                 case 2://480p
-                    checkStrategy = PhotoResolutionStrategy.PHOTO_RESOLUTION_480;
+                    checkStrategy = PhotoResolution.PHOTO_RESOLUTION_480;
                     break;
                 default:
                     break;
