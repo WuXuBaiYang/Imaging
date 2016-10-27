@@ -4,6 +4,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
 import com.jtech.imaging.receiver.ConnectionChangeReceiver;
+import com.jtech.imaging.service.DownloadService;
 import com.jtechlib.BaseApplication;
 import com.liulishuo.filedownloader.FileDownloader;
 
@@ -13,6 +14,7 @@ import com.liulishuo.filedownloader.FileDownloader;
  */
 public class JApplication extends BaseApplication {
 
+    private DownloadService downloadService;
     private ConnectionChangeReceiver connectionChangeReceiver;
 
     @Override
