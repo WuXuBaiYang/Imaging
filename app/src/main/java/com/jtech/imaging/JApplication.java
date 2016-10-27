@@ -5,6 +5,7 @@ import android.net.ConnectivityManager;
 
 import com.jtech.imaging.receiver.ConnectionChangeReceiver;
 import com.jtechlib.BaseApplication;
+import com.liulishuo.filedownloader.FileDownloader;
 
 /**
  * application，继承自JTechLib
@@ -19,6 +20,8 @@ public class JApplication extends BaseApplication {
         super.onCreate();
         //注册网络变化广播
         registerConnectReceiver();
+        //初始化下载管理
+        FileDownloader.init(getApplicationContext());
     }
 
     /**
