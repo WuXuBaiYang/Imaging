@@ -18,11 +18,11 @@ import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.WelcomePresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.util.ActivityJump;
-import com.jtech.imaging.util.PairChain;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
+import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
 
 import butterknife.Bind;

@@ -22,10 +22,10 @@ import com.jtech.imaging.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.presenter.OauthPresenter;
 import com.jtech.imaging.util.ActivityJump;
-import com.jtech.imaging.util.PairChain;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.view.JRecyclerView;
+import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
 
 import butterknife.Bind;

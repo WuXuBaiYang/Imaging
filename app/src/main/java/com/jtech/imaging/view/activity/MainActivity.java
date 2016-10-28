@@ -25,9 +25,7 @@ import com.jtech.imaging.common.PhotoLoad;
 import com.jtech.imaging.contract.MainContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.MainPresenter;
-import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.util.ActivityJump;
-import com.jtech.imaging.util.PairChain;
 import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.PhotoAdapter;
 import com.jtech.imaging.view.widget.CoverView;
@@ -42,6 +40,7 @@ import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
 import com.jtechlib.Util.DeviceUtils;
+import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
 
