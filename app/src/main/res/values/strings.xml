@@ -15,6 +15,9 @@
     <string name="photo_detail_sheet_wallpaper">Set as wallpaper</string>
     <string name="photo_detail_sheet_download">Download</string>
 
+    <string name="download_downloaded">Downloaded</string>
+    <string name="download_downloading">Downloading</string>
+
     <string name="cancel">cancel</string>
     <string name="done">done</string>
     <string name="submit">submit</string>

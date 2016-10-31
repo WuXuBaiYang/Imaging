@@ -11,6 +11,10 @@
 
     <style name="AppTheme" parent="@style/BaseAppTheme"></style>
 
+    <style name="AppThemeWithStatus" parent="@style/BaseAppTheme">
+        <item name="android:windowTranslucentStatus">false</item>
+    </style>
+
     <style name="Theme.AppCompat.Translucent" parent="BaseAppTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>

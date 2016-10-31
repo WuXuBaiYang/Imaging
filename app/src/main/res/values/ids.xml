@@ -33,5 +33,7 @@
     <item name="sheet_photo_detail" type="id"></item>
     <item name="sheet_photo_detail_resolution" type="id"></item>
     <item name="tablayout_wallpaper" type="id"></item>
+    <item name="tablayout_download" type="id"></item>
     <item name="close" type="id"></item>
+    <item name="viewpager" type="id"></item>
 </resources>
