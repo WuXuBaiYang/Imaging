@@ -1,27 +1,22 @@
 package com.jtech.imaging.event;
 
 /**
- * 下载状态事件
- * Created by jianghan on 2016/10/27.
+ * 下载状态监听
+ * Created by jianghan on 2016/11/1.
  */
 
 public class DownloadStateEvent {
-    private String id;
-    private int downloadState;
+    private int state;
 
-    public String getId() {
-        return id;
+    public DownloadStateEvent(int state) {
+        this.state = state;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public int getState() {
+        return state;
     }
 
-    public int getDownloadState() {
-        return downloadState;
-    }
-
-    public void setDownloadState(int downloadState) {
-        this.downloadState = downloadState;
+    public void setState(int state) {
+        this.state = state;
     }
 }

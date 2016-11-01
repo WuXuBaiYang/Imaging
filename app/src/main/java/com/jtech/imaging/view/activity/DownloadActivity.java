@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.DownloadContract;
+import com.jtech.imaging.event.DownloadServeEvent;
 import com.jtech.imaging.presenter.DownloadPresenter;
 import com.jtech.imaging.view.adapter.DownloadPagerAdapter;
 import com.jtech.imaging.view.fragment.DownloadedFragment;
@@ -17,8 +18,9 @@ import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.fragment.BaseFragment;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.Arrays;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -41,6 +43,8 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     @Bind(R.id.viewpager)
     ViewPager viewPager;
 
+    private DownloadingFragment downloadingFragment;
+    private DownloadedFragment downloadedFragment;
     private DownloadContract.Presenter presenter;
 
     @Override
@@ -57,11 +61,12 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
                 .setTitle("Download")
                 .setContentInsetStartWithNavigation(0)
                 .setNavigationIcon(R.drawable.ic_keyboard_backspace_white_24dp, this);
+        //实例化fragment对象
+        downloadedFragment = DownloadedFragment.newInstance();
+        downloadingFragment = DownloadingFragment.newInstance();
         //设置适配器
-        List<BaseFragment> fragmentList = new ArrayList<>();
-        fragmentList.add(DownloadedFragment.newInstance());
-        fragmentList.add(DownloadingFragment.newInstance());
-        viewPager.setAdapter(new DownloadPagerAdapter(getSupportFragmentManager(), fragmentList));
+        BaseFragment[] fragmentList = {downloadedFragment, downloadingFragment};
+        viewPager.setAdapter(new DownloadPagerAdapter(getSupportFragmentManager(), Arrays.asList(fragmentList)));
         //设置viewpager的pagechange事件监听
         viewPager.addOnPageChangeListener(this);
         //设置fab的点击事件
@@ -88,7 +93,15 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
 
     @Override
     public void onPageSelected(int position) {
-        // TODO: 2016/10/31  //页面切换，则切换fab的图标，同时fab的事件也发生变化
+        if (position == 0) {//已缓存
+            floatingActionButton.setImageResource(R.drawable.ic_photo_library_white_36dp);
+        } else {//缓存中
+            if (downloadingFragment.isAllDownloading()) {//正在下载
+                floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+            } else {
+                floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);
+            }
+        }
     }
 
     @Override
@@ -104,9 +117,16 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         public void call(Void aVoid) {
             //判断当前的所在页面
             if (viewPager.getCurrentItem() == 0) {//已缓存
-                // TODO: 2016/10/31 通知page浏览大图消息
+                downloadedFragment.showPhotoGallery();//点击浏览大图
             } else {//缓存中
-                // TODO: 2016/10/31 通知page全部下载或者全部暂停消息
+                boolean isAllDownloading = downloadingFragment.isAllDownloading();
+                if (isAllDownloading) {//正在下载
+                    floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);
+                } else {
+                    floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                }
+                //发送暂停或者下载的消息(取反操作)
+                EventBus.getDefault().post(new DownloadServeEvent(!isAllDownloading));
             }
         }
     }
