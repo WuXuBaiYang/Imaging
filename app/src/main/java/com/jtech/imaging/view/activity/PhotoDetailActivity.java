@@ -208,7 +208,8 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     jumpToWallpaper();
                     break;
                 case 3://下载
-                    Snackbar.make(content, "下载", Snackbar.LENGTH_SHORT).show();
+                    // TODO: 2016/11/1 发起下载
+                    Snackbar.make(content, "comeing soon!", Snackbar.LENGTH_SHORT).show();
                     break;
                 default:
                     break;
