@@ -7,24 +7,24 @@ package com.jtech.imaging.common;
 
 public class DownloadState {
     /*下载中*/
-    public static final int DOWNLOADING = 0x00001;
+    public static final int DOWNLOADING = 0x01;
     /*默认状态*/
-    public static final int DOWNLOAD_STOP = 0x0002;
+    public static final int DOWNLOAD_STOP = 0x02;
     /*下载完成*/
-    public static final int DOWNLOADED = 0x00003;
+    public static final int DOWNLOADED = 0x03;
     /*下载完成，文件不在目标位置*/
-    public static final int DOWNLOADED_NOT_FOUND = 0x0004;
+    public static final int DOWNLOADED_NOT_FOUND = 0x04;
 
     /*正在停止*/
-    public static final int DOWNLOAD_STOPING = 0x0005;
+    public static final int DOWNLOAD_STOPING = 0x05;
     /*正在连接*/
-    public static final int DOWNLOAD_CONNECTION = 0x0006;
+    public static final int DOWNLOAD_CONNECTION = 0x06;
 
 
     /*下载失败,未知原因*/
-    public static final int DOWNLOAD_FAIL_UNKNOWN = 0x00007;
+    public static final int DOWNLOAD_FAIL_UNKNOWN = 0x07;
     /*下载失败，网络状态变化*/
-    public static final int DOWNLOAD_FAIL_INTENT_CHANGE = 0x00008;
+    public static final int DOWNLOAD_FAIL_INTENT_CHANGE = 0x08;
     /*下载失败，网络错误*/
-    public static final int DOWNLOAD_FAIL_INTENT_ERROR = 0x00009;
+    public static final int DOWNLOAD_FAIL_INTENT_ERROR = 0x09;
 }

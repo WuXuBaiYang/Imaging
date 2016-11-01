@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/cardview_dark_background"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/margin_default_topbottom"
+    android:paddingLeft="@dimen/margin_default_leftright"
+    android:paddingRight="@dimen/margin_default_leftright"
+    android:paddingTop="@dimen/margin_default_topbottom">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@id/textview_downloading_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:textColor="@color/toolbar_subtitle" />
+
+        <TextView
+            android:id="@id/textview_downloading_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/margin_default_leftright"
+            android:layout_toLeftOf="@id/imageview_downloading_status"
+            android:text="status"
+            android:textColor="@color/toolbar_subtitle" />
+
+        <ImageView
+            android:id="@id/imageview_downloading_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_file_download_black_18dp" />
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@id/progressbar_downloading_progress"
+        style="?android:progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:visibility="gone" />
+</LinearLayout>

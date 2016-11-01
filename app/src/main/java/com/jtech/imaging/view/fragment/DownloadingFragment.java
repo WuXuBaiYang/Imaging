@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.event.DownloadScheduleEvent;
 import com.jtech.imaging.event.DownloadStateEvent;
+import com.jtech.imaging.view.adapter.DownloadingAdapter;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.fragment.BaseFragment;
 
@@ -25,6 +27,8 @@ public class DownloadingFragment extends BaseFragment {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
+
+    private DownloadingAdapter downloadingAdapter;
 
     public static DownloadingFragment newInstance() {
         Bundle args = new Bundle();
@@ -47,11 +51,15 @@ public class DownloadingFragment extends BaseFragment {
     protected void initViews(Bundle bundle) {
         //设置layoutmanager
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //实例化适配器
+        downloadingAdapter = new DownloadingAdapter(getActivity());
+        //设置适配器
+        jRecyclerView.setAdapter(downloadingAdapter);
     }
 
     @Override
     protected void loadData() {
-
+        // TODO: 2016/11/1 加载本地记录的下载列表
     }
 
     /**
@@ -71,5 +79,15 @@ public class DownloadingFragment extends BaseFragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void downloadStateEvent(DownloadStateEvent event) {
         // TODO: 2016/11/1 当有任务下载完成，则刷新本页列表
+    }
+
+    /**
+     * 任务下载进度事件
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void downloadingEvent(DownloadScheduleEvent event) {
+        // TODO: 2016/11/1 任务下载中下载进度方法
     }
 }

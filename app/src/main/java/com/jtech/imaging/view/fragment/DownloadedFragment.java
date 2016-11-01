@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.event.DownloadScheduleEvent;
 import com.jtech.imaging.event.DownloadStateEvent;
+import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.fragment.BaseFragment;
 
@@ -26,6 +26,8 @@ public class DownloadedFragment extends BaseFragment {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
+
+    private DownloadedAdapter downloadedAdapter;
 
     public static DownloadedFragment newInstance() {
         Bundle args = new Bundle();
@@ -48,28 +50,22 @@ public class DownloadedFragment extends BaseFragment {
     protected void initViews(Bundle bundle) {
         //设置layoutmanager
         jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //实例化适配器
+        downloadedAdapter = new DownloadedAdapter(getActivity());
+        //设置适配器
+        jRecyclerView.setAdapter(downloadedAdapter);
     }
 
     @Override
     protected void loadData() {
-
+        // TODO: 2016/11/1 加载本地缓存的已下载的图片列表
     }
 
     /**
      * 显示图片画廊
      */
     public void showPhotoGallery() {
-
-    }
-
-    /**
-     * 任务下载进度事件
-     *
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void downloadingEvent(DownloadScheduleEvent event) {
-        // TODO: 2016/11/1 任务下载中下载进度方法
+        // TODO: 2016/11/1 已画廊的形式显示图片 
     }
 
     /**
