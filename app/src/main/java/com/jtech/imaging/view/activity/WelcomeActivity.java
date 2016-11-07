@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.AppCompatImageView;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
+import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.Util.PairChain;
@@ -81,7 +83,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
     }
 
     @Override
-    public void success(PhotoModel photoModel) {
+    public void success(final PhotoModel photoModel) {
         //设置图片信息
         textviewInfo.setText(photoModel.getUser().getName());
         //显示图片
@@ -91,6 +93,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
                 if (null != bitmap) {
                     //隐藏加载视图
                     loadingView.hide();
+                    //设置点击事件
+                    imageView.setOnClickListener(new OnImageViewClick(photoModel));
                     //显示图片
                     imageView.setImageBitmap(bitmap);
                     //显示动画
@@ -132,7 +136,7 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
             public void run() {
                 ActivityCompat.finishAfterTransition(WelcomeActivity.this);
             }
-        }, getWindow().getTransitionBackgroundFadeDuration());
+        }, 500);
     }
 
     /**
@@ -142,6 +146,42 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
         @Override
         public void call(Void aVoid) {
             jumpToNext();
+        }
+    }
+
+    /**
+     * 图片的双击点击事件
+     */
+    public class OnImageViewClick implements View.OnClickListener {
+        private PhotoModel photoModel;
+        private boolean isDoubleClick = false;
+
+        public OnImageViewClick(PhotoModel photoModel) {
+            this.photoModel = photoModel;
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (!isDoubleClick) {
+                isDoubleClick = true;
+                return;
+            }
+            //重置状态
+            isDoubleClick = false;
+            //跳转到图片详情
+            Bundle bundle = BundleChain.build()
+                    .putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId())
+                    .putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName())
+                    .putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                    .toBundle();
+            Pair[] pairs = PairChain
+                    .build(floatingActionButton, getString(R.string.fab))
+                    .addPair(imageView, getString(R.string.image))
+                    .toArray();
+            ActivityJump.build(getActivity(), PhotoDetailActivity.class)
+                    .addBundle(bundle)
+                    .makeSceneTransitionAnimation(pairs)
+                    .jump();
         }
     }
 }
