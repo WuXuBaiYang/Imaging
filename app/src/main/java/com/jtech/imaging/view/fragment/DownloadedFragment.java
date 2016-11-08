@@ -43,7 +43,6 @@ public class DownloadedFragment extends BaseFragment {
 
     @Override
     protected void initVariables(Bundle bundle) {
-
     }
 
     @Override

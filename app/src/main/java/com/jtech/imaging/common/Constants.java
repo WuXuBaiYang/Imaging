@@ -10,10 +10,6 @@ public class Constants {
      */
     public static final String CACHE_NAME = "ImagingCache";
     /**
-     * http
-     */
-    public static final String HTTP = "http://";
-    /**
      * https
      */
     public static final String HTTPS = "https://";
@@ -25,7 +21,6 @@ public class Constants {
      * unsplash认证地址
      */
     public static final String BASE_UNSPLASH_OAUTH_URL = HTTPS + "unsplash.com";
-
     /**
      * unsplash的client_id
      */
