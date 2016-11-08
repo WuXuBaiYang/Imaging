@@ -164,6 +164,13 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
         public void onClick(View view) {
             if (!isDoubleClick) {
                 isDoubleClick = true;
+                //500毫秒后重置状态
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        isDoubleClick = false;
+                    }
+                }, 500);
                 return;
             }
             //重置状态
