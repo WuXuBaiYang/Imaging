@@ -80,7 +80,7 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
                     loadingView.hide();
                     //设置图片
                     photoView.setImageBitmap(bitmap);
-                    if (System.currentTimeMillis() - startTimeMillis > getWindow().getTransitionBackgroundFadeDuration()) {
+                    if (System.currentTimeMillis() - startTimeMillis > 500) {
                         photoView.setAlpha(0f);
                         photoView
                                 .animate()

@@ -39,6 +39,7 @@ import com.jtech.listener.OnLoadListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtech.view.RefreshLayout;
+import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
@@ -168,10 +169,11 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         PhotoModel photoModel = photoAdapter.getItem(position);
-        Bundle bundle = new Bundle();
-        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
-        bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName());
-        bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
+        Bundle bundle = BundleChain.build()
+                .putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId())
+                .putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName())
+                .putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                .toBundle();
         Pair[] pairs = PairChain
                 .build(floatingActionButton, getString(R.string.fab))
                 .addPair(photoAdapter.getParallaxView(recyclerHolder), getString(R.string.image))
@@ -284,8 +286,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     private boolean searchSubmit(String query) {
         if (!TextUtils.isEmpty(query.trim())) {
             //跳转到搜索页
-            Bundle bundle = new Bundle();
-            bundle.putString(SearchActivity.SEARCH_QUERY_KEY, query);
+            Bundle bundle = BundleChain.build()
+                    .putString(SearchActivity.SEARCH_QUERY_KEY, query)
+                    .toBundle();
             Pair[] pairs = PairChain
                     .build(floatingActionButton, getString(R.string.fab))
                     .toArray();

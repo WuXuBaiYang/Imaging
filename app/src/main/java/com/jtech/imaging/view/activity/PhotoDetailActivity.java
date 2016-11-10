@@ -27,6 +27,7 @@ import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.imaging.view.widget.dialog.PhotoDetailSheetDialog;
 import com.jtech.imaging.view.widget.dialog.PhotoExifDialog;
 import com.jtech.imaging.view.widget.dialog.PhotoResolutionDialog;
+import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
@@ -118,7 +119,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     loadingView.hide();
                     //设置图片
                     photoView.setImageBitmap(bitmap);
-                    if (System.currentTimeMillis() - startTimeMillis > getWindow().getTransitionBackgroundFadeDuration()) {
+                    if (System.currentTimeMillis() - startTimeMillis > 500) {
                         photoView.setAlpha(0f);
                         photoView
                                 .animate()
@@ -173,8 +174,9 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
 
     @Override
     public void jumpToWallpaper() {
-        Bundle bundle = new Bundle();
-        bundle.putString(WallpaperActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
+        Bundle bundle = BundleChain.build()
+                .putString(WallpaperActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                .toBundle();
         Pair[] pairs = PairChain
                 .build(floatingActionButton, getString(R.string.fab))
                 .addPair(photoView, getString(R.string.image))

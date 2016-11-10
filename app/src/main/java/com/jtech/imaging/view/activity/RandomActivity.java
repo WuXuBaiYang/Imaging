@@ -73,7 +73,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
             public void run() {
                 floatingActionButton.performClick();
             }
-        }, getWindow().getTransitionBackgroundFadeDuration());
+        }, 500);
     }
 
     @Override
