@@ -1,19 +1,21 @@
 package com.jtech.imaging.model;
 
-import com.jtechlib.model.BaseModel;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * 下载数据对象
  * Created by jianghan on 2016/10/21.
  */
 
-public class DownloadModel extends BaseModel {
+public class DownloadModel extends RealmObject {
+    @PrimaryKey
+    private long id;
     private String name;
     private String path;
     private String md5;
     private long size;
     private String url;
-    private String id;
     private int state;
     private long downloadSize;
 
@@ -57,11 +59,11 @@ public class DownloadModel extends BaseModel {
         this.url = url;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

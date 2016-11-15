@@ -10,6 +10,10 @@ public class Constants {
      */
     public static final String CACHE_NAME = "ImagingCache";
     /**
+     * 数据库名
+     */
+    public static final String DB_NAME = "ImagingDB";
+    /**
      * https
      */
     public static final String HTTPS = "https://";

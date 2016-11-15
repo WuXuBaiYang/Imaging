@@ -256,9 +256,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
                 showImageLoadStrategyDialog();
                 break;
             case R.id.menu_main_download://下载
-//                jumpToDownloadManager();
-                // TODO: 2016/11/1 跳转到下载页面
-                Snackbar.make(content, "comeing soon!", Snackbar.LENGTH_SHORT).show();
+                jumpToDownloadManager();
                 break;
             default:
                 break;
