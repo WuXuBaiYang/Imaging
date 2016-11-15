@@ -12,9 +12,6 @@ public class ScopeModel extends BaseModel {
     private boolean isChecked;
     private boolean cantChange;
 
-    public ScopeModel() {
-    }
-
     public String getScopeValue() {
         return scopeValue;
     }

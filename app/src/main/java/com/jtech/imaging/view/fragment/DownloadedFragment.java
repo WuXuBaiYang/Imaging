@@ -7,13 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.event.DownloadStateEvent;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.fragment.BaseFragment;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 
@@ -65,15 +61,5 @@ public class DownloadedFragment extends BaseFragment {
      */
     public void showPhotoGallery() {
         // TODO: 2016/11/1 已画廊的形式显示图片 
-    }
-
-    /**
-     * 任务下载状态事件
-     *
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void downloadStateEvent(DownloadStateEvent event) {
-        // TODO: 2016/11/1 当有任务下载完成或开始下载，则刷新本页列表
     }
 }

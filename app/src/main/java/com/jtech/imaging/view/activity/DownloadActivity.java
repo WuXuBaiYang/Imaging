@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.DownloadContract;
-import com.jtech.imaging.event.DownloadServeEvent;
 import com.jtech.imaging.presenter.DownloadPresenter;
 import com.jtech.imaging.view.adapter.DownloadPagerAdapter;
 import com.jtech.imaging.view.fragment.DownloadedFragment;
@@ -17,8 +16,6 @@ import com.jtech.imaging.view.fragment.DownloadingFragment;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.fragment.BaseFragment;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.Arrays;
 
@@ -126,7 +123,7 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
                     floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
                 }
                 //发送暂停或者下载的消息(取反操作)
-                EventBus.getDefault().post(new DownloadServeEvent(!isAllDownloading));
+                // TODO: 2016/11/15 发送暂停或下载全部任务的消息
             }
         }
     }

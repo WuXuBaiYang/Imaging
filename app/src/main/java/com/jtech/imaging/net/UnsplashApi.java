@@ -4,7 +4,7 @@ import com.jtech.imaging.model.CollectionsModel;
 import com.jtech.imaging.model.LikePhotoModel;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.PhotoModel;
-import com.jtech.imaging.model.PhotoStats;
+import com.jtech.imaging.model.PhotoStatsModel;
 import com.jtech.imaging.model.SearchCollectionModel;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.model.SearchUserModel;
@@ -196,7 +196,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/photos/{id}/stats")
-    Observable<PhotoStats> photoStats(
+    Observable<PhotoStatsModel> photoStats(
             @Path("id") String id);
 
     /**
@@ -206,7 +206,7 @@ public interface UnsplashApi {
      * @return
      */
     @GET("/photos/{id}/download")
-    Observable<PhotoStats> photoLink(
+    Observable<PhotoStatsModel> photoLink(
             @Path("id") String id);
 
     /**

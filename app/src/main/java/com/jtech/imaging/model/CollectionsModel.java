@@ -28,7 +28,7 @@ public class CollectionsModel extends BaseModel {
     @SerializedName("share_key")
     private String shareKey;
     @SerializedName("cover_photo")
-    private Object coverPhoto;
+    private CoverPhotoModel coverPhoto;
     @SerializedName("user")
     private UserModel user;
     @SerializedName("links")
@@ -106,11 +106,11 @@ public class CollectionsModel extends BaseModel {
         this.shareKey = shareKey;
     }
 
-    public Object getCoverPhoto() {
+    public CoverPhotoModel getCoverPhoto() {
         return coverPhoto;
     }
 
-    public void setCoverPhoto(Object coverPhoto) {
+    public void setCoverPhoto(CoverPhotoModel coverPhoto) {
         this.coverPhoto = coverPhoto;
     }
 
@@ -128,207 +128,5 @@ public class CollectionsModel extends BaseModel {
 
     public void setLinks(LinksModel links) {
         this.links = links;
-    }
-
-    public static class UserModel extends BaseModel {
-        @SerializedName("id")
-        private String id;
-        @SerializedName("username")
-        private String username;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("portfolio_url")
-        private String portfolioUrl;
-        @SerializedName("bio")
-        private String bio;
-        @SerializedName("profile_image")
-        private ProfileImageModel profileImage;
-        @SerializedName("links")
-        private LinksModel links;
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getPortfolioUrl() {
-            return portfolioUrl;
-        }
-
-        public void setPortfolioUrl(String portfolioUrl) {
-            this.portfolioUrl = portfolioUrl;
-        }
-
-        public String getBio() {
-            return bio;
-        }
-
-        public void setBio(String bio) {
-            this.bio = bio;
-        }
-
-        public ProfileImageModel getProfileImage() {
-            return profileImage;
-        }
-
-        public void setProfileImage(ProfileImageModel profileImage) {
-            this.profileImage = profileImage;
-        }
-
-        public LinksModel getLinks() {
-            return links;
-        }
-
-        public void setLinks(LinksModel links) {
-            this.links = links;
-        }
-
-        public static class ProfileImageModel extends BaseModel {
-            @SerializedName("small")
-            private String small;
-            @SerializedName("medium")
-            private String medium;
-            @SerializedName("large")
-            private String large;
-
-            public String getSmall() {
-                return small;
-            }
-
-            public void setSmall(String small) {
-                this.small = small;
-            }
-
-            public String getMedium() {
-                return medium;
-            }
-
-            public void setMedium(String medium) {
-                this.medium = medium;
-            }
-
-            public String getLarge() {
-                return large;
-            }
-
-            public void setLarge(String large) {
-                this.large = large;
-            }
-        }
-
-        public static class LinksModel extends BaseModel {
-            @SerializedName("self")
-            private String self;
-            @SerializedName("html")
-            private String html;
-            @SerializedName("photos")
-            private String photos;
-            @SerializedName("likes")
-            private String likes;
-            @SerializedName("portfolio")
-            private String portfolio;
-
-            public String getSelf() {
-                return self;
-            }
-
-            public void setSelf(String self) {
-                this.self = self;
-            }
-
-            public String getHtml() {
-                return html;
-            }
-
-            public void setHtml(String html) {
-                this.html = html;
-            }
-
-            public String getPhotos() {
-                return photos;
-            }
-
-            public void setPhotos(String photos) {
-                this.photos = photos;
-            }
-
-            public String getLikes() {
-                return likes;
-            }
-
-            public void setLikes(String likes) {
-                this.likes = likes;
-            }
-
-            public String getPortfolio() {
-                return portfolio;
-            }
-
-            public void setPortfolio(String portfolio) {
-                this.portfolio = portfolio;
-            }
-        }
-    }
-
-    public static class LinksModel extends BaseModel{
-        @SerializedName("self")
-        private String self;
-        @SerializedName("html")
-        private String html;
-        @SerializedName("photos")
-        private String photos;
-        @SerializedName("related")
-        private String related;
-
-        public String getSelf() {
-            return self;
-        }
-
-        public void setSelf(String self) {
-            this.self = self;
-        }
-
-        public String getHtml() {
-            return html;
-        }
-
-        public void setHtml(String html) {
-            this.html = html;
-        }
-
-        public String getPhotos() {
-            return photos;
-        }
-
-        public void setPhotos(String photos) {
-            this.photos = photos;
-        }
-
-        public String getRelated() {
-            return related;
-        }
-
-        public void setRelated(String related) {
-            this.related = related;
-        }
     }
 }

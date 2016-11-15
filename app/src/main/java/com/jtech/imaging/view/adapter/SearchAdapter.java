@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.jtech.adapter.BaseJAdapter;
 import com.jtech.imaging.R;
+import com.jtech.imaging.model.ResultsModel;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.view.adapter.viewholder.ParallaxViewHolder;
@@ -20,7 +21,7 @@ import com.yayandroid.parallaxlistview.ParallaxImageView;
  * 图片列表适配器
  * Created by jianghan on 2016/9/8.
  */
-public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, SearchPhotoModel.ResultsModel> {
+public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, ResultsModel> {
 
     private int screenWidth;
     private SearchPhotoModel searchPhotoModel;
@@ -87,7 +88,7 @@ public class SearchAdapter extends BaseJAdapter<ParallaxViewHolder, SearchPhotoM
 
     @Override
     public void convert(ParallaxViewHolder holder, int viewType, int position) {
-        SearchPhotoModel.ResultsModel resultsModel = getItem(position);
+        ResultsModel resultsModel = getItem(position);
         //设置item的高度
         double ratio = (1.0 * screenWidth) / resultsModel.getWidth();
         int itemHeight = (int) (ratio * resultsModel.getHeight());

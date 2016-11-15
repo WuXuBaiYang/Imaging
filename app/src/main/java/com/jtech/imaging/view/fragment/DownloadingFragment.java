@@ -7,14 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.event.DownloadScheduleEvent;
-import com.jtech.imaging.event.DownloadStateEvent;
 import com.jtech.imaging.view.adapter.DownloadingAdapter;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.fragment.BaseFragment;
-
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 
@@ -69,25 +64,5 @@ public class DownloadingFragment extends BaseFragment {
      */
     public boolean isAllDownloading() {
         return true;
-    }
-
-    /**
-     * 任务下载状态事件
-     *
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void downloadStateEvent(DownloadStateEvent event) {
-        // TODO: 2016/11/1 当有任务下载完成，则刷新本页列表
-    }
-
-    /**
-     * 任务下载进度事件
-     *
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void downloadingEvent(DownloadScheduleEvent event) {
-        // TODO: 2016/11/1 任务下载中下载进度方法
     }
 }

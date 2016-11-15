@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 
+import com.jtech.imaging.model.ExifModel;
 import com.jtech.imaging.model.PhotoModel;
 
 /**
@@ -21,7 +22,7 @@ public class PhotoExifDialog {
         //设置标题
         builder.setTitle("Photo Exif");
         //拼接要显示的参数信息
-        PhotoModel.ExifModel exifModel = photoModel.getExif();
+        ExifModel exifModel = photoModel.getExif();
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append("Aperture：" + exifModel.getAperture() + "\n");
         stringBuffer.append("ExposureTime：" + exifModel.getExposureTime() + "\n");

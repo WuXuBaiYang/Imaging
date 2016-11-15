@@ -6,34 +6,35 @@ import com.jtechlib.model.BaseModel;
 import java.util.List;
 
 /**
- * 图片对象
- * Created by jianghan on 2016/8/31.
+ * 封面图片
+ * Created by jianghan on 2016/11/15.
  */
-public class PhotoModel extends BaseModel {
 
+public class CoverPhotoModel extends BaseModel {
+
+    @SerializedName("id")
+    private String id;
     @SerializedName("created_at")
     private String createdAt;
-    @SerializedName("downloads")
-    private int downloads;
-    @SerializedName("exif")
-    private ExifModel exif;
-    @SerializedName("location")
-    private LocationModel location;
-    @SerializedName("user")
-    private UserModel user;
-    @SerializedName("current_user_collections")
-    private List<CollectionsModel> currentUserCollections;
-    @SerializedName("categories")
-    private List<CategoryModel> categories;
-    private String id;
+    @SerializedName("width")
     private int width;
+    @SerializedName("height")
     private int height;
+    @SerializedName("color")
     private String color;
+    @SerializedName("likes")
     private int likes;
     @SerializedName("liked_by_user")
     private boolean likedByUser;
+    @SerializedName("user")
+    private UserModel user;
+    @SerializedName("urls")
     private UrlsModel urls;
+    @SerializedName("links")
     private LinksModel links;
+    @SerializedName("categories")
+    private List<CategoryModel> categories;
+
 
     public String getId() {
         return id;
@@ -75,14 +76,6 @@ public class PhotoModel extends BaseModel {
         this.color = color;
     }
 
-    public int getDownloads() {
-        return downloads;
-    }
-
-    public void setDownloads(int downloads) {
-        this.downloads = downloads;
-    }
-
     public int getLikes() {
         return likes;
     }
@@ -99,20 +92,12 @@ public class PhotoModel extends BaseModel {
         this.likedByUser = likedByUser;
     }
 
-    public ExifModel getExif() {
-        return exif;
+    public UserModel getUser() {
+        return user;
     }
 
-    public void setExif(ExifModel exif) {
-        this.exif = exif;
-    }
-
-    public LocationModel getLocation() {
-        return location;
-    }
-
-    public void setLocation(LocationModel location) {
-        this.location = location;
+    public void setUser(UserModel user) {
+        this.user = user;
     }
 
     public UrlsModel getUrls() {
@@ -129,22 +114,6 @@ public class PhotoModel extends BaseModel {
 
     public void setLinks(LinksModel links) {
         this.links = links;
-    }
-
-    public UserModel getUser() {
-        return user;
-    }
-
-    public void setUser(UserModel user) {
-        this.user = user;
-    }
-
-    public List<CollectionsModel> getCurrentUserCollections() {
-        return currentUserCollections;
-    }
-
-    public void setCurrentUserCollections(List<CollectionsModel> currentUserCollections) {
-        this.currentUserCollections = currentUserCollections;
     }
 
     public List<CategoryModel> getCategories() {

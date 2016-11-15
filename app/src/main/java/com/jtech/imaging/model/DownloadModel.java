@@ -1,6 +1,5 @@
 package com.jtech.imaging.model;
 
-import com.jtech.imaging.event.DownloadScheduleEvent;
 import com.jtechlib.model.BaseModel;
 
 /**
@@ -16,7 +15,7 @@ public class DownloadModel extends BaseModel {
     private String url;
     private String id;
     private int state;
-    private DownloadScheduleEvent.Schedule schedule;
+    private long downloadSize;
 
     public String getName() {
         return name;
@@ -74,11 +73,11 @@ public class DownloadModel extends BaseModel {
         this.state = state;
     }
 
-    public DownloadScheduleEvent.Schedule getSchedule() {
-        return schedule;
+    public long getDownloadSize() {
+        return downloadSize;
     }
 
-    public void setSchedule(DownloadScheduleEvent.Schedule schedule) {
-        this.schedule = schedule;
+    public void setDownloadSize(long downloadSize) {
+        this.downloadSize = downloadSize;
     }
 }

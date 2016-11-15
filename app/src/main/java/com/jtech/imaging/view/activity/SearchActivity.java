@@ -19,6 +19,7 @@ import android.view.View;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.SearchContract;
+import com.jtech.imaging.model.ResultsModel;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.presenter.SearchPresenter;
 import com.jtech.imaging.util.ActivityJump;
@@ -244,7 +245,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     @Override
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         //获得当前的数据对象
-        SearchPhotoModel.ResultsModel resultsModel = searchAdapter.getItem(position);
+        ResultsModel resultsModel = searchAdapter.getItem(position);
         //跳转到详情页
         Bundle bundle = new Bundle();
         bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, resultsModel.getId());

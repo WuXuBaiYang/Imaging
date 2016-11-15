@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 import com.jtech.adapter.RecyclerAdapter;
 import com.jtech.imaging.R;
 import com.jtech.imaging.common.DownloadState;
-import com.jtech.imaging.event.DownloadScheduleEvent;
 import com.jtech.imaging.model.DownloadModel;
 import com.jtech.view.RecyclerHolder;
 
@@ -46,11 +45,8 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
             //设置状态
             progressBar.setIndeterminate(isIndeterminate(state));
             //设置进度
-            DownloadScheduleEvent.Schedule schedule = model.getSchedule();
-            if (null != schedule) {
-                int progress = (int) ((1.0 * schedule.getDownloadSize()) / schedule.getMaxSize() * 100);
-                progressBar.setProgress(progress);
-            }
+            int progress = (int) ((1.0 * model.getDownloadSize()) / model.getSize() * 100);
+            progressBar.setProgress(progress);
         }
     }
 

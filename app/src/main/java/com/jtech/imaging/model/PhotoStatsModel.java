@@ -6,7 +6,7 @@ import com.jtechlib.model.BaseModel;
  * 照片属性
  * Created by jianghan on 2016/8/31.
  */
-public class PhotoStats extends BaseModel {
+public class PhotoStatsModel extends BaseModel {
 
     private int downloads;
     private int likes;
@@ -52,35 +52,5 @@ public class PhotoStats extends BaseModel {
 
     public void setLinks(LinksModel links) {
         this.links = links;
-    }
-
-    public static class LinksModel {
-        private String self;
-        private String html;
-        private String download;
-
-        public String getSelf() {
-            return self;
-        }
-
-        public void setSelf(String self) {
-            this.self = self;
-        }
-
-        public String getHtml() {
-            return html;
-        }
-
-        public void setHtml(String html) {
-            this.html = html;
-        }
-
-        public String getDownload() {
-            return download;
-        }
-
-        public void setDownload(String download) {
-            this.download = download;
-        }
     }
 }
