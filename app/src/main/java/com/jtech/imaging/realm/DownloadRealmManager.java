@@ -51,13 +51,21 @@ public class DownloadRealmManager {
      *
      * @return
      */
-    public List<DownloadModel> getDownloading() {
-        RealmResults<DownloadModel> realmResults = realm
+    public RealmResults<DownloadModel> getDownloading() {
+        return realm
                 .where(DownloadModel.class)
                 .notEqualTo("state", DownloadState.DOWNLOADED)
                 .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
                 .findAll();
-        return toArray(realmResults);
+    }
+
+    /**
+     * 获取集合格式的下载记录
+     *
+     * @return
+     */
+    public List<DownloadModel> getDownloadingAsList() {
+        return toArray(getDownloading());
     }
 
     /**
@@ -65,13 +73,21 @@ public class DownloadRealmManager {
      *
      * @return
      */
-    public List<DownloadModel> getDownloaded() {
-        RealmResults<DownloadModel> realmResults = realm
+    public RealmResults<DownloadModel> getDownloaded() {
+        return realm
                 .where(DownloadModel.class)
                 .equalTo("state", DownloadState.DOWNLOADED)
                 .equalTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
                 .findAll();
-        return toArray(realmResults);
+    }
+
+    /**
+     * 获取集合格式的下载记录
+     *
+     * @return
+     */
+    public List<DownloadModel> getDownloadedAsList() {
+        return toArray(getDownloaded());
     }
 
     /**
