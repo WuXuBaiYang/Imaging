@@ -1,5 +1,7 @@
 package com.jtech.imaging.model;
 
+import com.jtech.imaging.common.DownloadState;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -16,7 +18,7 @@ public class DownloadModel extends RealmObject {
     private String md5;
     private long size;
     private String url;
-    private int state;
+    private int state = DownloadState.DOWNLOAD_STOP;
     private long downloadSize;
 
     public String getName() {

@@ -8,8 +8,6 @@ import com.jtechlib.BaseApplication;
 import com.liulishuo.filedownloader.FileDownloader;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.exceptions.RealmMigrationNeededException;
 
 /**
  * application，继承自JTechLib
@@ -28,26 +26,6 @@ public class JApplication extends BaseApplication {
         Realm.init(getApplicationContext());
         //初始化下载管理
         FileDownloader.init(getApplicationContext());
-    }
-
-    /**
-     * 获取realm对象
-     *
-     * @param realmDbName 数据库名称
-     * @return
-     */
-    public static Realm getRealm(String realmDbName) {
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name(realmDbName).build();
-        try {
-            return Realm.getInstance(realmConfiguration);
-        } catch (RealmMigrationNeededException e) {
-            try {
-                Realm.deleteRealm(realmConfiguration);
-                return Realm.getInstance(realmConfiguration);
-            } catch (Exception ex) {
-                throw ex;
-            }
-        }
     }
 
     /**
