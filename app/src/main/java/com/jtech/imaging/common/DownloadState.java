@@ -10,15 +10,12 @@ public class DownloadState {
     public static final int DOWNLOADING = 0x01;
     /*默认状态*/
     public static final int DOWNLOAD_STOP = 0x02;
+
+
     /*下载完成*/
     public static final int DOWNLOADED = 0x03;
     /*下载完成，文件不在目标位置*/
     public static final int DOWNLOADED_NOT_FOUND = 0x04;
-
-    /*正在停止*/
-    public static final int DOWNLOAD_STOPING = 0x05;
-    /*正在连接*/
-    public static final int DOWNLOAD_CONNECTION = 0x06;
 
 
     /*下载失败,未知原因*/

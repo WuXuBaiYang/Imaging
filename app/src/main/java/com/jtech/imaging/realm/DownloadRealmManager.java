@@ -1,11 +1,11 @@
 package com.jtech.imaging.realm;
 
+import android.util.Log;
+
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.DownloadModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
@@ -33,13 +33,17 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param downloadModel
      */
     public void insertOrUpdateDownload(final DownloadModel downloadModel) {
-        transaction()
-                .subscribe(new Action1<Realm>() {
-                    @Override
-                    public void call(Realm realm) {
-                        realm.insertOrUpdate(downloadModel);
-                    }
-                });
+        rx().subscribe(new Action1<Realm>() {
+            @Override
+            public void call(Realm realm) {
+                realm.insertOrUpdate(downloadModel);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage());
+            }
+        });
     }
 
     /**
@@ -48,90 +52,118 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param id
      * @return
      */
-    public Observable<? extends Boolean> removeDownload(long id) {
-        return removeDownloadRange(id);
+    public void removeDownload(final long id) {
+        rx().subscribe(new Action1<Realm>() {
+            @Override
+            public void call(Realm realm) {
+                realm.where(DownloadModel.class)
+                        .equalTo("id", id)
+                        .findFirst()
+                        .deleteFromRealm();
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage());
+            }
+        });
     }
 
     /**
-     * 批量删除下载记录
+     * 开启下载任务
      *
      * @param id
-     * @return
      */
-    public Observable<? extends Boolean> removeDownloadRange(final long... id) {
-        return transaction()
-                .map(new Func1<Realm, Boolean>() {
-                    @Override
-                    public Boolean call(Realm realm) {
-                        //查出来全部的任务
-                        RealmResults<DownloadModel> realmResults = getRealm()
-                                .where(DownloadModel.class)
-                                .findAll();
-                        //便利并按照条件移除对应的下载记录
-                        boolean flag = false;
-                        for (int i = 0; i < id.length; i++) {
-                            for (int j = 0; j < realmResults.size(); j++) {
-                                if (id[i] == realmResults.get(j).getId()) {
-                                    realmResults.get(j).deleteFromRealm();
-                                    flag = true;
-                                }
-                            }
-                        }
-                        return flag;
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread());
+    public void startDownload(final long id) {
+        rx().subscribe(new Action1<Realm>() {
+            @Override
+            public void call(Realm realm) {
+                realm.where(DownloadModel.class)
+                        .equalTo("id", id)
+                        .findFirst()
+                        .setState(DownloadState.DOWNLOADING);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage());
+            }
+        });
+    }
+
+    /**
+     * 停止一个下载
+     *
+     * @param id
+     */
+    public void stopDownload(final long id) {
+        rx().subscribe(new Action1<Realm>() {
+            @Override
+            public void call(Realm realm) {
+                realm.where(DownloadModel.class)
+                        .equalTo("id", id)
+                        .findFirst()
+                        .setState(DownloadState.DOWNLOAD_STOP);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage());
+            }
+        });
     }
 
     /**
      * 开启全部的下载(暂停和出现错误的任务)
      */
     public void startAllDownload() {
-        transaction()
-                .subscribe(new Action1<Realm>() {
-                    @Override
-                    public void call(Realm realm) {
-                        //获取到暂停以及错误的下载集合
-                        RealmResults<DownloadModel> realmResults = getRealm()
-                                .where(DownloadModel.class)
-                                .equalTo("state", DownloadState.DOWNLOAD_STOP).or()
-                                .equalTo("state", DownloadState.DOWNLOAD_STOPING).or()
-                                .equalTo("state", DownloadState.DOWNLOAD_FAIL_UNKNOWN).or()
-                                .equalTo("state", DownloadState.DOWNLOAD_FAIL_INTENT_ERROR).or()
-                                .equalTo("state", DownloadState.DOWNLOAD_FAIL_INTENT_CHANGE)
-                                .findAll();
-                        //修改状态为连接中
-                        for (int i = 0; i < realmResults.size(); i++) {
-                            realmResults.get(i).setState(DownloadState.DOWNLOAD_CONNECTION);
-                        }
-                        //插入或更新
-                        getRealm().insertOrUpdate(realmResults);
-                    }
-                });
+        rx().subscribe(new Action1<Realm>() {
+            @Override
+            public void call(Realm realm) {
+                //获取到暂停以及错误的下载集合
+                RealmResults<DownloadModel> realmResults = realm
+                        .where(DownloadModel.class)
+                        .equalTo("state", DownloadState.DOWNLOAD_STOP).or()
+                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_UNKNOWN).or()
+                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_INTENT_ERROR).or()
+                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_INTENT_CHANGE)
+                        .findAll();
+                //修改全部任务为连接中状态
+                for (DownloadModel downloadMode : realmResults) {
+                    downloadMode.setState(DownloadState.DOWNLOADING);
+                }
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage());
+            }
+        });
     }
 
     /**
      * 暂停所有下载(下载中和连接中的任务)
      */
     public void stopAllDownload() {
-        transaction()
-                .subscribe(new Action1<Realm>() {
-                    @Override
-                    public void call(Realm realm) {
-                        //获取到下载中,连接中状态的集合
-                        RealmResults<DownloadModel> realmResults = getRealm()
-                                .where(DownloadModel.class)
-                                .equalTo("state", DownloadState.DOWNLOADING).or()
-                                .equalTo("state", DownloadState.DOWNLOAD_CONNECTION)
-                                .findAll();
-                        //修改状态为连接中
-                        for (int i = 0; i < realmResults.size(); i++) {
-                            realmResults.get(i).setState(DownloadState.DOWNLOAD_STOPING);
-                        }
-                        //插入或更新
-                        getRealm().insertOrUpdate(realmResults);
-                    }
-                });
+        rx().subscribe(new Action1<Realm>() {
+            @Override
+            public void call(Realm realm) {
+                //获取到下载中,连接中状态的集合
+                RealmResults<DownloadModel> realmResults = realm
+                        .where(DownloadModel.class)
+                        .equalTo("state", DownloadState.DOWNLOADING)
+                        .findAll();
+                //修改全部任务为暂停中状态
+                for (DownloadModel downloadModel : realmResults) {
+                    downloadModel.setState(DownloadState.DOWNLOAD_STOP);
+                }
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage());
+            }
+        });
     }
 
     /**
@@ -141,21 +173,20 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param progress
      */
     public void updataDownloadingProgress(final long id, final long progress) {
-        transaction()
-                .subscribe(new Action1<Realm>() {
-                    @Override
-                    public void call(Realm realm) {
-                        //根据ID查到对象的下载任务
-                        DownloadModel downloadModel = realm
-                                .where(DownloadModel.class)
-                                .equalTo("id", id)
-                                .findFirst();
-                        //修改下载任务的下载进度
-                        downloadModel.setDownloadSize(progress);
-                        //插入或更新数据库
-                        realm.insertOrUpdate(downloadModel);
-                    }
-                });
+        rx().subscribe(new Action1<Realm>() {
+            @Override
+            public void call(Realm realm) {
+                realm.where(DownloadModel.class)
+                        .equalTo("id", id)
+                        .findFirst()
+                        .setDownloadSize(progress);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage());
+            }
+        });
     }
 
     /**
@@ -165,21 +196,20 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param size
      */
     public void updataDownloadSize(final long id, final long size) {
-        transaction()
-                .subscribe(new Action1<Realm>() {
-                    @Override
-                    public void call(Realm realm) {
-                        //根据ID查到对象的下载任务
-                        DownloadModel downloadModel = realm
-                                .where(DownloadModel.class)
-                                .equalTo("id", id)
-                                .findFirst();
-                        //修改下载任务的总大小
-                        downloadModel.setDownloadSize(size);
-                        //插入或更新数据库
-                        realm.insertOrUpdate(downloadModel);
-                    }
-                });
+        rx().subscribe(new Action1<Realm>() {
+            @Override
+            public void call(Realm realm) {
+                realm.where(DownloadModel.class)
+                        .equalTo("id", id)
+                        .findFirst()
+                        .setDownloadSize(size);
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                Log.e(TAG, throwable.getMessage());
+            }
+        });
     }
 
     /**
@@ -188,19 +218,17 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @return
      */
     public Observable<List<DownloadModel>> getDownloading() {
-        return transaction()
-                .map(new Func1<Realm, List<DownloadModel>>() {
-                    @Override
-                    public List<DownloadModel> call(Realm realm) {
-                        RealmResults<DownloadModel> realmResults = getRealm()
-                                .where(DownloadModel.class)
-                                .notEqualTo("state", DownloadState.DOWNLOADED)
-                                .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
-                                .findAll();
-                        return new ArrayList<>(Arrays.asList(realmResults.toArray(new DownloadModel[]{})));
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread());
+        return rx().map(new Func1<Realm, List<DownloadModel>>() {
+            @Override
+            public List<DownloadModel> call(Realm realm) {
+                RealmResults<DownloadModel> realmResults = realm
+                        .where(DownloadModel.class)
+                        .notEqualTo("state", DownloadState.DOWNLOADED)
+                        .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
+                        .findAllSorted("id");
+                return copyFromRealm(realm, realmResults);
+            }
+        }).observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
@@ -209,18 +237,16 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @return
      */
     public Observable<List<DownloadModel>> getDownloaded() {
-        return transaction()
-                .map(new Func1<Realm, List<DownloadModel>>() {
-                    @Override
-                    public List<DownloadModel> call(Realm realm) {
-                        RealmResults<DownloadModel> realmResults = getRealm()
-                                .where(DownloadModel.class)
-                                .equalTo("state", DownloadState.DOWNLOADED)
-                                .equalTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
-                                .findAll();
-                        return new ArrayList<>(Arrays.asList(realmResults.toArray(new DownloadModel[]{})));
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread());
+        return rx().map(new Func1<Realm, List<DownloadModel>>() {
+            @Override
+            public List<DownloadModel> call(Realm realm) {
+                RealmResults<DownloadModel> realmResults = realm
+                        .where(DownloadModel.class)
+                        .equalTo("state", DownloadState.DOWNLOADED)
+                        .equalTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
+                        .findAllSorted("id");
+                return copyFromRealm(realm, realmResults);
+            }
+        }).observeOn(AndroidSchedulers.mainThread());
     }
 }

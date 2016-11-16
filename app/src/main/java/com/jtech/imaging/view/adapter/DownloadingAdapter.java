@@ -42,8 +42,6 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
         if (isVisibleProgressbar(state)) {
             //获取进度条的对象
             ProgressBar progressBar = holder.getView(R.id.progressbar_downloading_progress);
-            //设置状态
-            progressBar.setIndeterminate(isIndeterminate(state));
             //设置进度
             int progress = (int) ((1.0 * model.getDownloadSize()) / model.getSize() * 100);
             progressBar.setProgress(progress);
@@ -61,10 +59,6 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
             return "downloading";
         } else if (state == DownloadState.DOWNLOAD_STOP) {
             return "stop";
-        } else if (state == DownloadState.DOWNLOAD_STOPING) {
-            return "stoping";
-        } else if (state == DownloadState.DOWNLOAD_CONNECTION) {
-            return "connection";
         } else if (state == DownloadState.DOWNLOAD_FAIL_UNKNOWN) {
             return "unknown";
         } else if (state == DownloadState.DOWNLOAD_FAIL_INTENT_CHANGE) {
@@ -83,7 +77,7 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
      * @return
      */
     private int getStateIcon(int state) {
-        if (state == DownloadState.DOWNLOADING || state == DownloadState.DOWNLOAD_CONNECTION) {
+        if (state == DownloadState.DOWNLOADING) {
             return R.drawable.ic_pause_black_18dp;
         }
         return R.drawable.ic_file_download_black_18dp;
@@ -97,17 +91,6 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
      * @return
      */
     private boolean isVisibleProgressbar(int state) {
-        return state == DownloadState.DOWNLOAD_STOPING || state == DownloadState.DOWNLOAD_CONNECTION || state == DownloadState.DOWNLOADING;
-    }
-
-    /**
-     * 判断当前状态是否显示为不确定状态
-     * (暂停中，连接中)
-     *
-     * @param state
-     * @return
-     */
-    private boolean isIndeterminate(int state) {
-        return state == DownloadState.DOWNLOAD_STOPING || state == DownloadState.DOWNLOAD_CONNECTION;
+        return state == DownloadState.DOWNLOADING;
     }
 }
