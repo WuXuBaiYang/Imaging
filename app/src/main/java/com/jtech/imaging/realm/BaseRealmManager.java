@@ -3,13 +3,10 @@ package com.jtech.imaging.realm;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
+import io.realm.RealmAsyncTask;
 import io.realm.RealmConfiguration;
 import io.realm.RealmModel;
 import io.realm.exceptions.RealmMigrationNeededException;
-import rx.Observable;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
 
 /**
  * realm中间过程基类
@@ -17,30 +14,7 @@ import rx.schedulers.Schedulers;
  */
 
 public abstract class BaseRealmManager {
-    public static final String TAG = "RealmManager";
     private Realm realm;
-
-    /**
-     * 事物执行方法（仅用于执行事务方法）
-     */
-    public Observable<? extends Realm> rx() {
-        return Observable.create(new Observable.OnSubscribe<Realm>() {
-            @Override
-            public void call(final Subscriber<? super Realm> subscriber) {
-                try {
-                    getRealm().executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            subscriber.onNext(realm);
-                        }
-                    });
-                } catch (Throwable e) {
-                    subscriber.onError(e);
-                }
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.io());
-    }
 
     /**
      * 获取数据库名称
@@ -50,15 +24,57 @@ public abstract class BaseRealmManager {
     public abstract String getDBName();
 
     /**
+     * 异步事物执行方法
+     *
+     * @param transaction
+     * @param onSuccess
+     * @param onError
+     * @return
+     */
+    public RealmAsyncTask execute(Realm.Transaction transaction, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
+        return getRealm().executeTransactionAsync(transaction, onSuccess, onError);
+    }
+
+    /**
+     * 异步事物执行方法
+     *
+     * @param transaction
+     * @return
+     */
+    public RealmAsyncTask execute(Realm.Transaction transaction) {
+        return getRealm().executeTransactionAsync(transaction);
+    }
+
+    /**
      * 获取realm对象
      *
      * @return
      */
     public Realm getRealm() {
         if (null == realm || realm.isClosed()) {
-            realm = getRealm(getDBName());
+            realm = getNewRealm(getDBName());
         }
         return realm;
+    }
+
+    /**
+     * 获取realm对象
+     *
+     * @param realmDbName 数据库名称
+     * @return
+     */
+    public Realm getNewRealm(String realmDbName) {
+        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name(realmDbName).build();
+        try {
+            return Realm.getInstance(realmConfiguration);
+        } catch (RealmMigrationNeededException e) {
+            try {
+                Realm.deleteRealm(realmConfiguration);
+                return Realm.getInstance(realmConfiguration);
+            } catch (Exception ex) {
+                throw ex;
+            }
+        }
     }
 
     /**
@@ -80,35 +96,9 @@ public abstract class BaseRealmManager {
      * @return
      */
     public <E extends RealmModel> E copyFromRealm(Realm realm, E realmObject) {
-        return realm.copyFromRealm(realmObject);
-    }
-
-    /**
-     * 数据库变化监听
-     *
-     * @param realmChangeListener
-     */
-    public void addChangeListener(RealmChangeListener<Realm> realmChangeListener) {
-        getRealm(getDBName()).addChangeListener(realmChangeListener);
-    }
-
-    /**
-     * 获取realm对象
-     *
-     * @param realmDbName 数据库名称
-     * @return
-     */
-    public Realm getRealm(String realmDbName) {
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder().name(realmDbName).build();
-        try {
-            return Realm.getInstance(realmConfiguration);
-        } catch (RealmMigrationNeededException e) {
-            try {
-                Realm.deleteRealm(realmConfiguration);
-                return Realm.getInstance(realmConfiguration);
-            } catch (Exception ex) {
-                throw ex;
-            }
+        if (null == realmObject) {
+            return null;
         }
+        return realm.copyFromRealm(realmObject);
     }
 }

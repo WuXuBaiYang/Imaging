@@ -84,4 +84,35 @@ public class DownloadModel extends RealmObject {
     public void setDownloadSize(long downloadSize) {
         this.downloadSize = downloadSize;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DownloadModel that = (DownloadModel) o;
+
+        if (id != that.id) return false;
+        if (size != that.size) return false;
+        if (state != that.state) return false;
+        if (downloadSize != that.downloadSize) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (path != null ? !path.equals(that.path) : that.path != null) return false;
+        if (md5 != null ? !md5.equals(that.md5) : that.md5 != null) return false;
+        return url != null ? url.equals(that.url) : that.url == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (path != null ? path.hashCode() : 0);
+        result = 31 * result + (md5 != null ? md5.hashCode() : 0);
+        result = 31 * result + (int) (size ^ (size >>> 32));
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + state;
+        result = 31 * result + (int) (downloadSize ^ (downloadSize >>> 32));
+        return result;
+    }
 }

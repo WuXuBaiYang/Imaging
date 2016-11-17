@@ -1,19 +1,14 @@
 package com.jtech.imaging.realm;
 
-import android.util.Log;
-
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.DownloadModel;
-
-import java.util.List;
+import com.jtech.imaging.realm.listener.OnDownloadTaskListener;
 
 import io.realm.Realm;
+import io.realm.RealmAsyncTask;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * 下载数据库管理
@@ -32,16 +27,11 @@ public class DownloadRealmManager extends BaseRealmManager {
      *
      * @param downloadModel
      */
-    public void insertOrUpdateDownload(final DownloadModel downloadModel) {
-        rx().subscribe(new Action1<Realm>() {
+    public RealmAsyncTask insertOrUpdateDownload(final DownloadModel downloadModel) {
+        return execute(new Realm.Transaction() {
             @Override
-            public void call(Realm realm) {
+            public void execute(Realm realm) {
                 realm.insertOrUpdate(downloadModel);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
             }
         });
     }
@@ -52,19 +42,14 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param id
      * @return
      */
-    public void removeDownload(final long id) {
-        rx().subscribe(new Action1<Realm>() {
+    public RealmAsyncTask removeDownload(final long id) {
+        return execute(new Realm.Transaction() {
             @Override
-            public void call(Realm realm) {
+            public void execute(Realm realm) {
                 realm.where(DownloadModel.class)
                         .equalTo("id", id)
                         .findFirst()
                         .deleteFromRealm();
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
             }
         });
     }
@@ -74,19 +59,14 @@ public class DownloadRealmManager extends BaseRealmManager {
      *
      * @param id
      */
-    public void startDownload(final long id) {
-        rx().subscribe(new Action1<Realm>() {
+    public RealmAsyncTask startDownload(final long id) {
+        return execute(new Realm.Transaction() {
             @Override
-            public void call(Realm realm) {
+            public void execute(Realm realm) {
                 realm.where(DownloadModel.class)
                         .equalTo("id", id)
                         .findFirst()
                         .setState(DownloadState.DOWNLOADING);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
             }
         });
     }
@@ -96,19 +76,14 @@ public class DownloadRealmManager extends BaseRealmManager {
      *
      * @param id
      */
-    public void stopDownload(final long id) {
-        rx().subscribe(new Action1<Realm>() {
+    public RealmAsyncTask stopDownload(final long id) {
+        return execute(new Realm.Transaction() {
             @Override
-            public void call(Realm realm) {
+            public void execute(Realm realm) {
                 realm.where(DownloadModel.class)
                         .equalTo("id", id)
                         .findFirst()
                         .setState(DownloadState.DOWNLOAD_STOP);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
             }
         });
     }
@@ -116,16 +91,19 @@ public class DownloadRealmManager extends BaseRealmManager {
     /**
      * 开启全部的下载(暂停和出现错误的任务)
      */
-    public void startAllDownload() {
-        rx().subscribe(new Action1<Realm>() {
+    public RealmAsyncTask startAllDownload() {
+        return execute(new Realm.Transaction() {
             @Override
-            public void call(Realm realm) {
+            public void execute(Realm realm) {
                 //获取到暂停以及错误的下载集合
                 RealmResults<DownloadModel> realmResults = realm
                         .where(DownloadModel.class)
-                        .equalTo("state", DownloadState.DOWNLOAD_STOP).or()
-                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_UNKNOWN).or()
-                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_INTENT_ERROR).or()
+                        .equalTo("state", DownloadState.DOWNLOAD_STOP)
+                        .or()
+                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_UNKNOWN)
+                        .or()
+                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_INTENT_ERROR)
+                        .or()
                         .equalTo("state", DownloadState.DOWNLOAD_FAIL_INTENT_CHANGE)
                         .findAll();
                 //修改全部任务为连接中状态
@@ -133,21 +111,16 @@ public class DownloadRealmManager extends BaseRealmManager {
                     downloadMode.setState(DownloadState.DOWNLOADING);
                 }
             }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
-            }
         });
     }
 
     /**
      * 暂停所有下载(下载中和连接中的任务)
      */
-    public void stopAllDownload() {
-        rx().subscribe(new Action1<Realm>() {
+    public RealmAsyncTask stopAllDownload() {
+        return execute(new Realm.Transaction() {
             @Override
-            public void call(Realm realm) {
+            public void execute(Realm realm) {
                 //获取到下载中,连接中状态的集合
                 RealmResults<DownloadModel> realmResults = realm
                         .where(DownloadModel.class)
@@ -158,11 +131,6 @@ public class DownloadRealmManager extends BaseRealmManager {
                     downloadModel.setState(DownloadState.DOWNLOAD_STOP);
                 }
             }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
-            }
         });
     }
 
@@ -172,19 +140,14 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param id
      * @param progress
      */
-    public void updataDownloadingProgress(final long id, final long progress) {
-        rx().subscribe(new Action1<Realm>() {
+    public RealmAsyncTask updataDownloadingProgress(final long id, final long progress) {
+        return execute(new Realm.Transaction() {
             @Override
-            public void call(Realm realm) {
+            public void execute(Realm realm) {
                 realm.where(DownloadModel.class)
                         .equalTo("id", id)
                         .findFirst()
                         .setDownloadSize(progress);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
             }
         });
     }
@@ -195,19 +158,14 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param id
      * @param size
      */
-    public void updataDownloadSize(final long id, final long size) {
-        rx().subscribe(new Action1<Realm>() {
+    public RealmAsyncTask updataDownloadSize(final long id, final long size) {
+        return execute(new Realm.Transaction() {
             @Override
-            public void call(Realm realm) {
+            public void execute(Realm realm) {
                 realm.where(DownloadModel.class)
                         .equalTo("id", id)
                         .findFirst()
                         .setDownloadSize(size);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                Log.e(TAG, throwable.getMessage());
             }
         });
     }
@@ -217,36 +175,43 @@ public class DownloadRealmManager extends BaseRealmManager {
      *
      * @return
      */
-    public Observable<List<DownloadModel>> getDownloading() {
-        return rx().map(new Func1<Realm, List<DownloadModel>>() {
+    public void getDownloading(final OnDownloadTaskListener onDownloadTaskListener) {
+        RealmResults<DownloadModel> realmResults = getRealm()
+                .where(DownloadModel.class)
+                .notEqualTo("state", DownloadState.DOWNLOADED)
+                .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
+                .findAllSortedAsync("id");
+        //监听集合变化，持续回调
+        realmResults.addChangeListener(new RealmChangeListener<RealmResults<DownloadModel>>() {
             @Override
-            public List<DownloadModel> call(Realm realm) {
-                RealmResults<DownloadModel> realmResults = realm
-                        .where(DownloadModel.class)
-                        .notEqualTo("state", DownloadState.DOWNLOADED)
-                        .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
-                        .findAllSorted("id");
-                return copyFromRealm(realm, realmResults);
+            public void onChange(RealmResults<DownloadModel> element) {
+                if (null != onDownloadTaskListener) {
+                    onDownloadTaskListener.downloadTask(copyFromRealm(getRealm(), element));
+                }
             }
-        }).observeOn(AndroidSchedulers.mainThread());
+        });
     }
 
     /**
-     * 获取已下载集合
+     * 获取已下载记录，异步方法
      *
      * @return
      */
-    public Observable<List<DownloadModel>> getDownloaded() {
-        return rx().map(new Func1<Realm, List<DownloadModel>>() {
+    public void getDownloaded(final OnDownloadTaskListener onDownloadTaskListener) {
+        RealmResults<DownloadModel> realmResults = getRealm()
+                .where(DownloadModel.class)
+                .equalTo("state", DownloadState.DOWNLOADED)
+                .or()
+                .equalTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
+                .findAllSorted("id");
+        //监听集合变化，持续回调
+        realmResults.addChangeListener(new RealmChangeListener<RealmResults<DownloadModel>>() {
             @Override
-            public List<DownloadModel> call(Realm realm) {
-                RealmResults<DownloadModel> realmResults = realm
-                        .where(DownloadModel.class)
-                        .equalTo("state", DownloadState.DOWNLOADED)
-                        .equalTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
-                        .findAllSorted("id");
-                return copyFromRealm(realm, realmResults);
+            public void onChange(RealmResults<DownloadModel> element) {
+                if (null != onDownloadTaskListener) {
+                    onDownloadTaskListener.downloadTask(copyFromRealm(getRealm(), element));
+                }
             }
-        }).observeOn(AndroidSchedulers.mainThread());
+        });
     }
 }
