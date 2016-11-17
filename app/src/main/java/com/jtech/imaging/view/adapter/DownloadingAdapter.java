@@ -57,6 +57,8 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
     private String getStateDescribe(int state) {
         if (state == DownloadState.DOWNLOADING) {
             return "downloading";
+        } else if (state == DownloadState.DOWNLOAD_WAITING) {
+            return "waiting";
         } else if (state == DownloadState.DOWNLOAD_STOP) {
             return "stop";
         } else if (state == DownloadState.DOWNLOAD_FAIL_UNKNOWN) {
@@ -77,7 +79,7 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
      * @return
      */
     private int getStateIcon(int state) {
-        if (state == DownloadState.DOWNLOADING) {
+        if (state == DownloadState.DOWNLOADING || state == DownloadState.DOWNLOAD_WAITING) {
             return R.drawable.ic_pause_black_18dp;
         }
         return R.drawable.ic_file_download_black_18dp;

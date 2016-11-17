@@ -7,9 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.contract.DownloadContract;
+import com.jtech.imaging.model.DownloadModel;
+import com.jtech.imaging.presenter.DownloadedPresenter;
+import com.jtech.imaging.util.Tools;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.fragment.BaseFragment;
+
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -18,11 +24,12 @@ import butterknife.Bind;
  * Created by jianghan on 2016/10/31.
  */
 
-public class DownloadedFragment extends BaseFragment {
+public class DownloadedFragment extends BaseFragment implements DownloadContract.DownloadedView {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
 
+    private DownloadContract.DownloadedPresenter presenter;
     private DownloadedAdapter downloadedAdapter;
 
     public static DownloadedFragment newInstance() {
@@ -39,6 +46,8 @@ public class DownloadedFragment extends BaseFragment {
 
     @Override
     protected void initVariables(Bundle bundle) {
+        //实例化P类
+        this.presenter = new DownloadedPresenter(getActivity(), this);
     }
 
     @Override
@@ -53,7 +62,7 @@ public class DownloadedFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
-        // TODO: 2016/11/1 加载本地缓存的已下载的图片列表
+        presenter.getDownloadedTask();
     }
 
     /**
@@ -61,5 +70,12 @@ public class DownloadedFragment extends BaseFragment {
      */
     public void showPhotoGallery() {
         // TODO: 2016/11/1 已画廊的形式显示图片 
+    }
+
+    @Override
+    public void downloadTask(List<DownloadModel> downloadModels) {
+        if (Tools.isDifferent(downloadModels, downloadedAdapter.getRealDatas())) {
+            downloadedAdapter.setDatas(downloadModels);
+        }
     }
 }

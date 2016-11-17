@@ -8,6 +8,8 @@ package com.jtech.imaging.common;
 public class DownloadState {
     /*下载中*/
     public static final int DOWNLOADING = 0x01;
+    /*队列中等待下载*/
+    public static final int DOWNLOAD_WAITING = 0x10;//开启一个下载任务会将任务状态修改为等待，加入下载队列之后，开始下载的任务才会被修改为下载中
     /*默认状态*/
     public static final int DOWNLOAD_STOP = 0x02;
 

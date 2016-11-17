@@ -27,6 +27,7 @@
     <string name="oauth_page_subtitle_login">输入账号并登录</string>
 
     <string name="download_state_downloading">Downloading</string>
+    <string name="download_state_download_waiting">Waiting</string>
     <string name="download_state_downloaded">Downloaded</string>
     <string name="download_state_stop">Stop</string>
     <string name="download_state_not_found">FileNotFound</string>

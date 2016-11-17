@@ -66,7 +66,7 @@ public class DownloadRealmManager extends BaseRealmManager {
                 realm.where(DownloadModel.class)
                         .equalTo("id", id)
                         .findFirst()
-                        .setState(DownloadState.DOWNLOADING);
+                        .setState(DownloadState.DOWNLOAD_WAITING);
             }
         });
     }
@@ -106,9 +106,9 @@ public class DownloadRealmManager extends BaseRealmManager {
                         .or()
                         .equalTo("state", DownloadState.DOWNLOAD_FAIL_INTENT_CHANGE)
                         .findAll();
-                //修改全部任务为连接中状态
+                //修改全部任务为开始状态
                 for (DownloadModel downloadMode : realmResults) {
-                    downloadMode.setState(DownloadState.DOWNLOADING);
+                    downloadMode.setState(DownloadState.DOWNLOAD_WAITING);
                 }
             }
         });
@@ -125,6 +125,8 @@ public class DownloadRealmManager extends BaseRealmManager {
                 RealmResults<DownloadModel> realmResults = realm
                         .where(DownloadModel.class)
                         .equalTo("state", DownloadState.DOWNLOADING)
+                        .or()
+                        .equalTo("state", DownloadState.DOWNLOAD_WAITING)
                         .findAll();
                 //修改全部任务为暂停中状态
                 for (DownloadModel downloadModel : realmResults) {

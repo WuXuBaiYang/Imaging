@@ -7,9 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.contract.DownloadContract;
+import com.jtech.imaging.model.DownloadModel;
+import com.jtech.imaging.presenter.DownloadingPresenter;
+import com.jtech.imaging.util.Tools;
 import com.jtech.imaging.view.adapter.DownloadingAdapter;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.fragment.BaseFragment;
+
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -18,11 +24,12 @@ import butterknife.Bind;
  * Created by jianghan on 2016/10/31.
  */
 
-public class DownloadingFragment extends BaseFragment {
+public class DownloadingFragment extends BaseFragment implements DownloadContract.DownloadingView {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
 
+    private DownloadContract.DownloadingPresenter presenter;
     private DownloadingAdapter downloadingAdapter;
 
     public static DownloadingFragment newInstance() {
@@ -39,7 +46,8 @@ public class DownloadingFragment extends BaseFragment {
 
     @Override
     protected void initVariables(Bundle bundle) {
-
+        //实例化P类
+        this.presenter = new DownloadingPresenter(getActivity(), this);
     }
 
     @Override
@@ -54,7 +62,7 @@ public class DownloadingFragment extends BaseFragment {
 
     @Override
     protected void loadData() {
-        // TODO: 2016/11/1 加载本地记录的下载列表
+        presenter.getDownloadingTask();
     }
 
     /**
@@ -63,6 +71,14 @@ public class DownloadingFragment extends BaseFragment {
      * @return
      */
     public boolean isAllDownloading() {
+        // TODO: 2016/11/17 判断是否已经全部变成正在下载状态
         return true;
+    }
+
+    @Override
+    public void downloadTask(List<DownloadModel> downloadModels) {
+        if (Tools.isDifferent(downloadModels, downloadingAdapter.getRealDatas())) {
+            downloadingAdapter.setDatas(downloadModels);
+        }
     }
 }

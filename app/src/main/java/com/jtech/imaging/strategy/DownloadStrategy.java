@@ -19,6 +19,8 @@ public class DownloadStrategy {
     public static String getDescribeByState(Context context, int state) {
         if (state == DownloadState.DOWNLOADING) {
             return context.getString(R.string.download_state_downloading);
+        } else if (state == DownloadState.DOWNLOAD_WAITING) {
+            return context.getString(R.string.download_state_download_waiting);
         } else if (state == DownloadState.DOWNLOADED) {
             return context.getString(R.string.download_state_downloaded);
         } else if (state == DownloadState.DOWNLOAD_STOP) {
