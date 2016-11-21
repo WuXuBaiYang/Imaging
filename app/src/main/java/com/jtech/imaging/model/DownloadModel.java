@@ -2,6 +2,8 @@ package com.jtech.imaging.model;
 
 import com.jtech.imaging.common.DownloadState;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -10,7 +12,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by jianghan on 2016/10/21.
  */
 
-public class DownloadModel extends RealmObject {
+public class DownloadModel extends RealmObject implements Serializable {
     @PrimaryKey
     private long id;
     private String name;

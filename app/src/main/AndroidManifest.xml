@@ -37,6 +37,10 @@
         <activity
             android:name=".view.activity.RandomActivity"
             android:theme="@style/Theme.AppCompat.Translucent" />
+        //画廊页面
+        <activity
+            android:name=".view.activity.GalleryActivity"
+            android:theme="@style/Theme.AppCompat.Translucent" />
         //网络状态变化广播接收
         <receiver
             android:name=".receiver.ConnectionChangeReceiver"

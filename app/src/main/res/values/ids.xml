@@ -40,4 +40,5 @@
     <item name="textview_downloading_status" type="id"></item>
     <item name="textview_downloading_name" type="id"></item>
     <item name="progressbar_downloading_progress" type="id"></item>
+    <item name="viewpager_gallery" type="id"></item>
 </resources>

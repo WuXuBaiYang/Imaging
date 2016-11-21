@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.text.TextUtils;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.jtech.imaging.R;
@@ -30,6 +32,7 @@ import uk.co.senab.photoview.PhotoView;
 public class WallpaperActivity extends BaseActivity implements WallpaperContract.View {
 
     public static final String IMAGE_URL_KEY = "imageUrlKey";
+    public static final String IMAGE_LOCAL_PATH_KEY = "imageLocalPathKey";
     public static final long IMAGE_ANIMATION_DURATION = 450;
 
     @Bind(R.id.contentloading)
@@ -44,12 +47,15 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
     private WallpaperContract.Presenter presenter;
 
     private String imageUrl;
+    private String imagePath;
     private int screenWidth;
 
     @Override
     protected void initVariables(Bundle bundle) {
         //获取图片url
         this.imageUrl = bundle.getString(IMAGE_URL_KEY);
+        //获取本地图片地址
+        this.imagePath = bundle.getString(IMAGE_LOCAL_PATH_KEY);
         //计算屏幕宽度
         this.screenWidth = DeviceUtils.getScreenWidth(getActivity());
         //实例化P类
@@ -67,47 +73,55 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
 
     @Override
     protected void loadData() {
-        //显示加载动画
-        loadingView.show();
-        //默认加载详情页设置的分辨率
-        final long startTimeMillis = System.currentTimeMillis();
-        //图片请求
-        ImageUtils.requestImage(getActivity(), presenter.getUrl(imageUrl, screenWidth), new Action1<Bitmap>() {
-            @Override
-            public void call(Bitmap bitmap) {
-                if (presenter.isRightBitmap(getActivity(), bitmap)) {
-                    //隐藏加载对象
-                    loadingView.hide();
-                    //设置图片
-                    photoView.setImageBitmap(bitmap);
-                    if (System.currentTimeMillis() - startTimeMillis > 500) {
-                        photoView.setAlpha(0f);
-                        photoView
-                                .animate()
-                                .alpha(1f)
-                                .setDuration(IMAGE_ANIMATION_DURATION)
-                                .setInterpolator(new AccelerateDecelerateInterpolator())
-                                .start();
+        if (!TextUtils.isEmpty(imageUrl)) {
+            //显示加载动画
+            loadingView.show();
+            //默认加载详情页设置的分辨率
+            final long startTimeMillis = System.currentTimeMillis();
+            //图片请求
+            ImageUtils.requestImage(getActivity(), presenter.getUrl(imageUrl, screenWidth), new Action1<Bitmap>() {
+                @Override
+                public void call(Bitmap bitmap) {
+                    if (presenter.isRightBitmap(getActivity(), bitmap)) {
+                        //隐藏加载对象
+                        loadingView.hide();
+                        //设置图片
+                        photoView.setImageBitmap(bitmap);
+                        if (System.currentTimeMillis() - startTimeMillis > 500) {
+                            photoView.setAlpha(0f);
+                            photoView
+                                    .animate()
+                                    .alpha(1f)
+                                    .setDuration(IMAGE_ANIMATION_DURATION)
+                                    .setInterpolator(new AccelerateDecelerateInterpolator())
+                                    .start();
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            // TODO: 2016/11/21 显示本地图片
+        }
     }
 
     /**
      * 设置分辨率选择的tab
      */
     private void setupTab() {
-        //添加tab
-        for (String tabName : getResources().getStringArray(R.array.imageWallpaperResolutiorn)) {
-            tabLayout.addTab(tabLayout.newTab().setText(tabName));
+        if (!TextUtils.isEmpty(imageUrl)) {
+            //添加tab
+            for (String tabName : getResources().getStringArray(R.array.imageWallpaperResolutiorn)) {
+                tabLayout.addTab(tabLayout.newTab().setText(tabName));
+            }
+            //选择默认项
+            tabLayout
+                    .getTabAt(PhotoResolutionStrategy.getSelectStrategyPosition(getActivity()))
+                    .select();
+            //设置tab选择事件
+            tabLayout.addOnTabSelectedListener(new TabSelectedListener());
+        } else {
+            tabLayout.setVisibility(View.INVISIBLE);
         }
-        //选择默认项
-        tabLayout
-                .getTabAt(PhotoResolutionStrategy.getSelectStrategyPosition(getActivity()))
-                .select();
-        //设置tab选择事件
-        tabLayout.addOnTabSelectedListener(new TabSelectedListener());
     }
 
     @Override

@@ -45,6 +45,7 @@ import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.widget.StatusBarCompat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -115,6 +116,18 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         jRecyclerView.addOnScrollListener(new OnScrollListener());
         //设置覆盖层取消事件
         coverView.setOnCoverCancelListener(this);
+
+
+        Intent intent = new Intent(this, GalleryActivity.class);
+        Bundle s = new Bundle();
+        s.putInt(GalleryActivity.GALLERY_INDEX_KEY, 0);
+        ArrayList<String> datas = new ArrayList<>();
+        datas.add("/storage/emulated/0/DCIM/Camera/IMG20161120181236.jpg");
+        datas.add("/storage/emulated/0/DCIM/Camera/IMG20161120182808.jpg");
+        datas.add("/storage/emulated/0/tencent/zebra/cache/IMG20161120181236.jpg");
+        s.putStringArrayList(GalleryActivity.GALLERY_LIST_KEY, datas);
+        intent.putExtras(s);
+        startActivity(intent);
     }
 
     @Override
