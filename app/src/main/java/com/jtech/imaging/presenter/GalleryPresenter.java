@@ -46,9 +46,7 @@ public class GalleryPresenter implements GalleryContract.Presenter {
                     @Override
                     public Bitmap call(Map<String, Object> map) {
                         int targetHeight = (int) map.get("targetHeight");
-                        if (targetHeight > 1080) {
-                            targetHeight = 1080;
-                        }
+                        targetHeight = targetHeight > 1920 ? 1920 : targetHeight;
                         String uri = (String) map.get("uri");
                         if (!TextUtils.isEmpty(uri) && new File(uri).exists()) {
                             BitmapFactory.Options options = new BitmapFactory.Options();

@@ -100,7 +100,15 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
                 }
             });
         } else {
-            // TODO: 2016/11/21 显示本地图片
+            presenter.getImage(imagePath, DeviceUtils.getScreenHeight(getActivity()), new Action1<Bitmap>() {
+                @Override
+                public void call(Bitmap bitmap) {
+                    if (null != bitmap) {
+                        loadingView.hide();
+                        photoView.setImageBitmap(bitmap);
+                    }
+                }
+            });
         }
     }
 

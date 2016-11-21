@@ -4,12 +4,18 @@ import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 
 import com.jtech.imaging.contract.WallpaperContract;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
+import com.jtech.imaging.util.Tools;
 import com.jtechlib.Util.DeviceUtils;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -101,6 +107,44 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
                     @Override
                     public void call(Throwable throwable) {
                         view.setWallpaperFail();
+                    }
+                });
+    }
+
+    @Override
+    public void getImage(String uri, int targetHeight, Action1<Bitmap> action1) {
+        //放入map
+        Map<String, Object> map = new HashMap<>();
+        map.put("targetHeight", targetHeight);
+        map.put("uri", uri);
+        //处理图片
+        Observable
+                .just(map)
+                .subscribeOn(Schedulers.io())
+                .map(new Func1<Map<String, Object>, Bitmap>() {
+                    @Override
+                    public Bitmap call(Map<String, Object> map) {
+                        int targetHeight = (int) map.get("targetHeight");
+                        targetHeight = targetHeight > 1920 ? 1920 : targetHeight;
+                        String uri = (String) map.get("uri");
+                        if (!TextUtils.isEmpty(uri) && new File(uri).exists()) {
+                            BitmapFactory.Options options = new BitmapFactory.Options();
+                            options.inJustDecodeBounds = true;
+                            BitmapFactory.decodeFile(uri, options);
+                            double ratio = (1.0 * targetHeight) / options.outHeight;
+                            int targetWidth = (int) (ratio * options.outWidth);
+                            options.inSampleSize = Tools.computeSampleSize(options, -1, targetWidth * targetHeight);
+                            options.inJustDecodeBounds = false;
+                            return BitmapFactory.decodeFile(uri, options);
+                        }
+                        return null;
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(action1, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
                     }
                 });
     }

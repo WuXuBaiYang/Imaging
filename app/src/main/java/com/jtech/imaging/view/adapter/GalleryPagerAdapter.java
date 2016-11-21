@@ -16,6 +16,7 @@ public class GalleryPagerAdapter extends BasePagerAdapter<PhotoView> {
 
     public GalleryPagerAdapter(List<PhotoView> photoViews) {
         super(photoViews);
+        this.photoViews = photoViews;
     }
 
     public PhotoView getPhotoView(int position) {

@@ -103,7 +103,7 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
             int currentItem = viewPager.getCurrentItem();
             if (currentItem >= 0 && currentItem < galleryPagerAdapter.getCount()) {
                 Bundle bundle = BundleChain.build()
-                        .putString(WallpaperActivity.IMAGE_URL_KEY, imageList.get(currentItem))
+                        .putString(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, imageList.get(currentItem))
                         .toBundle();
                 Pair[] pairs = PairChain
                         .build(floatingActionButton, getString(R.string.fab))

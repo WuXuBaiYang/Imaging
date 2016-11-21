@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 
 import com.jtechlib.contract.BaseContract;
 
+import rx.functions.Action1;
+
 /**
  * 设置壁纸协议
  * Created by jianghan on 2016/10/14.
@@ -21,6 +23,8 @@ public interface WallpaperContract {
         int getSelectWidth(int width);
 
         void setWallpaper(Bitmap bitmap);
+
+        void getImage(String uri, int targetHeight, Action1<Bitmap> action1);
     }
 
     interface View extends BaseContract.View {
