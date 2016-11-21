@@ -35,4 +35,9 @@ public class DownloadedPresenter implements DownloadContract.DownloadedPresenter
             }
         });
     }
+
+    @Override
+    public void removeDownloaded(long id) {
+        downloadRealmManager.removeDownload(id);
+    }
 }

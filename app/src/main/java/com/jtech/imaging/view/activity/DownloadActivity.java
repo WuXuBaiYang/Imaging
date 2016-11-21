@@ -12,8 +12,6 @@ import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.contract.DownloadContract;
 import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.presenter.DownloadPresenter;
-import com.jtech.imaging.realm.DownloadRealmManager;
-import com.jtech.imaging.realm.listener.OnDownloadTaskListener;
 import com.jtech.imaging.view.adapter.DownloadPagerAdapter;
 import com.jtech.imaging.view.fragment.DownloadedFragment;
 import com.jtech.imaging.view.fragment.DownloadingFragment;
@@ -45,7 +43,6 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     @Bind(R.id.viewpager)
     ViewPager viewPager;
 
-    private DownloadRealmManager downloadRealmManager;
     private DownloadingFragment downloadingFragment;
     private DownloadedFragment downloadedFragment;
     private DownloadContract.Presenter presenter;
@@ -54,8 +51,6 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     protected void initVariables(Bundle bundle) {
         //实例化P类
         this.presenter = new DownloadPresenter(getActivity(), this);
-        //实例化下载数据库管理
-        downloadRealmManager = new DownloadRealmManager();
     }
 
     @Override
@@ -79,7 +74,7 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         //将tablayout设置给viewpager
         tabLayout.setupWithViewPager(viewPager);
         //监听下载列表的变化
-        downloadRealmManager.getDownloading(new OnDownloadTask());
+        presenter.listenDownloadingChange();
     }
 
     @Override
@@ -116,6 +111,20 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
 
     }
 
+    @Override
+    public void downloadingList(List<DownloadModel> downloadModels) {
+        if (viewPager.getCurrentItem() == 1) {//下载列表
+            for (DownloadModel downloadModel : downloadModels) {
+                if (downloadModel.getState() != DownloadState.DOWNLOADING) {
+                    //存在至少一个未下载中状态
+                    floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                    return;
+                }
+            }
+            floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);
+        }
+    }
+
     /**
      * fab的点击事件
      */
@@ -124,34 +133,15 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         public void call(Void aVoid) {
             //判断当前的所在页面
             if (viewPager.getCurrentItem() == 0) {//已缓存
-                downloadedFragment.showPhotoGallery();//点击浏览大图
+                downloadedFragment.showPhotoGallery(0);//点击浏览大图
             } else {//缓存中
                 if (downloadingFragment.isAllDownloading()) {//正在下载
                     floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);
-                    downloadRealmManager.stopAllDownload();
+                    presenter.stopAllDownload();
                 } else {
                     floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
-                    downloadRealmManager.startAllDownload();
+                    presenter.startAllDownload();
                 }
-            }
-        }
-    }
-
-    /**
-     * 下载列表数据监听
-     */
-    private class OnDownloadTask implements OnDownloadTaskListener {
-        @Override
-        public void downloadTask(List<DownloadModel> downloadModels) {
-            if (viewPager.getCurrentItem() == 1) {//下载列表
-                for (DownloadModel downloadModel : downloadModels) {
-                    if (downloadModel.getState() != DownloadState.DOWNLOADING) {
-                        //存在至少一个未下载中状态
-                        floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
-                        return;
-                    }
-                }
-                floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);
             }
         }
     }

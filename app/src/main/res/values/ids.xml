@@ -37,6 +37,7 @@
     <item name="close" type="id"></item>
     <item name="viewpager" type="id"></item>
     <item name="imageview_downloading_status" type="id"></item>
+    <item name="imageview_state" type="id"></item>
     <item name="textview_downloading_status" type="id"></item>
     <item name="textview_downloading_name" type="id"></item>
     <item name="progressbar_downloading_progress" type="id"></item>
