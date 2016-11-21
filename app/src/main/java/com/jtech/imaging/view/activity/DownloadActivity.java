@@ -8,8 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.contract.DownloadContract;
+import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.presenter.DownloadPresenter;
+import com.jtech.imaging.realm.DownloadRealmManager;
+import com.jtech.imaging.realm.listener.OnDownloadTaskListener;
 import com.jtech.imaging.view.adapter.DownloadPagerAdapter;
 import com.jtech.imaging.view.fragment.DownloadedFragment;
 import com.jtech.imaging.view.fragment.DownloadingFragment;
@@ -18,6 +22,7 @@ import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.fragment.BaseFragment;
 
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -40,6 +45,7 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     @Bind(R.id.viewpager)
     ViewPager viewPager;
 
+    private DownloadRealmManager downloadRealmManager;
     private DownloadingFragment downloadingFragment;
     private DownloadedFragment downloadedFragment;
     private DownloadContract.Presenter presenter;
@@ -48,6 +54,8 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     protected void initVariables(Bundle bundle) {
         //实例化P类
         this.presenter = new DownloadPresenter(getActivity(), this);
+        //实例化下载数据库管理
+        downloadRealmManager = new DownloadRealmManager();
     }
 
     @Override
@@ -70,6 +78,8 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
         //将tablayout设置给viewpager
         tabLayout.setupWithViewPager(viewPager);
+        //监听下载列表的变化
+        downloadRealmManager.getDownloading(new OnDownloadTask());
     }
 
     @Override
@@ -116,14 +126,32 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
             if (viewPager.getCurrentItem() == 0) {//已缓存
                 downloadedFragment.showPhotoGallery();//点击浏览大图
             } else {//缓存中
-                boolean isAllDownloading = downloadingFragment.isAllDownloading();
-                if (isAllDownloading) {//正在下载
+                if (downloadingFragment.isAllDownloading()) {//正在下载
                     floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);
+                    downloadRealmManager.stopAllDownload();
                 } else {
                     floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                    downloadRealmManager.startAllDownload();
                 }
-                //发送暂停或者下载的消息(取反操作)
-                // TODO: 2016/11/15 发送暂停或下载全部任务的消息
+            }
+        }
+    }
+
+    /**
+     * 下载列表数据监听
+     */
+    private class OnDownloadTask implements OnDownloadTaskListener {
+        @Override
+        public void downloadTask(List<DownloadModel> downloadModels) {
+            if (viewPager.getCurrentItem() == 1) {//下载列表
+                for (DownloadModel downloadModel : downloadModels) {
+                    if (downloadModel.getState() != DownloadState.DOWNLOADING) {
+                        //存在至少一个未下载中状态
+                        floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                        return;
+                    }
+                }
+                floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);
             }
         }
     }
