@@ -126,6 +126,15 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     }
 
     /**
+     * 得到fab对象
+     *
+     * @return
+     */
+    public FloatingActionButton getFab() {
+        return floatingActionButton;
+    }
+
+    /**
      * fab的点击事件
      */
     private class FabClick implements Action1<Void> {
@@ -133,7 +142,7 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         public void call(Void aVoid) {
             //判断当前的所在页面
             if (viewPager.getCurrentItem() == 0) {//已缓存
-                downloadedFragment.showPhotoGallery(0);//点击浏览大图
+                downloadedFragment.showPhotoGallery();//点击浏览大图
             } else {//缓存中
                 if (downloadingFragment.isAllDownloading()) {//正在下载
                     floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);

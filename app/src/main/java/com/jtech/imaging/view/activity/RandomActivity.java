@@ -10,6 +10,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.bumptech.glide.request.target.Target;
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.RandomContract;
 import com.jtech.imaging.model.PhotoModel;
@@ -81,7 +82,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
         this.photoModel = photoModel;
         //显示图片
         String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), photoModel.getUrls().getRaw(), screenWidth);
-        ImageUtils.requestImage(getActivity(), imageUrl, new Action1<Bitmap>() {
+        ImageUtils.requestImage(getActivity(), imageUrl, Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL, new Action1<Bitmap>() {
             @Override
             public void call(Bitmap bitmap) {
                 if (null != bitmap) {

@@ -29,6 +29,8 @@
         <activity android:name=".view.activity.PhotoDetailActivity" />
         //设置壁纸页面
         <activity android:name=".view.activity.WallpaperActivity" />
+        //画廊页面
+        <activity android:name=".view.activity.GalleryActivity" />
         //下载管理页
         <activity
             android:name=".view.activity.DownloadActivity"
@@ -36,10 +38,6 @@
         //随机页面
         <activity
             android:name=".view.activity.RandomActivity"
-            android:theme="@style/Theme.AppCompat.Translucent" />
-        //画廊页面
-        <activity
-            android:name=".view.activity.GalleryActivity"
             android:theme="@style/Theme.AppCompat.Translucent" />
         //网络状态变化广播接收
         <receiver

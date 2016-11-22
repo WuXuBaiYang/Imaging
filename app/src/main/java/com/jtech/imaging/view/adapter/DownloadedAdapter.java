@@ -58,6 +58,16 @@ public class DownloadedAdapter extends RecyclerSwipeAdapter<DownloadModel> {
         recyclerHolder.setImageResource(R.id.imageview_state, R.drawable.ic_delete_sweep_grey_300_36dp);
     }
 
+    /**
+     * 得到图片对象
+     *
+     * @param recyclerHolder
+     * @return
+     */
+    public ImageView getImageView(RecyclerHolder recyclerHolder) {
+        return recyclerHolder.getView(R.id.imageview_photo);
+    }
+
     @Override
     protected View createView(LayoutInflater layoutInflater, ViewGroup viewGroup, int i) {
         return layoutInflater.inflate(R.layout.view_downloaded, viewGroup, false);

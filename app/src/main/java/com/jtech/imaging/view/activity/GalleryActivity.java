@@ -3,7 +3,6 @@ package com.jtech.imaging.view.activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 
@@ -33,8 +32,6 @@ import uk.co.senab.photoview.PhotoView;
 
 public class GalleryActivity extends BaseActivity implements GalleryContract.View {
 
-    public static final String GALLERY_INDEX_KEY = "galleryIndexKey";
-
     @Bind(R.id.viewpager_gallery)
     ViewPager viewPager;
     @Bind(R.id.fab)
@@ -42,15 +39,12 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
 
     private GalleryPagerAdapter galleryPagerAdapter;
     private GalleryContract.Presenter presenter;
-    private int imageIndex;
     private List<DownloadModel> downloadModels;
 
     @Override
     protected void initVariables(Bundle bundle) {
         //实例化P类
         this.presenter = new GalleryPresenter(getActivity(), this);
-        //获取当前点击图片所在位置
-        this.imageIndex = bundle.getInt(GALLERY_INDEX_KEY);
     }
 
     @Override
@@ -63,6 +57,17 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
     @Override
     protected void loadData() {
         presenter.getDownloadedList();
+
+        //假数据
+        List<DownloadModel> downloadModels = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            DownloadModel downloadModel = new DownloadModel();
+            downloadModel.setId(10000);
+            downloadModel.setColor("#607563");
+            downloadModel.setPath("http://h.hiphotos.baidu.com/zhidao/pic/item/6d81800a19d8bc3ed69473cb848ba61ea8d34516.jpg");
+            downloadModels.add(downloadModel);
+        }
+        downloadTaskList(downloadModels);
     }
 
     @Override
@@ -93,18 +98,6 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         galleryPagerAdapter = new GalleryPagerAdapter(photoViews);
         //设置适配器
         viewPager.setAdapter(galleryPagerAdapter);
-        //跳转到指定页面
-        if (-1 != imageIndex) {
-            imageIndex = -1;
-            viewPager.setCurrentItem(imageIndex);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        //动画后关闭activity
-        ActivityCompat.finishAffinity(getActivity());
     }
 
     /**

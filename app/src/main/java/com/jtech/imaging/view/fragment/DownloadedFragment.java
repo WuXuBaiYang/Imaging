@@ -16,7 +16,9 @@ import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.presenter.DownloadedPresenter;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.util.Tools;
+import com.jtech.imaging.view.activity.DownloadActivity;
 import com.jtech.imaging.view.activity.GalleryActivity;
+import com.jtech.imaging.view.activity.WallpaperActivity;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnItemViewSwipeListener;
@@ -24,6 +26,7 @@ import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.DeviceUtils;
+import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.fragment.BaseFragment;
 
 import java.util.ArrayList;
@@ -42,6 +45,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
     JRecyclerView jRecyclerView;
 
     private DownloadContract.DownloadedPresenter presenter;
+    private GridLayoutManager gridLayoutManager;
     private DownloadedAdapter downloadedAdapter;
 
     public static DownloadedFragment newInstance() {
@@ -65,7 +69,8 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
     @Override
     protected void initViews(Bundle bundle) {
         //设置layoutmanager
-        jRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        jRecyclerView.setLayoutManager(gridLayoutManager);
         //实例化适配器
         downloadedAdapter = new DownloadedAdapter(getActivity());
         //设置item的宽高
@@ -98,15 +103,13 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
     /**
      * 显示图片画廊
      */
-    public void showPhotoGallery(int index) {
+    public void showPhotoGallery() {
         if (downloadedAdapter.getItemCount() > 0) {
-            Bundle bundle = BundleChain.build()
-                    .putInt(GalleryActivity.GALLERY_INDEX_KEY, index)
-                    .toBundle();
-            Pair[] pairs = {};
+            Pair[] pairs = PairChain
+                    .build(((DownloadActivity) getActivity()).getFab(), getString(R.string.fab))
+                    .toArray();
             ActivityJump
                     .build(getActivity(), GalleryActivity.class)
-                    .addBundle(bundle)
                     .makeSceneTransitionAnimation(pairs)
                     .jump();
         } else {
@@ -131,7 +134,17 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
     }
 
     @Override
-    public void onItemClick(RecyclerHolder recyclerHolder, View view, int i) {
-        showPhotoGallery(i);
+    public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
+        Bundle bundle = BundleChain.build()
+                .putSerializable(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, downloadedAdapter.getItem(position))
+                .toBundle();
+        Pair[] pairs = PairChain
+                .build(((DownloadActivity) getActivity()).getFab(), getString(R.string.fab))
+                .build(downloadedAdapter.getImageView(recyclerHolder), getString(R.string.image))
+                .toArray();
+        ActivityJump.build(getActivity(), WallpaperActivity.class)
+                .addBundle(bundle)
+                .makeSceneTransitionAnimation(pairs)
+                .jump();
     }
 }
