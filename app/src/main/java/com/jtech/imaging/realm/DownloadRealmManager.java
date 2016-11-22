@@ -48,8 +48,8 @@ public class DownloadRealmManager extends BaseRealmManager {
             public void execute(Realm realm) {
                 realm.where(DownloadModel.class)
                         .equalTo("id", id)
-                        .findFirst()
-                        .deleteFromRealm();
+                        .findAll()
+                        .deleteAllFromRealm();
             }
         });
     }

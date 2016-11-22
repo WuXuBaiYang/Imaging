@@ -18,6 +18,10 @@ public class Tools {
      * @return
      */
     public static boolean isDifferent(Collection<?> var1, Collection<?> var2) {
+        //两个集合不为空
+        if (var1.size() == 0 && var2.size() == 0) {
+            return false;
+        }
         //判断数量是否相同
         if (var1.size() != var2.size()) {
             return true;

@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="margin_default_topbottom">8dp</dimen>
+    <dimen name="margin_default_grid">6dp</dimen>
     <dimen name="margin_default_leftright">16dp</dimen>
     <dimen name="sheet_default_height">48dp</dimen>
     <dimen name="fab_default_margin">16dp</dimen>

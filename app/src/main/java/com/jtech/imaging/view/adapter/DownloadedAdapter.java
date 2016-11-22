@@ -1,9 +1,11 @@
 package com.jtech.imaging.view.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.jtech.adapter.RecyclerSwipeAdapter;
 import com.jtech.imaging.R;
@@ -19,6 +21,7 @@ import com.jtechlib.Util.ImageUtils;
 public class DownloadedAdapter extends RecyclerSwipeAdapter<DownloadModel> {
 
     private int itemSize;
+    private int cellSize;
 
     public DownloadedAdapter(Context context) {
         super(context);
@@ -30,8 +33,9 @@ public class DownloadedAdapter extends RecyclerSwipeAdapter<DownloadModel> {
      * @param screenWidth
      */
     public void setupItemWidth(int screenWidth) {
-        int defaultMargen = getContext().getResources().getDimensionPixelSize(R.dimen.margin_default_leftright);
+        int defaultMargen = getContext().getResources().getDimensionPixelSize(R.dimen.margin_default_grid);
         this.itemSize = (screenWidth - defaultMargen * 4) / 3;
+        this.cellSize = screenWidth / 3;
     }
 
     @Override
@@ -50,6 +54,11 @@ public class DownloadedAdapter extends RecyclerSwipeAdapter<DownloadModel> {
     }
 
     @Override
+    public void onSwipeEnd(RecyclerHolder recyclerHolder, float dx) {
+        recyclerHolder.setImageResource(R.id.imageview_state, R.drawable.ic_delete_sweep_grey_300_36dp);
+    }
+
+    @Override
     protected View createView(LayoutInflater layoutInflater, ViewGroup viewGroup, int i) {
         return layoutInflater.inflate(R.layout.view_downloaded, viewGroup, false);
     }
@@ -57,11 +66,19 @@ public class DownloadedAdapter extends RecyclerSwipeAdapter<DownloadModel> {
     @Override
     protected void convert(RecyclerHolder recyclerHolder, DownloadModel downloadModel, int i) {
         //设置item的宽高
-        ViewGroup.LayoutParams layoutParams = recyclerHolder.itemView.getLayoutParams();
+        ImageView imageView = recyclerHolder.getImageView(R.id.imageview_photo);
+        ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
         layoutParams.width = itemSize;
         layoutParams.height = itemSize;
+        imageView.setLayoutParams(layoutParams);
+        //设置cell的宽高
+        layoutParams = recyclerHolder.itemView.getLayoutParams();
+        layoutParams.width = cellSize;
+        layoutParams.height = cellSize;
         recyclerHolder.itemView.setLayoutParams(layoutParams);
         //设置图片
-        ImageUtils.showImage(getContext(), downloadModel.getPath(), recyclerHolder.getImageView(R.id.imageview_photo));
+        ImageUtils.showImage(getContext(), downloadModel.getPath(), imageView);
+        //设置默认背景颜色
+        imageView.setBackgroundColor(Color.parseColor(downloadModel.getColor()));
     }
 }

@@ -3,7 +3,7 @@ package com.jtech.imaging.view.fragment;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.Pair;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
@@ -65,7 +65,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
     @Override
     protected void initViews(Bundle bundle) {
         //设置layoutmanager
-        jRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        jRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         //实例化适配器
         downloadedAdapter = new DownloadedAdapter(getActivity());
         //设置item的宽高
@@ -75,12 +75,24 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
         //设置item 的点击事件
         jRecyclerView.setOnItemClickListener(this);
         //设置item的滑动删除
-        jRecyclerView.setSwipeStart(true, this);
+        jRecyclerView.setSwipeEnd(true, this);
     }
 
     @Override
     protected void loadData() {
         presenter.getDownloadedTask();
+
+
+        //假数据
+        List<DownloadModel> downloadModels = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            DownloadModel downloadModel = new DownloadModel();
+            downloadModel.setId(10000);
+            downloadModel.setColor("#607563");
+            downloadModel.setPath("http://h.hiphotos.baidu.com/zhidao/pic/item/6d81800a19d8bc3ed69473cb848ba61ea8d34516.jpg");
+            downloadModels.add(downloadModel);
+        }
+        downloadTask(downloadModels);
     }
 
     /**
@@ -118,7 +130,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
     public void onItemViewSwipe(RecyclerView.ViewHolder viewHolder, int i) {
         DownloadModel downloadModel = downloadedAdapter.getItem(viewHolder.getAdapterPosition());
         downloadedAdapter.removeData(viewHolder.getAdapterPosition());
-        if (i == ItemTouchHelper.START) {
+        if (i == ItemTouchHelper.END) {
             presenter.removeDownloaded(downloadModel.getId());
         }
     }

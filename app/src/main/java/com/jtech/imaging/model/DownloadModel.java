@@ -17,6 +17,7 @@ public class DownloadModel extends RealmObject implements Serializable {
     private long id;
     private String name;
     private String path;
+    private String color;
     private String md5;
     private long size;
     private String url;
@@ -87,6 +88,14 @@ public class DownloadModel extends RealmObject implements Serializable {
         this.downloadSize = downloadSize;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,6 +109,7 @@ public class DownloadModel extends RealmObject implements Serializable {
         if (downloadSize != that.downloadSize) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         if (path != null ? !path.equals(that.path) : that.path != null) return false;
+        if (color != null ? !color.equals(that.color) : that.color != null) return false;
         if (md5 != null ? !md5.equals(that.md5) : that.md5 != null) return false;
         return url != null ? url.equals(that.url) : that.url == null;
 
@@ -110,6 +120,7 @@ public class DownloadModel extends RealmObject implements Serializable {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (path != null ? path.hashCode() : 0);
+        result = 31 * result + (color != null ? color.hashCode() : 0);
         result = 31 * result + (md5 != null ? md5.hashCode() : 0);
         result = 31 * result + (int) (size ^ (size >>> 32));
         result = 31 * result + (url != null ? url.hashCode() : 0);

@@ -3,6 +3,7 @@ package com.jtech.imaging.view.activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 
@@ -92,6 +93,13 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         viewPager.setAdapter(galleryPagerAdapter);
         //跳转到指定页面
         viewPager.setCurrentItem(imageIndex);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        //动画后关闭activity
+        ActivityCompat.finishAffinity(getActivity());
     }
 
     /**
