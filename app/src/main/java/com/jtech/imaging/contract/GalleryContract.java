@@ -2,6 +2,10 @@ package com.jtech.imaging.contract;
 
 import android.graphics.Bitmap;
 
+import com.jtech.imaging.model.DownloadModel;
+
+import java.util.List;
+
 import rx.functions.Action1;
 
 /**
@@ -11,10 +15,12 @@ import rx.functions.Action1;
 
 public interface GalleryContract {
     interface Presenter {
-        void getImage(String uri, int targetHeight, Action1<Bitmap> action1);
+        void getImage(DownloadModel downloadModel, int targetWidth, Action1<Bitmap> action1);
+
+        void getDownloadedList();
     }
 
     interface View {
-
+        void downloadTaskList(List<DownloadModel> downloadModels);
     }
 }

@@ -2,21 +2,16 @@ package com.jtech.imaging.presenter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.text.TextUtils;
 
 import com.jtech.imaging.contract.GalleryContract;
-import com.jtech.imaging.util.Tools;
+import com.jtech.imaging.model.DownloadModel;
+import com.jtech.imaging.realm.DownloadRealmManager;
+import com.jtech.imaging.realm.listener.OnDownloadTaskListener;
+import com.jtechlib.Util.ImageUtils;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * 画廊P类
@@ -26,47 +21,33 @@ import rx.schedulers.Schedulers;
 public class GalleryPresenter implements GalleryContract.Presenter {
     private Context context;
     private GalleryContract.View view;
+    private DownloadRealmManager downloadRealmManager;
 
     public GalleryPresenter(Context context, GalleryContract.View view) {
         this.context = context;
         this.view = view;
+        //实例化数据库管理
+        this.downloadRealmManager = new DownloadRealmManager();
     }
 
     @Override
-    public void getImage(String uri, int targetHeight, Action1<Bitmap> action1) {
-        //放入map
-        Map<String, Object> map = new HashMap<>();
-        map.put("targetHeight", targetHeight);
-        map.put("uri", uri);
-        //处理图片
-        Observable
-                .just(map)
-                .subscribeOn(Schedulers.io())
-                .map(new Func1<Map<String, Object>, Bitmap>() {
-                    @Override
-                    public Bitmap call(Map<String, Object> map) {
-                        int targetHeight = (int) map.get("targetHeight");
-                        targetHeight = targetHeight > 1920 ? 1920 : targetHeight;
-                        String uri = (String) map.get("uri");
-                        if (!TextUtils.isEmpty(uri) && new File(uri).exists()) {
-                            BitmapFactory.Options options = new BitmapFactory.Options();
-                            options.inJustDecodeBounds = true;
-                            BitmapFactory.decodeFile(uri, options);
-                            double ratio = (1.0 * targetHeight) / options.outHeight;
-                            int targetWidth = (int) (ratio * options.outWidth);
-                            options.inSampleSize = Tools.computeSampleSize(options, -1, targetWidth * targetHeight);
-                            options.inJustDecodeBounds = false;
-                            return BitmapFactory.decodeFile(uri, options);
-                        }
-                        return null;
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(action1, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
-                });
+    public void getImage(DownloadModel downloadModel, int targetWidth, final Action1<Bitmap> action1) {
+        //限制目标宽度的最大值为1K
+        targetWidth = targetWidth > 1080 ? 1080 : targetWidth;
+        //等比缩放
+        double ratio = (1.0 * targetWidth) / downloadModel.getWidth();
+        int targetHeight = (int) (downloadModel.getHeight() * ratio);
+        //获取目标大小的图片
+        ImageUtils.requestImage(context, downloadModel.getPath(), targetWidth, targetHeight, action1);
+    }
+
+    @Override
+    public void getDownloadedList() {
+        downloadRealmManager.getDownloaded(new OnDownloadTaskListener() {
+            @Override
+            public void downloadTask(List<DownloadModel> downloadModels) {
+                view.downloadTaskList(downloadModels);
+            }
+        });
     }
 }

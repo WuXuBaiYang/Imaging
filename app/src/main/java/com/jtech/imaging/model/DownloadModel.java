@@ -18,11 +18,26 @@ public class DownloadModel extends RealmObject implements Serializable {
     private String name;
     private String path;
     private String color;
+    private int width;
+    private int height;
     private String md5;
     private long size;
     private String url;
     private int state = DownloadState.DOWNLOAD_STOP;
     private long downloadSize;
+
+    public DownloadModel() {
+    }
+
+    public DownloadModel(long id, String name, String color, int width, int height, String md5, String url) {
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.width = width;
+        this.height = height;
+        this.md5 = md5;
+        this.url = url;
+    }
 
     public String getName() {
         return name;
@@ -96,6 +111,22 @@ public class DownloadModel extends RealmObject implements Serializable {
         this.color = color;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,6 +135,8 @@ public class DownloadModel extends RealmObject implements Serializable {
         DownloadModel that = (DownloadModel) o;
 
         if (id != that.id) return false;
+        if (width != that.width) return false;
+        if (height != that.height) return false;
         if (size != that.size) return false;
         if (state != that.state) return false;
         if (downloadSize != that.downloadSize) return false;
@@ -121,6 +154,8 @@ public class DownloadModel extends RealmObject implements Serializable {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (path != null ? path.hashCode() : 0);
         result = 31 * result + (color != null ? color.hashCode() : 0);
+        result = 31 * result + width;
+        result = 31 * result + height;
         result = 31 * result + (md5 != null ? md5.hashCode() : 0);
         result = 31 * result + (int) (size ^ (size >>> 32));
         result = 31 * result + (url != null ? url.hashCode() : 0);

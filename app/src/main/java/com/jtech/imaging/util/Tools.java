@@ -2,6 +2,7 @@ package com.jtech.imaging.util;
 
 import android.graphics.BitmapFactory;
 
+import java.security.MessageDigest;
 import java.util.Collection;
 
 /**
@@ -80,5 +81,31 @@ public class Tools {
         } else {
             return upperBound;
         }
+    }
+
+    /**
+     * MD5
+     *
+     * @param str
+     * @return
+     */
+    public static String md5(String str) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.update(str.getBytes());
+            byte[] b = messageDigest.digest();
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < b.length; i++) {
+                int v = (int) b[i];
+                v = v < 0 ? 0x100 + v : v;
+                String cc = Integer.toHexString(v);
+                if (cc.length() == 1)
+                    sb.append('0');
+                sb.append(cc);
+            }
+            return sb.toString();
+        } catch (Exception e) {
+        }
+        return "";
     }
 }

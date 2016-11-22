@@ -37,6 +37,18 @@ public class DownloadRealmManager extends BaseRealmManager {
     }
 
     /**
+     * 判断是否已存在下载任务
+     *
+     * @param md5
+     * @return
+     */
+    public boolean hasDownloadEvent(String md5) {
+        return null != getRealm().where(DownloadModel.class)
+                .equalTo("md5", md5)
+                .findFirst();
+    }
+
+    /**
      * 移除一条下载记录
      *
      * @param id

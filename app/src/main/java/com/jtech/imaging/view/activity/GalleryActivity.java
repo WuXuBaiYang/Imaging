@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.GalleryContract;
+import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.presenter.GalleryPresenter;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.GalleryPagerAdapter;
@@ -32,7 +33,6 @@ import uk.co.senab.photoview.PhotoView;
 
 public class GalleryActivity extends BaseActivity implements GalleryContract.View {
 
-    public static final String GALLERY_LIST_KEY = "galleryListKey";
     public static final String GALLERY_INDEX_KEY = "galleryIndexKey";
 
     @Bind(R.id.viewpager_gallery)
@@ -42,15 +42,13 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
 
     private GalleryPagerAdapter galleryPagerAdapter;
     private GalleryContract.Presenter presenter;
-    private List<String> imageList;
     private int imageIndex;
+    private List<DownloadModel> downloadModels;
 
     @Override
     protected void initVariables(Bundle bundle) {
         //实例化P类
         this.presenter = new GalleryPresenter(getActivity(), this);
-        //获取图片地址集合
-        this.imageList = bundle.getStringArrayList(GALLERY_LIST_KEY);
         //获取当前点击图片所在位置
         this.imageIndex = bundle.getInt(GALLERY_INDEX_KEY);
     }
@@ -58,26 +56,30 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
     @Override
     protected void initViews(Bundle bundle) {
         setContentView(R.layout.activity_gallery);
-        //设置viewpager
-        setupPager();
         //设置fab的点击事件
         RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
     }
 
     @Override
     protected void loadData() {
+        presenter.getDownloadedList();
+    }
 
+    @Override
+    public void downloadTaskList(List<DownloadModel> downloadModels) {
+        setupPager(downloadModels);
     }
 
     /**
      * 设置viewpager
      */
-    private void setupPager() {
+    private void setupPager(List<DownloadModel> downloadModels) {
+        this.downloadModels = downloadModels;
         //实例化视图
         List<PhotoView> photoViews = new ArrayList<>();
-        for (String imageUri : imageList) {
+        for (DownloadModel downloadModel : downloadModels) {
             final PhotoView photoView = new PhotoView(getActivity());
-            presenter.getImage(imageUri, DeviceUtils.getScreenHeight(getActivity()), new Action1<Bitmap>() {
+            presenter.getImage(downloadModel, DeviceUtils.getScreenHeight(getActivity()), new Action1<Bitmap>() {
                 @Override
                 public void call(Bitmap bitmap) {
                     if (null != bitmap) {
@@ -92,7 +94,10 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         //设置适配器
         viewPager.setAdapter(galleryPagerAdapter);
         //跳转到指定页面
-        viewPager.setCurrentItem(imageIndex);
+        if (-1 != imageIndex) {
+            imageIndex = -1;
+            viewPager.setCurrentItem(imageIndex);
+        }
     }
 
     @Override
@@ -109,9 +114,10 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         @Override
         public void call(Void aVoid) {
             int currentItem = viewPager.getCurrentItem();
-            if (currentItem >= 0 && currentItem < galleryPagerAdapter.getCount()) {
+            if (currentItem >= 0 && currentItem < galleryPagerAdapter.getCount()
+                    && null != downloadModels && currentItem < downloadModels.size()) {
                 Bundle bundle = BundleChain.build()
-                        .putString(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, imageList.get(currentItem))
+                        .putSerializable(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, downloadModels.get(currentItem))
                         .toBundle();
                 Pair[] pairs = PairChain
                         .build(floatingActionButton, getString(R.string.fab))

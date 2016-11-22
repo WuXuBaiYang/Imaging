@@ -100,12 +100,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
      */
     public void showPhotoGallery(int index) {
         if (downloadedAdapter.getItemCount() > 0) {
-            ArrayList<String> imagePaths = new ArrayList<>();
-            for (int i = 0; i < downloadedAdapter.getItemCount(); i++) {
-                imagePaths.add(downloadedAdapter.getItem(i).getPath());
-            }
             Bundle bundle = BundleChain.build()
-                    .putStringArrayList(GalleryActivity.GALLERY_LIST_KEY, imagePaths)
                     .putInt(GalleryActivity.GALLERY_INDEX_KEY, index)
                     .toBundle();
             Pair[] pairs = {};

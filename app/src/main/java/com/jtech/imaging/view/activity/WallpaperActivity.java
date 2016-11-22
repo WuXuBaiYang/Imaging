@@ -11,6 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.contract.WallpaperContract;
+import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.presenter.WallpaperPresenter;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
@@ -44,20 +45,17 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
     @Bind(R.id.tablayout_wallpaper)
     TabLayout tabLayout;
 
-    private WallpaperContract.Presenter presenter;
-
     private String imageUrl;
-    private String imagePath;
-    private int screenWidth;
+    private DownloadModel downloadModel;
+    private WallpaperContract.Presenter presenter;
 
     @Override
     protected void initVariables(Bundle bundle) {
         //获取图片url
         this.imageUrl = bundle.getString(IMAGE_URL_KEY);
         //获取本地图片地址
-        this.imagePath = bundle.getString(IMAGE_LOCAL_PATH_KEY);
-        //计算屏幕宽度
-        this.screenWidth = DeviceUtils.getScreenWidth(getActivity());
+        Object object = bundle.getSerializable(IMAGE_LOCAL_PATH_KEY);
+        this.downloadModel = null != object ? (DownloadModel) object : null;
         //实例化P类
         this.presenter = new WallpaperPresenter(getActivity(), this);
     }
@@ -79,7 +77,7 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
             //默认加载详情页设置的分辨率
             final long startTimeMillis = System.currentTimeMillis();
             //图片请求
-            ImageUtils.requestImage(getActivity(), presenter.getUrl(imageUrl, screenWidth), new Action1<Bitmap>() {
+            ImageUtils.requestImage(getActivity(), presenter.getUrl(imageUrl, DeviceUtils.getScreenWidth(getActivity())), new Action1<Bitmap>() {
                 @Override
                 public void call(Bitmap bitmap) {
                     if (presenter.isRightBitmap(getActivity(), bitmap)) {
@@ -100,7 +98,7 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
                 }
             });
         } else {
-            presenter.getImage(imagePath, DeviceUtils.getScreenHeight(getActivity()), new Action1<Bitmap>() {
+            presenter.getImage(downloadModel, DeviceUtils.getScreenHeight(getActivity()), new Action1<Bitmap>() {
                 @Override
                 public void call(Bitmap bitmap) {
                     if (null != bitmap) {

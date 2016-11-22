@@ -18,10 +18,13 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.cache.PhotoCache;
 import com.jtech.imaging.common.PhotoResolution;
 import com.jtech.imaging.contract.PhotoDetailContract;
+import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.presenter.PhotoDetailPresenter;
+import com.jtech.imaging.realm.DownloadRealmManager;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.util.ActivityJump;
+import com.jtech.imaging.util.Tools;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.imaging.view.widget.dialog.PhotoDetailSheetDialog;
@@ -72,6 +75,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     private PhotoModel photoModel;
 
     private PhotoDetailContract.Presenter presenter;
+    private DownloadRealmManager downloadRealmManager;
 
     @Override
     protected void initVariables(Bundle bundle) {
@@ -210,8 +214,21 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     jumpToWallpaper();
                     break;
                 case 3://下载
-                    // TODO: 2016/11/1 发起下载
-                    Snackbar.make(content, "comeing soon!", Snackbar.LENGTH_SHORT).show();
+                    if (null == downloadRealmManager) {
+                        downloadRealmManager = new DownloadRealmManager();
+                    }
+                    long id = System.currentTimeMillis();
+                    String name = photoModel.getUser().getName();
+                    String color = photoModel.getColor();
+                    int width = photoModel.getWidth();
+                    int height = photoModel.getHeight();
+                    String url = photoModel.getUrls().getRaw();
+                    String md5 = Tools.md5(name + width + height + url);
+                    if (downloadRealmManager.hasDownloadEvent(md5)) {
+                        Snackbar.make(content, "already exists", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+                    downloadRealmManager.insertOrUpdateDownload(new DownloadModel(id, name, color, width, height, md5, url));
                     break;
                 default:
                     break;
