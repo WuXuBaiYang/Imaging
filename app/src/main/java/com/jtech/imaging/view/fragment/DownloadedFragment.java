@@ -1,8 +1,6 @@
 package com.jtech.imaging.view.fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -14,19 +12,13 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.contract.DownloadContract;
 import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.presenter.DownloadedPresenter;
-import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.util.Tools;
-import com.jtech.imaging.view.activity.DownloadActivity;
-import com.jtech.imaging.view.activity.GalleryActivity;
-import com.jtech.imaging.view.activity.WallpaperActivity;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnItemViewSwipeListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
-import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.DeviceUtils;
-import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.fragment.BaseFragment;
 
 import java.util.ArrayList;
@@ -39,12 +31,13 @@ import butterknife.Bind;
  * Created by jianghan on 2016/10/31.
  */
 
-public class DownloadedFragment extends BaseFragment implements DownloadContract.DownloadedView, OnItemViewSwipeListener, OnItemClickListener {
+public class DownloadedFragment extends BaseFragment implements DownloadContract.DownloadedView, OnItemViewSwipeListener {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
 
     private DownloadContract.DownloadedPresenter presenter;
+    private OnItemClickListener onItemClickListener;
     private GridLayoutManager gridLayoutManager;
     private DownloadedAdapter downloadedAdapter;
 
@@ -78,7 +71,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
         //设置适配器
         jRecyclerView.setAdapter(downloadedAdapter);
         //设置item 的点击事件
-        jRecyclerView.setOnItemClickListener(this);
+        jRecyclerView.setOnItemClickListener(onItemClickListener);
         //设置item的滑动删除
         jRecyclerView.setSwipeEnd(true, this);
     }
@@ -101,20 +94,12 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
     }
 
     /**
-     * 显示图片画廊
+     * 是否存在图片
+     *
+     * @return
      */
-    public void showPhotoGallery() {
-        if (downloadedAdapter.getItemCount() > 0) {
-            Pair[] pairs = PairChain
-                    .build(((DownloadActivity) getActivity()).getFab(), getString(R.string.fab))
-                    .toArray();
-            ActivityJump
-                    .build(getActivity(), GalleryActivity.class)
-                    .makeSceneTransitionAnimation(pairs)
-                    .jump();
-        } else {
-            Snackbar.make(getContentView(), "none", Snackbar.LENGTH_SHORT).show();
-        }
+    public boolean hasPhoto() {
+        return null != downloadedAdapter && downloadedAdapter.getItemCount() > 0;
     }
 
     @Override
@@ -133,18 +118,32 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
         }
     }
 
-    @Override
-    public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
-        Bundle bundle = BundleChain.build()
-                .putSerializable(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, downloadedAdapter.getItem(position))
-                .toBundle();
-        Pair[] pairs = PairChain
-                .build(((DownloadActivity) getActivity()).getFab(), getString(R.string.fab))
-                .build(downloadedAdapter.getImageView(recyclerHolder), getString(R.string.image))
-                .toArray();
-        ActivityJump.build(getActivity(), WallpaperActivity.class)
-                .addBundle(bundle)
-                .makeSceneTransitionAnimation(pairs)
-                .jump();
+    /**
+     * 设置item的点击事件
+     *
+     * @param onItemClickListener
+     */
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    /**
+     * 获取item对象
+     *
+     * @param position
+     * @return
+     */
+    public DownloadModel getModel(int position) {
+        return downloadedAdapter.getItem(position);
+    }
+
+    /**
+     * 获取图片视图
+     *
+     * @param recyclerHolder
+     * @return
+     */
+    public View getView(RecyclerHolder recyclerHolder) {
+        return downloadedAdapter.getImageView(recyclerHolder);
     }
 }

@@ -1,8 +1,8 @@
 package com.jtech.imaging.view.activity;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 
@@ -14,7 +14,6 @@ import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.GalleryPagerAdapter;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.Util.BundleChain;
-import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
 
@@ -23,14 +22,13 @@ import java.util.List;
 
 import butterknife.Bind;
 import rx.functions.Action1;
-import uk.co.senab.photoview.PhotoView;
 
 /**
  * 画廊页面
  * Created by jianghan on 2016/11/21.
  */
 
-public class GalleryActivity extends BaseActivity implements GalleryContract.View {
+public class GalleryActivity extends BaseActivity implements GalleryContract.View, GalleryPagerAdapter.OnOutsidePhotoTap {
 
     @Bind(R.id.viewpager_gallery)
     ViewPager viewPager;
@@ -39,7 +37,6 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
 
     private GalleryPagerAdapter galleryPagerAdapter;
     private GalleryContract.Presenter presenter;
-    private List<DownloadModel> downloadModels;
 
     @Override
     protected void initVariables(Bundle bundle) {
@@ -79,25 +76,18 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
      * 设置viewpager
      */
     private void setupPager(List<DownloadModel> downloadModels) {
-        this.downloadModels = downloadModels;
-        //实例化视图
-        List<PhotoView> photoViews = new ArrayList<>();
-        for (DownloadModel downloadModel : downloadModels) {
-            final PhotoView photoView = new PhotoView(getActivity());
-            presenter.getImage(downloadModel, DeviceUtils.getScreenHeight(getActivity()), new Action1<Bitmap>() {
-                @Override
-                public void call(Bitmap bitmap) {
-                    if (null != bitmap) {
-                        photoView.setImageBitmap(bitmap);
-                    }
-                }
-            });
-            photoViews.add(photoView);
-        }
         //实例化pager适配器
-        galleryPagerAdapter = new GalleryPagerAdapter(photoViews);
+        galleryPagerAdapter = new GalleryPagerAdapter(getSupportFragmentManager(), downloadModels);
+        //设置点击事件
+        galleryPagerAdapter.setOnOutsidePhotoTap(this);
         //设置适配器
         viewPager.setAdapter(galleryPagerAdapter);
+    }
+
+    @Override
+    public void outsideTap() {
+        //关闭当前的activity
+        ActivityCompat.finishAfterTransition(getActivity());
     }
 
     /**
@@ -106,21 +96,17 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
     private class FabClick implements Action1<Void> {
         @Override
         public void call(Void aVoid) {
-            int currentItem = viewPager.getCurrentItem();
-            if (currentItem >= 0 && currentItem < galleryPagerAdapter.getCount()
-                    && null != downloadModels && currentItem < downloadModels.size()) {
-                Bundle bundle = BundleChain.build()
-                        .putSerializable(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, downloadModels.get(currentItem))
-                        .toBundle();
-                Pair[] pairs = PairChain
-                        .build(floatingActionButton, getString(R.string.fab))
-                        .addPair(galleryPagerAdapter.getPhotoView(currentItem), getString(R.string.image))
-                        .toArray();
-                ActivityJump.build(getActivity(), WallpaperActivity.class)
-                        .addBundle(bundle)
-                        .makeSceneTransitionAnimation(pairs)
-                        .jump();
-            }
+            Bundle bundle = BundleChain.build()
+                    .putSerializable(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, galleryPagerAdapter.getModel(viewPager.getCurrentItem()))
+                    .toBundle();
+            Pair[] pairs = PairChain
+                    .build(floatingActionButton, getString(R.string.fab))
+                    .addPair(galleryPagerAdapter.getView(viewPager.getCurrentItem()), getString(R.string.image))
+                    .toArray();
+            ActivityJump.build(getActivity(), WallpaperActivity.class)
+                    .addBundle(bundle)
+                    .makeSceneTransitionAnimation(pairs)
+                    .jump();
         }
     }
 }

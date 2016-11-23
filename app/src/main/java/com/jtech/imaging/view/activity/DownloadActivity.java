@@ -1,8 +1,11 @@
 package com.jtech.imaging.view.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -12,10 +15,15 @@ import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.contract.DownloadContract;
 import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.presenter.DownloadPresenter;
+import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.DownloadPagerAdapter;
 import com.jtech.imaging.view.fragment.DownloadedFragment;
 import com.jtech.imaging.view.fragment.DownloadingFragment;
 import com.jtech.imaging.view.widget.RxCompat;
+import com.jtech.listener.OnItemClickListener;
+import com.jtech.view.RecyclerHolder;
+import com.jtechlib.Util.BundleChain;
+import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.fragment.BaseFragment;
 
@@ -30,7 +38,7 @@ import rx.functions.Action1;
  * Created by jianghan on 2016/10/19.
  */
 
-public class DownloadActivity extends BaseActivity implements DownloadContract.View, View.OnClickListener, ViewPager.OnPageChangeListener {
+public class DownloadActivity extends BaseActivity implements DownloadContract.View, View.OnClickListener, ViewPager.OnPageChangeListener, OnItemClickListener {
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -42,6 +50,8 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     TabLayout tabLayout;
     @Bind(R.id.viewpager)
     ViewPager viewPager;
+    @Bind(R.id.content)
+    CoordinatorLayout content;
 
     private DownloadingFragment downloadingFragment;
     private DownloadedFragment downloadedFragment;
@@ -69,6 +79,8 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         viewPager.setAdapter(new DownloadPagerAdapter(getSupportFragmentManager(), Arrays.asList(fragmentList)));
         //设置viewpager的pagechange事件监听
         viewPager.addOnPageChangeListener(this);
+        //设置已下载列表的item点击事件
+        downloadedFragment.setOnItemClickListener(this);
         //设置fab的点击事件
         RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
         //将tablayout设置给viewpager
@@ -125,13 +137,46 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         }
     }
 
+    @Override
+    public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
+        jumpToWallpaper(downloadedFragment.getModel(position), downloadedFragment.getView(recyclerHolder));
+    }
+
     /**
-     * 得到fab对象
-     *
-     * @return
+     * 跳转到画廊页面
      */
-    public FloatingActionButton getFab() {
-        return floatingActionButton;
+    private void jumpToGallery() {
+        if (downloadedFragment.hasPhoto()) {
+            Pair[] pairs = PairChain
+                    .build(floatingActionButton, getString(R.string.fab))
+                    .toArray();
+            ActivityJump
+                    .build(getActivity(), GalleryActivity.class)
+                    .makeSceneTransitionAnimation(pairs)
+                    .jump();
+        } else {
+            Snackbar.make(content, "none", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 跳转到壁纸设置页面
+     *
+     * @param downloadModel
+     * @param view
+     */
+    public void jumpToWallpaper(DownloadModel downloadModel, View view) {
+        Bundle bundle = BundleChain.build()
+                .putSerializable(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, downloadModel)
+                .toBundle();
+        Pair[] pairs = PairChain
+                .build(floatingActionButton, getString(R.string.fab))
+                .addPair(view, getString(R.string.image))
+                .toArray();
+        ActivityJump.build(getActivity(), WallpaperActivity.class)
+                .addBundle(bundle)
+                .makeSceneTransitionAnimation(pairs)
+                .jump();
     }
 
     /**
@@ -142,7 +187,7 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         public void call(Void aVoid) {
             //判断当前的所在页面
             if (viewPager.getCurrentItem() == 0) {//已缓存
-                downloadedFragment.showPhotoGallery();//点击浏览大图
+                jumpToGallery();
             } else {//缓存中
                 if (downloadingFragment.isAllDownloading()) {//正在下载
                     floatingActionButton.setImageResource(R.drawable.ic_stop_white_36dp);
