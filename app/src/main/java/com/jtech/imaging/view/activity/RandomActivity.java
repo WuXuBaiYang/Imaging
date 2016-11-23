@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.util.Pair;
-import android.support.v7.widget.AppCompatImageView;
-import android.view.ViewGroup;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.bumptech.glide.request.target.Target;
@@ -25,44 +25,41 @@ import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
 
 import butterknife.Bind;
-import butterknife.OnClick;
-import butterknife.OnTouch;
 import rx.functions.Action1;
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * 随机页面
  * Created by jianghan on 2016/9/23.
  */
-public class RandomActivity extends BaseActivity implements RandomContract.View {
+public class RandomActivity extends BaseActivity implements RandomContract.View, PhotoViewAttacher.OnPhotoTapListener {
 
     private static final long IMAGE_SHOW_ANIMATION_DURATION = 350;
 
-    @Bind(R.id.imageview_random)
-    AppCompatImageView imageView;
-    @Bind(R.id.fab)
-    FloatingActionButton floatingActionButton;
     @Bind(R.id.content)
     CoordinatorLayout content;
+    @Bind(R.id.fab)
+    FloatingActionButton floatingActionButton;
     @Bind(R.id.contentloading)
     LoadingView loadingView;
+    @Bind(R.id.photoview_random)
+    PhotoView photoView;
 
     private PhotoModel photoModel;
-    private int maxHeight, screenWidth;
     private RandomContract.Presenter presenter;
 
     @Override
     protected void initVariables(Bundle bundle) {
         //绑定P类
         this.presenter = new RandomPresenter(getActivity(), this);
-        //获取屏幕宽度
-        this.screenWidth = DeviceUtils.getScreenWidth(getActivity());
-        //计算最大高度
-        this.maxHeight = screenWidth / 3 * 2;
     }
 
     @Override
     protected void initViews(Bundle bundle) {
         setContentView(R.layout.activity_random);
+        //设置photoview的点击事件
+        photoView.setOnPhotoTapListener(this);
         //设置fab的点击事件
         RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
     }
@@ -78,31 +75,24 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     }
 
     @Override
-    public void success(final PhotoModel photoModel) {
+    public void success(PhotoModel photoModel) {
         this.photoModel = photoModel;
         //显示图片
-        String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), photoModel.getUrls().getRaw(), screenWidth);
+        String imageUrl = PhotoLoadStrategy.getUrl(getActivity(), photoModel.getUrls().getRaw(), DeviceUtils.getScreenWidth(getActivity()));
         ImageUtils.requestImage(getActivity(), imageUrl, Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL, new Action1<Bitmap>() {
             @Override
             public void call(Bitmap bitmap) {
                 if (null != bitmap) {
                     //设置图片
-                    imageView.setImageBitmap(bitmap);
+                    photoView.setImageBitmap(bitmap);
                     //取消加载动画
                     loadingView.hide();
                     //关闭fab动画
                     floatingActionButton.setEnabled(true);
-                    //计算图片高度
-                    int imageHeight = Math.min(photoModel.getHeight(), maxHeight);
-                    //设置图片的高度(最高不超过屏幕高度的三分之二)
-                    ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
-                    layoutParams.width = screenWidth;
-                    layoutParams.height = imageHeight;
-                    imageView.setLayoutParams(layoutParams);
                     //设置图片透明度为0
-                    imageView.setAlpha(0f);
+                    photoView.setAlpha(0f);
                     //显示图片动画
-                    imageView.animate()
+                    photoView.animate()
                             .alphaBy(1f)
                             .setDuration(IMAGE_SHOW_ANIMATION_DURATION)
                             .setInterpolator(new AccelerateDecelerateInterpolator())
@@ -131,29 +121,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    /**
-     * 背景触摸事件
-     *
-     * @return
-     */
-    @OnTouch(R.id.content)
-    boolean onContentTouch() {
-        onBackPressed();
-        return true;
-    }
-
-    /**
-     * 图片点击事件
-     *
-     * @return
-     */
-
-    @OnClick(R.id.imageview_random)
-    void onImageClick() {
+    public void onPhotoTap(View view, float x, float y) {
         if (null != photoModel) {
             Bundle bundle = new Bundle();
             bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
@@ -161,7 +129,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
             bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
             Pair[] pairs = PairChain
                     .build(floatingActionButton, getString(R.string.fab))
-                    .addPair(imageView, getString(R.string.image))
+                    .addPair(photoView, getString(R.string.image))
                     .toArray();
             ActivityJump.build(getActivity(), PhotoDetailActivity.class)
                     .addBundle(bundle)
@@ -170,6 +138,11 @@ public class RandomActivity extends BaseActivity implements RandomContract.View 
         } else {
             Snackbar.make(content, "Please wait the request success", Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onOutsidePhotoTap() {
+        ActivityCompat.finishAfterTransition(getActivity());
     }
 
     /**

@@ -31,6 +31,7 @@
     <item name="photoview_detail" type="id"></item>
     <item name="photoview_wallpaper" type="id"></item>
     <item name="photoview" type="id"></item>
+    <item name="photoview_random" type="id"></item>
     <item name="sheet_photo_detail" type="id"></item>
     <item name="sheet_photo_detail_resolution" type="id"></item>
     <item name="tablayout_wallpaper" type="id"></item>

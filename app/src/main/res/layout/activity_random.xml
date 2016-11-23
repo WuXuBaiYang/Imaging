@@ -4,24 +4,19 @@
     android:id="@id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    android:background="@color/content_half_transparent_black"
-    android:clickable="true">
+    android:background="@color/content_half_transparent_black">
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@id/imageview_random"
+    <uk.co.senab.photoview.PhotoView
+        android:id="@id/photoview_random"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:clickable="true"
-        android:scaleType="centerCrop"
+        android:layout_height="match_parent"
         android:transitionName="@string/image" />
 
     <com.jtech.imaging.view.widget.LoadingView
         android:id="@id/contentloading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_anchor="@id/imageview_random"
+        app:layout_anchor="@id/photoview_random"
         app:layout_anchorGravity="center" />
 
     <android.support.design.widget.FloatingActionButton
