@@ -3,7 +3,6 @@ package com.jtech.imaging.view.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,9 @@ import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.presenter.DownloadedPresenter;
 import com.jtech.imaging.util.Tools;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
+import com.jtech.imaging.view.widget.dialog.DeleteDialog;
 import com.jtech.listener.OnItemClickListener;
+import com.jtech.listener.OnItemLongClickListener;
 import com.jtech.listener.OnItemViewSwipeListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
@@ -31,7 +32,7 @@ import butterknife.Bind;
  * Created by jianghan on 2016/10/31.
  */
 
-public class DownloadedFragment extends BaseFragment implements DownloadContract.DownloadedView, OnItemViewSwipeListener {
+public class DownloadedFragment extends BaseFragment implements DownloadContract.DownloadedView, OnItemViewSwipeListener, OnItemLongClickListener {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
@@ -72,6 +73,8 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
         jRecyclerView.setAdapter(downloadedAdapter);
         //设置item 的点击事件
         jRecyclerView.setOnItemClickListener(onItemClickListener);
+        //设置item的长点击事件
+        jRecyclerView.setOnItemLongClickListener(this);
         //设置item的滑动删除
         jRecyclerView.setSwipeEnd(true, this);
     }
@@ -111,11 +114,18 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
 
     @Override
     public void onItemViewSwipe(RecyclerView.ViewHolder viewHolder, int i) {
-        DownloadModel downloadModel = downloadedAdapter.getItem(viewHolder.getAdapterPosition());
-        downloadedAdapter.removeData(viewHolder.getAdapterPosition());
-        if (i == ItemTouchHelper.END) {
-            presenter.removeDownloaded(downloadModel.getId());
-        }
+        removeDownloaded(downloadedAdapter.getItem(viewHolder.getAdapterPosition()).getId(), viewHolder.getAdapterPosition());
+    }
+
+    /**
+     * 移除数据
+     *
+     * @param id
+     * @param position
+     */
+    private void removeDownloaded(long id, int position) {
+        downloadedAdapter.removeData(position);
+        presenter.removeDownloaded(id);
     }
 
     /**
@@ -125,6 +135,20 @@ public class DownloadedFragment extends BaseFragment implements DownloadContract
      */
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    @Override
+    public boolean onItemLongClick(RecyclerHolder recyclerHolder, View view, final int position) {
+        DeleteDialog
+                .build(getActivity())
+                .setDoneClick(new DeleteDialog.OnDeleteListener() {
+                    @Override
+                    public void delete() {
+                        removeDownloaded(downloadedAdapter.getItem(position).getId(), position);
+                    }
+                })
+                .show();
+        return true;
     }
 
     /**
