@@ -224,11 +224,11 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     int height = photoModel.getHeight();
                     String url = photoModel.getUrls().getRaw();
                     String md5 = Tools.md5(name + width + height + url);
-                    if (downloadRealmManager.hasDownloadEvent(md5)) {
+                    if (downloadRealmManager.hasDownload(md5)) {
                         Snackbar.make(content, "already exists", Snackbar.LENGTH_SHORT).show();
                         return;
                     }
-                    downloadRealmManager.insertOrUpdateDownload(new DownloadModel(id, name, color, width, height, md5, url));
+                    downloadRealmManager.addDownloadAndStart(new DownloadModel(id, name, color, width, height, md5, url));
                     break;
                 default:
                     break;

@@ -23,11 +23,22 @@ public class DownloadRealmManager extends BaseRealmManager {
     }
 
     /**
+     * 添加并开启一个下载任务
+     *
+     * @param downloadModel
+     * @return
+     */
+    public RealmAsyncTask addDownloadAndStart(DownloadModel downloadModel) {
+        downloadModel.setState(DownloadState.DOWNLOADING);
+        return addDownload(downloadModel);
+    }
+
+    /**
      * 添加一条下载记录
      *
      * @param downloadModel
      */
-    public RealmAsyncTask insertOrUpdateDownload(final DownloadModel downloadModel) {
+    public RealmAsyncTask addDownload(final DownloadModel downloadModel) {
         return execute(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -42,7 +53,7 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param md5
      * @return
      */
-    public boolean hasDownloadEvent(String md5) {
+    public boolean hasDownload(String md5) {
         return null != getRealm().where(DownloadModel.class)
                 .equalTo("md5", md5)
                 .findFirst();
