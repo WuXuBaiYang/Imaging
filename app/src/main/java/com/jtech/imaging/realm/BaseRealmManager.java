@@ -89,6 +89,18 @@ public abstract class BaseRealmManager {
     }
 
     /**
+     * 拷贝到数据库
+     *
+     * @param realm
+     * @param realmObjects
+     * @param <E>
+     * @return
+     */
+    public <E extends RealmModel> List<E> copyToRealm(Realm realm, Iterable<E> realmObjects) {
+        return realm.copyToRealm(realmObjects);
+    }
+
+    /**
      * 从realm得到数据对象
      *
      * @param realmObject
@@ -100,5 +112,20 @@ public abstract class BaseRealmManager {
             return null;
         }
         return realm.copyFromRealm(realmObject);
+    }
+
+    /**
+     * 拷贝到数据库
+     *
+     * @param realm
+     * @param realmObject
+     * @param <E>
+     * @return
+     */
+    public <E extends RealmModel> E copyToRealm(Realm realm, E realmObject) {
+        if (null == realmObject) {
+            return null;
+        }
+        return realm.copyToRealm(realmObject);
     }
 }
