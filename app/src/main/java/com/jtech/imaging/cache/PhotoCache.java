@@ -9,7 +9,6 @@ import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.common.PhotoLoad;
 import com.jtech.imaging.common.PhotoResolution;
 import com.jtech.imaging.model.PhotoModel;
-import com.jtech.imaging.net.API;
 import com.jtechlib.cache.ACache;
 import com.jtechlib.cache.BaseCacheManager;
 
@@ -37,9 +36,13 @@ public class PhotoCache extends BaseCacheManager {
     private int photoLoadStrategy;
     //图片清晰度加载策略(图片详情页)
     private int photoResolutionStrategy;
+    //gson
+    private Gson gson;
 
     public PhotoCache(Context context) {
         super(context);
+        //实例化gson
+        this.gson = new Gson();
     }
 
     public static PhotoCache get(Context context) {
@@ -55,7 +58,7 @@ public class PhotoCache extends BaseCacheManager {
      * @return
      */
     public boolean clearWelcomePhoto() {
-        return delete(PHOTO_WELCOME_PAGE);
+        return deleteByKey(PHOTO_WELCOME_PAGE);
     }
 
     /**
@@ -64,7 +67,7 @@ public class PhotoCache extends BaseCacheManager {
      * @return
      */
     public PhotoModel getWelcomePhoto() {
-        return querySerializable(PHOTO_WELCOME_PAGE);
+        return getSerializable(PHOTO_WELCOME_PAGE);
     }
 
     /**
@@ -73,8 +76,8 @@ public class PhotoCache extends BaseCacheManager {
      * @param photoModel
      * @return
      */
-    public boolean setWelcomePhoto(PhotoModel photoModel) {
-        return insert(PHOTO_WELCOME_PAGE, photoModel, ACache.TIME_DAY);
+    public void setWelcomePhoto(PhotoModel photoModel) {
+        put(PHOTO_WELCOME_PAGE, photoModel, ACache.TIME_DAY);
     }
 
     /**
@@ -83,12 +86,8 @@ public class PhotoCache extends BaseCacheManager {
      * @param photoModels
      * @return
      */
-    public boolean setFirstPagePhotos(List<PhotoModel> photoModels) {
-        Gson gson = API.gson;
-        if (null == gson) {
-            gson = new Gson();
-        }
-        return insert(PHOTO_CACHE_FIRSTPAGE, gson.toJson(photoModels), PHOTO_CACHE_TIME);
+    public void setFirstPagePhotos(List<PhotoModel> photoModels) {
+        put(PHOTO_CACHE_FIRSTPAGE, gson.toJson(photoModels), PHOTO_CACHE_TIME);
     }
 
     /**
@@ -97,17 +96,8 @@ public class PhotoCache extends BaseCacheManager {
      * @return
      */
     public List<PhotoModel> getFirstPagePhotos() {
-        Gson gson = API.gson;
-        if (null == gson) {
-            gson = new Gson();
-        }
-        String json = queryString(PHOTO_CACHE_FIRSTPAGE);
-        if (!TextUtils.isEmpty(json)) {
-            return gson
-                    .fromJson(json, new TypeToken<List<PhotoModel>>() {
-                    }.getType());
-        }
-        return null;
+        return getList(PHOTO_CACHE_FIRSTPAGE, new TypeToken<List<PhotoModel>>() {
+        }.getType());
     }
 
     /**
@@ -117,7 +107,7 @@ public class PhotoCache extends BaseCacheManager {
      */
     public int getPhotoLoadStrategy() {
         if (photoLoadStrategy == 0) {
-            this.photoLoadStrategy = queryInt(PHOTO_LOAD_STRATEGY, PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_480);
+            this.photoLoadStrategy = getInt(PHOTO_LOAD_STRATEGY, PhotoLoad.PHOTO_LOAD_STRATEGY_FIXED_480);
         }
         return photoLoadStrategy;
     }
@@ -129,7 +119,7 @@ public class PhotoCache extends BaseCacheManager {
      */
     public void setPhotoLoadStrategy(int strategy) {
         this.photoLoadStrategy = strategy;
-        insertInt(PHOTO_LOAD_STRATEGY, strategy);
+        put(PHOTO_LOAD_STRATEGY, strategy);
     }
 
     /**
@@ -139,7 +129,7 @@ public class PhotoCache extends BaseCacheManager {
      */
     public int getPhotoResolution() {
         if (photoResolutionStrategy == 0) {
-            this.photoResolutionStrategy = queryInt(PHOTO_RESOLUTION_STRATEGY, PhotoResolution.PHOTO_RESOLUTION_480);
+            this.photoResolutionStrategy = getInt(PHOTO_RESOLUTION_STRATEGY, PhotoResolution.PHOTO_RESOLUTION_480);
         }
         return photoResolutionStrategy;
     }
@@ -151,7 +141,7 @@ public class PhotoCache extends BaseCacheManager {
      */
     public void setPhotoResolutionStrategy(int strategy) {
         this.photoResolutionStrategy = strategy;
-        insertInt(PHOTO_RESOLUTION_STRATEGY, strategy);
+        put(PHOTO_RESOLUTION_STRATEGY, strategy);
     }
 
     /**
@@ -164,7 +154,7 @@ public class PhotoCache extends BaseCacheManager {
         if (TextUtils.isEmpty(imageId)) {
             return null;
         }
-        return querySerializable(imageId);
+        return getSerializable(imageId);
     }
 
     /**
@@ -177,7 +167,7 @@ public class PhotoCache extends BaseCacheManager {
         if (TextUtils.isEmpty(imageId) || null == photoModel) {
             return;
         }
-        insertSerializable(imageId, photoModel);
+        put(imageId, photoModel);
     }
 
     @Override

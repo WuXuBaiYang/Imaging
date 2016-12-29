@@ -11,6 +11,8 @@ import com.jtechlib.cache.BaseCacheManager;
  * Created by jianghan on 2016/9/21.
  */
 public class OauthCache extends BaseCacheManager {
+    private static final String CACHE_KEY_OAUTH = "cacheKeyOauth";
+
     private static OauthCache INSTANCE;
 
     private OauthModel oauthModel;
@@ -41,9 +43,9 @@ public class OauthCache extends BaseCacheManager {
      * @param oauthModel
      * @return
      */
-    public boolean setOauthModel(OauthModel oauthModel) {
+    public void setOauthModel(OauthModel oauthModel) {
         this.oauthModel = oauthModel;
-        return insert(OauthModel.class.getSimpleName(), oauthModel);
+        put(CACHE_KEY_OAUTH, oauthModel);
     }
 
     /**
@@ -53,7 +55,7 @@ public class OauthCache extends BaseCacheManager {
      */
     public OauthModel getOauthModel() {
         if (null == oauthModel) {
-            oauthModel = querySerializable(OauthModel.class.getSimpleName());
+            oauthModel = getSerializable(CACHE_KEY_OAUTH);
         }
         return oauthModel;
     }

@@ -1,13 +1,12 @@
 package com.jtech.imaging.cache;
 
 import android.content.Context;
-import android.text.TextUtils;
 
+import com.google.gson.reflect.TypeToken;
 import com.jtech.imaging.common.Constants;
 import com.jtechlib.cache.BaseCacheManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -32,7 +31,11 @@ public class SearchRecordCache extends BaseCacheManager {
      */
     public List<String> getSearchRecords() {
         if (null == searchRecords) {
-            this.searchRecords = convertToList(queryString(SEARCH_RECORD_CACHE_KEY));
+            this.searchRecords = getList(SEARCH_RECORD_CACHE_KEY, new TypeToken<List<String>>() {
+            }.getType());
+            if (null == searchRecords) {
+                this.searchRecords = new ArrayList<>();
+            }
         }
         return searchRecords;
     }
@@ -43,7 +46,11 @@ public class SearchRecordCache extends BaseCacheManager {
      * @return
      */
     public List<String> getCurrentSearchRecords() {
-        this.searchRecords = convertToList(queryString(SEARCH_RECORD_CACHE_KEY));
+        this.searchRecords = getList(SEARCH_RECORD_CACHE_KEY, new TypeToken<List<String>>() {
+        }.getType());
+        if (null == searchRecords) {
+            this.searchRecords = new ArrayList<>();
+        }
         return searchRecords;
     }
 
@@ -85,48 +92,14 @@ public class SearchRecordCache extends BaseCacheManager {
      */
     public void removeAllRecord() {
         this.searchRecords = null;
-        delete(SEARCH_RECORD_CACHE_KEY);
+        deleteByKey(SEARCH_RECORD_CACHE_KEY);
     }
 
     /**
      * 保存搜索记录
      */
     private void saveSearchRecord() {
-        insertString(SEARCH_RECORD_CACHE_KEY, convertToString(getSearchRecords()));
-    }
-
-    /**
-     * 将字符转换为集合
-     *
-     * @param origin
-     * @return
-     */
-    private List<String> convertToList(String origin) {
-        List<String> list = new ArrayList<>();
-        if (!TextUtils.isEmpty(origin)) {
-            list.addAll(Arrays.asList(origin.split("\\|")));
-        }
-        return list;
-    }
-
-    /**
-     * 将集合转换为字符
-     *
-     * @param origin
-     * @return
-     */
-    private String convertToString(List<String> origin) {
-        if (null != origin && origin.size() > 0) {
-            StringBuffer sb = new StringBuffer();
-            for (int i = 0; i < origin.size(); i++) {
-                sb.append(origin.get(i));
-                if (i != origin.size() - 1) {
-                    sb.append("|");
-                }
-            }
-            return sb.toString();
-        }
-        return "";
+        put(SEARCH_RECORD_CACHE_KEY, getSearchRecords());
     }
 
     @Override

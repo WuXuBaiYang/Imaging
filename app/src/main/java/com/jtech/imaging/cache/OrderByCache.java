@@ -38,7 +38,7 @@ public class OrderByCache extends BaseCacheManager {
      */
     public int getOrderByIndex() {
         if (-1 == orderBy) {
-            this.orderBy = queryInt(ORDER_BY_KEY, 0);
+            this.orderBy = getInt(ORDER_BY_KEY, 0);
         }
         return orderBy;
     }
@@ -68,7 +68,7 @@ public class OrderByCache extends BaseCacheManager {
      */
     public void setOrderBy(int orderBy) {
         this.orderBy = orderBy;
-        insertInt(ORDER_BY_KEY, orderBy);
+        put(ORDER_BY_KEY, orderBy);
     }
 
     @Override
