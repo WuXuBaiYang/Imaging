@@ -75,7 +75,7 @@ public class SearchRecordPopup extends BasePopupWindow implements OnItemClickLis
     @Override
     public void recordClose(String keyword) {
         //移除本条记录
-        searchRecordCache.removeSearchRecord(keyword);
+        searchRecordCache.removeRecord(keyword);
         //设置搜索记录
         searchRecordAdapter.setDatas(searchRecordCache.getSearchRecords());
         //判断是否需要关闭popup
@@ -89,7 +89,7 @@ public class SearchRecordPopup extends BasePopupWindow implements OnItemClickLis
      */
     public void showSearchRecord(View view) {
         //设置搜索记录
-        searchRecordAdapter.setDatas(searchRecordCache.getCurrentSearchRecords());
+        searchRecordAdapter.setDatas(searchRecordCache.getSearchRecords());
         //如果无数据则不显示popup
         if (searchRecordAdapter.getItemCount() > 0) {
             showAsDropDown(view);
@@ -102,7 +102,7 @@ public class SearchRecordPopup extends BasePopupWindow implements OnItemClickLis
      * @param keyword
      */
     public void addSearchRecord(String keyword) {
-        searchRecordCache.addSearchRecord(keyword);
+        searchRecordCache.addRecord(keyword);
     }
 
     @Override

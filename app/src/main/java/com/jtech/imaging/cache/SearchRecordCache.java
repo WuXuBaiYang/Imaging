@@ -15,91 +15,66 @@ import java.util.List;
  */
 
 public class SearchRecordCache extends BaseCacheManager {
+    private static final String KEY_SEARCH_RECORD = "SEARCH_RECORD";
 
-    private static final String SEARCH_RECORD_CACHE_KEY = "searchRecordCache";
-
-    private List<String> searchRecords;
+    private List<String> tempSearchRecords;
 
     public SearchRecordCache(Context context) {
         super(context);
     }
 
-    /**
-     * 获取搜索记录
-     *
-     * @return
-     */
     public List<String> getSearchRecords() {
-        if (null == searchRecords) {
-            this.searchRecords = getList(SEARCH_RECORD_CACHE_KEY, new TypeToken<List<String>>() {
+        if (null == tempSearchRecords) {
+            tempSearchRecords = getList(KEY_SEARCH_RECORD, new TypeToken<List<String>>() {
             }.getType());
-            if (null == searchRecords) {
-                this.searchRecords = new ArrayList<>();
-            }
         }
-        return searchRecords;
+        return tempSearchRecords;
     }
 
     /**
-     * 获取最新的缓存数据
+     * 添加一条记录
      *
-     * @return
+     * @param record
      */
-    public List<String> getCurrentSearchRecords() {
-        this.searchRecords = getList(SEARCH_RECORD_CACHE_KEY, new TypeToken<List<String>>() {
-        }.getType());
-        if (null == searchRecords) {
-            this.searchRecords = new ArrayList<>();
+    public void addRecord(String record) {
+        if (null == tempSearchRecords) {
+            tempSearchRecords = new ArrayList<>();
         }
-        return searchRecords;
-    }
-
-    /**
-     * 添加搜索记录(添加到首位)
-     *
-     * @param keyword
-     */
-    public void addSearchRecord(String keyword) {
-        if (getSearchRecords().size() > 0) {
-            getSearchRecords().add(0, keyword);
-        } else {
-            getSearchRecords().add(keyword);
-        }
+        //添加一条记录
+        tempSearchRecords.add(record);
         //保存记录
-        saveSearchRecord();
+        put(KEY_SEARCH_RECORD, tempSearchRecords);
     }
 
     /**
-     * 根据搜索的关键字，移除搜索记录
+     * 移除一条数据
      *
-     * @param keyword
+     * @param record
      */
-    public void removeSearchRecord(String keyword) {
-        for (int i = 0; i < getSearchRecords().size(); i++) {
-            if (keyword.equals(getSearchRecords().get(i))) {
-                //移除对象
-                getSearchRecords().remove(i);
-                //保存记录
-                saveSearchRecord();
-                break;
+    public void removeRecord(String record) {
+        if (null != tempSearchRecords) {
+            for (int i = 0; i < tempSearchRecords.size(); i++) {
+                if (tempSearchRecords.get(i).equals(record)) {
+                    //移除一条数据
+                    tempSearchRecords.remove(i);
+                    //保存记录
+                    put(KEY_SEARCH_RECORD, tempSearchRecords);
+                    break;
+                }
             }
         }
     }
 
-
     /**
-     * 移除全部的记录
+     * 移除全部记录
      */
     public void removeAllRecord() {
-        this.searchRecords = null;
-        deleteByKey(SEARCH_RECORD_CACHE_KEY);
-    }
-
-    /**
-     * 保存搜索记录
-     */
-    private void saveSearchRecord() {
-        put(SEARCH_RECORD_CACHE_KEY, getSearchRecords());
+        if (null != tempSearchRecords) {
+            //清除集合
+            tempSearchRecords.clear();
+            //删除缓存
+            deleteByKey(KEY_SEARCH_RECORD);
+        }
     }
 
     @Override
