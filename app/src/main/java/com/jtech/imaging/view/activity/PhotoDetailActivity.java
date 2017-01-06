@@ -17,9 +17,9 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.PhotoCache;
 import com.jtech.imaging.common.PhotoResolution;
-import com.jtech.imaging.mvp.contract.PhotoDetailContract;
 import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.mvp.contract.PhotoDetailContract;
 import com.jtech.imaging.mvp.presenter.PhotoDetailPresenter;
 import com.jtech.imaging.realm.DownloadRealmManager;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
@@ -72,7 +72,6 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     private PhotoModel photoModel;
 
     private PhotoDetailContract.Presenter presenter;
-    private DownloadRealmManager downloadRealmManager;
 
     @Override
     protected void initVariables(Bundle bundle) {
@@ -209,9 +208,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     jumpToWallpaper();
                     break;
                 case 3://下载
-                    if (null == downloadRealmManager) {
-                        downloadRealmManager = new DownloadRealmManager();
-                    }
+                    DownloadRealmManager downloadRealmManager = new DownloadRealmManager();
                     long id = System.currentTimeMillis();
                     String name = photoModel.getUser().getName();
                     String color = photoModel.getColor();

@@ -18,8 +18,14 @@ import com.jtech.view.RecyclerHolder;
  */
 
 public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
+    private OnDownloadingClickListener onDownloadingClickListener;
+
     public DownloadingAdapter(Context context) {
         super(context);
+    }
+
+    public void setOnDownloadingClickListener(OnDownloadingClickListener onDownloadingClickListener) {
+        this.onDownloadingClickListener = onDownloadingClickListener;
     }
 
     @Override
@@ -28,7 +34,7 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
     }
 
     @Override
-    protected void convert(RecyclerHolder holder, DownloadModel model, int position) {
+    protected void convert(RecyclerHolder holder, final DownloadModel model, int position) {
         //获取任务状态
         int state = model.getState();
         //设置名称
@@ -36,7 +42,7 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
         //设置状态
         holder.setText(R.id.textview_downloading_status, getStateDescribe(state));
         //设置状态图标
-        holder.setImageResource(R.id.imageview_downloading_status, getStateIcon(state));
+        holder.setImageResource(R.id.imagebutton_downloading_status, getStateIcon(state));
         //判断是否需要显示进度条
         holder.setViewVisible(R.id.progressbar_downloading_progress, isVisibleProgressbar(state));
         if (isVisibleProgressbar(state)) {
@@ -46,6 +52,15 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
             int progress = (int) ((1.0 * model.getDownloadSize()) / model.getSize() * 100);
             progressBar.setProgress(progress);
         }
+        //设置状态的点击事件
+        holder.setClickListener(R.id.imagebutton_downloading_status, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (null != onDownloadingClickListener) {
+                    onDownloadingClickListener.onStateClick(model.getId(), model.getState());
+                }
+            }
+        });
     }
 
     /**
@@ -63,9 +78,9 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
             return "stop";
         } else if (state == DownloadState.DOWNLOAD_FAIL_UNKNOWN) {
             return "unknown";
-        } else if (state == DownloadState.DOWNLOAD_FAIL_INTENT_CHANGE) {
+        } else if (state == DownloadState.DOWNLOAD_FAIL_NETWORK_CHANGE) {
             return "intent change";
-        } else if (state == DownloadState.DOWNLOAD_FAIL_INTENT_ERROR) {
+        } else if (state == DownloadState.DOWNLOAD_FAIL_NETWORK_ERROR) {
             return "intent error";
         }
         return "unknown";
@@ -94,5 +109,12 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
      */
     private boolean isVisibleProgressbar(int state) {
         return state == DownloadState.DOWNLOADING;
+    }
+
+    /**
+     * 下载列表的点击事件
+     */
+    public interface OnDownloadingClickListener {
+        void onStateClick(long id, int state);
     }
 }

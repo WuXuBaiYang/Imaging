@@ -40,16 +40,6 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
         return layoutInflater.inflate(R.layout.fragment_photo, viewGroup, false);
     }
 
-    public static PhotoFragment newInstance(String uri, int width, int height) {
-        Bundle args = new Bundle();
-        args.putString(URI_KEY, uri);
-        args.putInt(WIDTH_KEY, width);
-        args.putInt(HEIGHT_KEY, height);
-        PhotoFragment fragment = new PhotoFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     protected void initVariables(Bundle bundle) {
         //获取图片的uri
@@ -71,6 +61,16 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
     @Override
     protected void loadData() {
         presenter.getImage(uri, width, height, DeviceUtils.getScreenWidth(getActivity()));
+    }
+
+    public static PhotoFragment newInstance(String uri, int width, int height) {
+        Bundle args = new Bundle();
+        args.putString(URI_KEY, uri);
+        args.putInt(WIDTH_KEY, width);
+        args.putInt(HEIGHT_KEY, height);
+        PhotoFragment fragment = new PhotoFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override

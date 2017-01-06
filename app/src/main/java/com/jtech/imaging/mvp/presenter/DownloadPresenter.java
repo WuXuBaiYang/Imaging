@@ -3,11 +3,7 @@ package com.jtech.imaging.mvp.presenter;
 import android.content.Context;
 
 import com.jtech.imaging.mvp.contract.DownloadContract;
-import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.realm.DownloadRealmManager;
-import com.jtech.imaging.realm.listener.OnDownloadTaskListener;
-
-import java.util.List;
 
 /**
  * 下载管理，P类
@@ -37,12 +33,12 @@ public class DownloadPresenter implements DownloadContract.Presenter {
     }
 
     @Override
-    public void listenDownloadingChange() {
-        downloadRealmManager.getDownloading(new OnDownloadTaskListener() {
-            @Override
-            public void downloadTask(List<DownloadModel> downloadModels) {
-                view.downloadingList(downloadModels);
-            }
-        });
+    public boolean hasDownloading() {
+        return downloadRealmManager.hasDownloading();
+    }
+
+    @Override
+    public boolean isAllDownloading() {
+        return downloadRealmManager.isAllDownloading();
     }
 }

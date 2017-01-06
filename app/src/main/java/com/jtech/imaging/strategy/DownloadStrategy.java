@@ -29,9 +29,9 @@ public class DownloadStrategy {
             return context.getString(R.string.download_state_not_found);
         } else if (state == DownloadState.DOWNLOAD_FAIL_UNKNOWN) {
             return context.getString(R.string.download_state_fail_unknown);
-        } else if (state == DownloadState.DOWNLOAD_FAIL_INTENT_CHANGE) {
+        } else if (state == DownloadState.DOWNLOAD_FAIL_NETWORK_CHANGE) {
             return context.getString(R.string.download_state_fail_intent_change);
-        } else if (state == DownloadState.DOWNLOAD_FAIL_INTENT_ERROR) {
+        } else if (state == DownloadState.DOWNLOAD_FAIL_NETWORK_ERROR) {
             return context.getString(R.string.download_state_fail_intent_error);
         }
         return "";

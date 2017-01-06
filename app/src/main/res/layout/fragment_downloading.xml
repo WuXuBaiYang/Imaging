@@ -6,9 +6,5 @@
     <com.jtech.view.JRecyclerView
         android:id="@id/jrecyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/margin_default_topbottom"
-        android:layout_marginLeft="@dimen/margin_default_leftright"
-        android:layout_marginRight="@dimen/margin_default_leftright"
-        android:layout_marginTop="@dimen/margin_default_topbottom" />
+        android:layout_height="match_parent" />
 </FrameLayout>

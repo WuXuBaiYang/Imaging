@@ -38,7 +38,7 @@
     <item name="tablayout_download" type="id"></item>
     <item name="close" type="id"></item>
     <item name="viewpager" type="id"></item>
-    <item name="imageview_downloading_status" type="id"></item>
+    <item name="imagebutton_downloading_status" type="id"></item>
     <item name="imageview_state" type="id"></item>
     <item name="textview_downloading_status" type="id"></item>
     <item name="textview_downloading_name" type="id"></item>

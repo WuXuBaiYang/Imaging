@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.mvp.contract.DownloadContract;
 import com.jtech.imaging.model.DownloadModel;
+import com.jtech.imaging.mvp.contract.DownloadingContract;
 import com.jtech.imaging.mvp.presenter.DownloadingPresenter;
-import com.jtech.imaging.util.Tools;
 import com.jtech.imaging.view.adapter.DownloadingAdapter;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.view.fragment.BaseFragment;
@@ -24,20 +23,13 @@ import butterknife.Bind;
  * Created by jianghan on 2016/10/31.
  */
 
-public class DownloadingFragment extends BaseFragment implements DownloadContract.DownloadingView {
+public class DownloadingFragment extends BaseFragment implements DownloadingContract.View, DownloadingAdapter.OnDownloadingClickListener {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
 
-    private DownloadContract.DownloadingPresenter presenter;
     private DownloadingAdapter downloadingAdapter;
-
-    public static DownloadingFragment newInstance() {
-        Bundle args = new Bundle();
-        DownloadingFragment fragment = new DownloadingFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private DownloadingContract.Presenter presenter;
 
     @Override
     public View createView(LayoutInflater layoutInflater, ViewGroup viewGroup) {
@@ -58,27 +50,29 @@ public class DownloadingFragment extends BaseFragment implements DownloadContrac
         downloadingAdapter = new DownloadingAdapter(getActivity());
         //设置适配器
         jRecyclerView.setAdapter(downloadingAdapter);
+        //设置下载列表点击事件
+        downloadingAdapter.setOnDownloadingClickListener(this);
     }
 
     @Override
     protected void loadData() {
-        presenter.getDownloadingTask();
+        presenter.getDownloadingList();
     }
 
-    /**
-     * 判断是否全部正在下载的状态
-     *
-     * @return
-     */
-    public boolean isAllDownloading() {
-        // TODO: 2016/11/17 判断是否已经全部变成正在下载状态
-        return true;
+    public static DownloadingFragment newInstance() {
+        Bundle args = new Bundle();
+        DownloadingFragment fragment = new DownloadingFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
-    public void downloadTask(List<DownloadModel> downloadModels) {
-        if (Tools.isDifferent(downloadModels, downloadingAdapter.getRealDatas())) {
-            downloadingAdapter.setDatas(downloadModels);
-        }
+    public void downloadingList(List<DownloadModel> downloadModels) {
+        downloadingAdapter.setDatas(downloadModels);
+    }
+
+    @Override
+    public void onStateClick(long id, int state) {
+        // TODO: 2017/1/6 下载状态点击事件
     }
 }

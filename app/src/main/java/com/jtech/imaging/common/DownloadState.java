@@ -23,7 +23,7 @@ public class DownloadState {
     /*下载失败,未知原因*/
     public static final int DOWNLOAD_FAIL_UNKNOWN = 0x07;
     /*下载失败，网络状态变化*/
-    public static final int DOWNLOAD_FAIL_INTENT_CHANGE = 0x08;
+    public static final int DOWNLOAD_FAIL_NETWORK_CHANGE = 0x08;
     /*下载失败，网络错误*/
-    public static final int DOWNLOAD_FAIL_INTENT_ERROR = 0x09;
+    public static final int DOWNLOAD_FAIL_NETWORK_ERROR = 0x09;
 }
