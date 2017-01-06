@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.contract.DownloadContract;
+import com.jtech.imaging.mvp.contract.DownloadContract;
 import com.jtech.imaging.model.DownloadModel;
-import com.jtech.imaging.presenter.DownloadedPresenter;
+import com.jtech.imaging.mvp.presenter.DownloadedPresenter;
 import com.jtech.imaging.util.Tools;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.imaging.view.widget.dialog.DeleteDialog;

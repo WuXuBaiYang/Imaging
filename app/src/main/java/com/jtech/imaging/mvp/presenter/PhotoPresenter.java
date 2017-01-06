@@ -1,9 +1,9 @@
-package com.jtech.imaging.presenter;
+package com.jtech.imaging.mvp.presenter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.jtech.imaging.contract.PhotoContract;
+import com.jtech.imaging.mvp.contract.PhotoContract;
 import com.jtechlib.Util.ImageUtils;
 
 import rx.functions.Action1;

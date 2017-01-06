@@ -1,4 +1,4 @@
-package com.jtech.imaging.contract;
+package com.jtech.imaging.mvp.contract;
 
 import android.app.Activity;
 

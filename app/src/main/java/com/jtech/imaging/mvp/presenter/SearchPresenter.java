@@ -1,8 +1,8 @@
-package com.jtech.imaging.presenter;
+package com.jtech.imaging.mvp.presenter;
 
 import android.content.Context;
 
-import com.jtech.imaging.contract.SearchContract;
+import com.jtech.imaging.mvp.contract.SearchContract;
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtech.imaging.net.API;
 

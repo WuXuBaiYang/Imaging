@@ -1,9 +1,9 @@
-package com.jtech.imaging.presenter;
+package com.jtech.imaging.mvp.presenter;
 
 import android.app.Activity;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.contract.OauthContract;
+import com.jtech.imaging.mvp.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.ScopeModel;
 import com.jtech.imaging.net.API;

@@ -7,9 +7,9 @@ import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.contract.GalleryContract;
+import com.jtech.imaging.mvp.contract.GalleryContract;
 import com.jtech.imaging.model.DownloadModel;
-import com.jtech.imaging.presenter.GalleryPresenter;
+import com.jtech.imaging.mvp.presenter.GalleryPresenter;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.GalleryPagerAdapter;
 import com.jtech.imaging.view.widget.RxCompat;

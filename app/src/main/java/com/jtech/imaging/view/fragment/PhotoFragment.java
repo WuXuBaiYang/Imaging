@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.contract.PhotoContract;
-import com.jtech.imaging.presenter.PhotoPresenter;
+import com.jtech.imaging.mvp.contract.PhotoContract;
+import com.jtech.imaging.mvp.presenter.PhotoPresenter;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.fragment.BaseFragment;
 

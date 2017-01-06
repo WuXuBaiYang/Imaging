@@ -1,4 +1,4 @@
-package com.jtech.imaging.event;
+package com.jtech.imaging.model.event;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

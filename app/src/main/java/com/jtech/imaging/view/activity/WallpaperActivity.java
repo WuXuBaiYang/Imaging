@@ -10,9 +10,9 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.contract.WallpaperContract;
+import com.jtech.imaging.mvp.contract.WallpaperContract;
 import com.jtech.imaging.model.DownloadModel;
-import com.jtech.imaging.presenter.WallpaperPresenter;
+import com.jtech.imaging.mvp.presenter.WallpaperPresenter;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;

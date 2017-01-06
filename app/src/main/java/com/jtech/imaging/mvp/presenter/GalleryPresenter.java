@@ -1,8 +1,8 @@
-package com.jtech.imaging.presenter;
+package com.jtech.imaging.mvp.presenter;
 
 import android.content.Context;
 
-import com.jtech.imaging.contract.GalleryContract;
+import com.jtech.imaging.mvp.contract.GalleryContract;
 import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.realm.DownloadRealmManager;
 import com.jtech.imaging.realm.listener.OnDownloadTaskListener;

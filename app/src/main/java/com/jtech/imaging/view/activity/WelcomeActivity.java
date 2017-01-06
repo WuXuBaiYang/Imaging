@@ -13,10 +13,10 @@ import android.widget.TextView;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OauthCache;
-import com.jtech.imaging.contract.WelcomeContract;
+import com.jtech.imaging.mvp.contract.WelcomeContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.PhotoModel;
-import com.jtech.imaging.presenter.WelcomePresenter;
+import com.jtech.imaging.mvp.presenter.WelcomePresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.widget.LoadingView;

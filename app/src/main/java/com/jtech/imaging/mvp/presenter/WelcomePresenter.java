@@ -1,10 +1,10 @@
-package com.jtech.imaging.presenter;
+package com.jtech.imaging.mvp.presenter;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.jtech.imaging.cache.PhotoCache;
-import com.jtech.imaging.contract.WelcomeContract;
+import com.jtech.imaging.mvp.contract.WelcomeContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.net.API;
 

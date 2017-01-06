@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.jtech.imaging.event.NetStateEvent;
+import com.jtech.imaging.model.event.NetStateEvent;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 
 import org.greenrobot.eventbus.EventBus;

@@ -1,4 +1,4 @@
-package com.jtech.imaging.contract;
+package com.jtech.imaging.mvp.contract;
 
 import com.jtech.imaging.model.SearchPhotoModel;
 import com.jtechlib.contract.BaseContract;

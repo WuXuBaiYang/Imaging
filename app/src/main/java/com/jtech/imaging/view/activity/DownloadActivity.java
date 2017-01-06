@@ -12,9 +12,9 @@ import android.view.View;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.common.DownloadState;
-import com.jtech.imaging.contract.DownloadContract;
+import com.jtech.imaging.mvp.contract.DownloadContract;
 import com.jtech.imaging.model.DownloadModel;
-import com.jtech.imaging.presenter.DownloadPresenter;
+import com.jtech.imaging.mvp.presenter.DownloadPresenter;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.DownloadPagerAdapter;
 import com.jtech.imaging.view.fragment.DownloadedFragment;

@@ -1,11 +1,11 @@
-package com.jtech.imaging.presenter;
+package com.jtech.imaging.mvp.presenter;
 
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import com.jtech.imaging.contract.WallpaperContract;
+import com.jtech.imaging.mvp.contract.WallpaperContract;
 import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtechlib.Util.DeviceUtils;

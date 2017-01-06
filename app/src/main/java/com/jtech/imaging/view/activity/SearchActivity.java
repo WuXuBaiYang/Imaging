@@ -18,10 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.contract.SearchContract;
+import com.jtech.imaging.mvp.contract.SearchContract;
 import com.jtech.imaging.model.ResultsModel;
 import com.jtech.imaging.model.SearchPhotoModel;
-import com.jtech.imaging.presenter.SearchPresenter;
+import com.jtech.imaging.mvp.presenter.SearchPresenter;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
 import com.jtech.imaging.view.adapter.SearchAdapter;

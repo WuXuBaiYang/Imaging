@@ -1,8 +1,8 @@
-package com.jtech.imaging.presenter;
+package com.jtech.imaging.mvp.presenter;
 
 import android.content.Context;
 
-import com.jtech.imaging.contract.RandomContract;
+import com.jtech.imaging.mvp.contract.RandomContract;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.net.API;
 
