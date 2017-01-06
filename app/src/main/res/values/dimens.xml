@@ -21,4 +21,5 @@
     <dimen name="divider_margin_right">16dp</dimen>
     <dimen name="photo_detail_sheet_peekheight">0dp</dimen>
     <dimen name="tablayout_wallpaper_margin_bottom">60dp</dimen>
+    <dimen name="button_icon_padding">4dp</dimen>
 </resources>

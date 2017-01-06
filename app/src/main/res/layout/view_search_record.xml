@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
@@ -31,19 +32,16 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_normal" />
 
-        <com.jtech.imaging.view.widget.RippleView
+        <ImageButton
             android:id="@id/close"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_default_topbottom"
-                android:layout_marginLeft="@dimen/margin_default_leftright"
-                android:layout_marginRight="@dimen/margin_default_leftright"
-                android:layout_marginTop="@dimen/margin_default_topbottom"
-                android:src="@drawable/ic_close_white_24dp" />
-        </com.jtech.imaging.view.widget.RippleView>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_default_topbottom"
+            android:layout_marginLeft="@dimen/margin_default_leftright"
+            android:layout_marginRight="@dimen/margin_default_leftright"
+            android:layout_marginTop="@dimen/margin_default_topbottom"
+            android:background="@drawable/button_ripple_oval"
+            android:padding="@dimen/button_icon_padding"
+            android:src="@drawable/ic_close_white_24dp" />
     </LinearLayout>
 </android.support.v7.widget.CardView>

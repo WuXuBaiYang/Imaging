@@ -6,6 +6,7 @@
         <item name="colorAccent">@color/color_accent</item>
 
         <item name="android:statusBarColor">@color/color_primary</item>
+        <item name="android:colorControlHighlight">@color/color_control_highlight</item>
     </style>
     <!--常用页面样式-->
     <style name="AppTheme" parent="@style/Base.AppTheme"></style>
