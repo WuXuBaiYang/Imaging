@@ -13,7 +13,9 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         //欢迎页
-        <activity android:name=".view.activity.WelcomeActivity">
+        <activity
+            android:name=".view.activity.WelcomeActivity"
+            android:theme="@style/AppCompat.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"></action>
                 <category android:name="android.intent.category.LAUNCHER"></category>
@@ -28,19 +30,19 @@
         //图片详情
         <activity android:name=".view.activity.PhotoDetailActivity" />
         //设置壁纸页面
-        <activity android:name=".view.activity.WallpaperActivity" />
-        //下载管理页
         <activity
-            android:name=".view.activity.DownloadActivity"
-            android:theme="@style/AppThemeWithStatus" />
+            android:name=".view.activity.WallpaperActivity"
+            android:theme="@style/AppCompat.FullScreen" />
+        //下载管理页
+        <activity android:name=".view.activity.DownloadActivity" />
         //画廊页面
         <activity
             android:name=".view.activity.GalleryActivity"
-            android:theme="@style/Theme.AppCompat.Translucent" />
+            android:theme="@style/AppCompat.Translucent.FullScreen" />
         //随机页面
         <activity
             android:name=".view.activity.RandomActivity"
-            android:theme="@style/Theme.AppCompat.Translucent" />
+            android:theme="@style/AppCompat.Translucent.FullScreen" />
         //网络状态变化广播接收
         <receiver
             android:name=".receiver.ConnectionChangeReceiver"

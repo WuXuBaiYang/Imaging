@@ -42,8 +42,6 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.statusbar)
-    View statusBar;
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
     @Bind(R.id.tablayout_download)

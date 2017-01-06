@@ -43,7 +43,6 @@ import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
-import com.jtechlib.view.widget.StatusBarCompat;
 
 import java.util.List;
 
@@ -66,8 +65,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     JRecyclerView jRecyclerView;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-    @Bind(R.id.statusbar)
-    View statusBar;
     @Bind(R.id.content)
     CoordinatorLayout content;
     @Bind(R.id.content_cover)
@@ -93,8 +90,6 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         setupToolbar(toolbar)
                 .setTitleTextColor(R.color.toolbar_title)
                 .setOnMenuItemClickListener(this);
-        //设置状态栏
-        StatusBarCompat.setStatusBar(getActivity(), statusBar);
         //fab点击
         RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
         //实例化popup

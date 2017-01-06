@@ -34,7 +34,6 @@ import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
-import com.jtechlib.view.widget.StatusBarCompat;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -64,8 +63,6 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     Toolbar toolbar;
     @Bind(R.id.appbar)
     AppBarLayout appBarLayout;
-    @Bind(R.id.statusbar)
-    View statusBar;
     @Bind(R.id.content)
     CoordinatorLayout content;
 
@@ -99,8 +96,6 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                 .setContentInsetStartWithNavigation(0)
                 .setTitleTextColor(R.color.toolbar_title)
                 .setNavigationIcon(R.drawable.ic_keyboard_backspace_white_24dp, this);
-        //设置状态栏
-        StatusBarCompat.setStatusBar(getActivity(), statusBar);
         //设置fab的点击事件
         RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
         //设置图片的缩放事件

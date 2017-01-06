@@ -1,24 +1,29 @@
 <resources>
-
-    <style name="BaseAppTheme" parent="Theme.AppCompat.NoActionBar">
+    <!--基础样式-->
+    <style name="Base.AppTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
         <item name="colorAccent">@color/color_accent</item>
 
-        <item name="android:windowContentTransitions">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:statusBarColor">@color/color_primary</item>
     </style>
-
-    <style name="AppTheme" parent="@style/BaseAppTheme"></style>
-
-    <style name="AppThemeWithStatus" parent="@style/BaseAppTheme">
-        <item name="android:windowTranslucentStatus">false</item>
-    </style>
-
-    <style name="Theme.AppCompat.Translucent" parent="BaseAppTheme">
+    <!--常用页面样式-->
+    <style name="AppTheme" parent="@style/Base.AppTheme"></style>
+    <!--透明背景样式-->
+    <style name="AppCompat.Translucent" parent="Base.AppTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+    <!--透明背景并且全屏-->
+    <style name="AppCompat.Translucent.FullScreen" parent="AppCompat.Translucent">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <!--全屏样式-->
+    <style name="AppCompat.FullScreen" parent="Base.AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

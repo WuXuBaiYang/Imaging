@@ -34,7 +34,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by jianghan on 2016/9/23.
  */
 public class RandomActivity extends BaseActivity implements RandomContract.View, PhotoViewAttacher.OnPhotoTapListener {
-
     private static final long IMAGE_SHOW_ANIMATION_DURATION = 350;
 
     @Bind(R.id.content)

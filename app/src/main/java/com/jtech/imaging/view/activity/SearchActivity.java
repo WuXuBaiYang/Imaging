@@ -36,7 +36,6 @@ import com.jtech.view.RefreshLayout;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
-import com.jtechlib.view.widget.StatusBarCompat;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -61,8 +60,6 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     CoordinatorLayout content;
     @Bind(R.id.fab)
     FloatingActionButton floatingActionButton;
-    @Bind(R.id.statusbar)
-    View statusBar;
     @Bind(R.id.content_cover)
     CoverView coverView;
 
@@ -87,8 +84,6 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         setupToolbar(toolbar)
                 .setContentInsetStartWithNavigation(0)
                 .setNavigationIcon(R.drawable.ic_keyboard_backspace_white_24dp, this);
-        //设置状态栏
-        StatusBarCompat.setStatusBar(getActivity(), statusBar);
         //实例化popup
         searchRecordPopup = new SearchRecordPopup(getActivity());
         //实例化适配器并设置
