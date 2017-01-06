@@ -91,6 +91,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
     public boolean onItemLongClick(RecyclerHolder recyclerHolder, View view, final int position) {
         DeleteDialog
                 .build(getActivity())
+                .setContent("Whether to delete photo")
                 .setDoneClick(new DeleteDialog.OnDeleteListener() {
                     @Override
                     public void delete() {
@@ -99,8 +100,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
                         //移除数据库中的数据
                         // TODO: 2017/1/6 删除数据库中已下载的图片,以及本地图片
                     }
-                })
-                .show();
+                }).show();
         return true;
     }
 }

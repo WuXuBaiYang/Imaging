@@ -34,4 +34,19 @@ public class DownloadingPresenter implements DownloadingContract.Presenter {
             }
         });
     }
+
+    @Override
+    public void startDownload(long id) {
+        downloadRealmManager.startDownload(id);
+    }
+
+    @Override
+    public void stopDownload(long id) {
+        downloadRealmManager.stopDownload(id);
+    }
+
+    @Override
+    public void deleteDownload(long id) {
+        downloadRealmManager.removeDownload(id);
+    }
 }

@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.model.event.DownloadEvent;
 import com.jtech.imaging.mvp.contract.DownloadContract;
 import com.jtech.imaging.mvp.presenter.DownloadPresenter;
 import com.jtech.imaging.view.adapter.DownloadPagerAdapter;
@@ -18,6 +19,9 @@ import com.jtech.imaging.view.fragment.DownloadingFragment;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.fragment.BaseFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Arrays;
 
@@ -48,6 +52,8 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     protected void initVariables(Bundle bundle) {
         //实例化P类
         this.presenter = new DownloadPresenter(getActivity(), this);
+        //注册到eventbus
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -90,8 +96,12 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         if (0 == position) {
             floatingActionButton.setImageResource(R.drawable.ic_photo_library_white_36dp);
         } else {
-            if (presenter.isAllDownloading()) {
-                floatingActionButton.setImageResource(R.drawable.ic_pause_black_18dp);
+            if (presenter.hasDownloading()) {
+                if (presenter.isAllDownloading()) {
+                    floatingActionButton.setImageResource(R.drawable.ic_pause_black_18dp);
+                } else {
+                    floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                }
             } else {
                 floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
             }
@@ -101,6 +111,22 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @Subscribe
+    public void DownloadStateChange(DownloadEvent.StateEvent event) {
+        //下载状态变化事件
+        if (0 != viewPager.getCurrentItem()) {
+            if (event.hasDownload()) {
+                if (event.isAllDownloadStart()) {
+                    floatingActionButton.setImageResource(R.drawable.ic_pause_black_18dp);
+                } else {
+                    floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+                }
+            } else {
+                floatingActionButton.setImageResource(R.drawable.ic_play_arrow_white_36dp);
+            }
+        }
     }
 
     /**
@@ -126,5 +152,12 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //反注册eventbus
+        EventBus.getDefault().unregister(this);
     }
 }

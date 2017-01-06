@@ -7,12 +7,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.DownloadModel;
+import com.jtech.imaging.model.event.DownloadEvent;
 import com.jtech.imaging.mvp.contract.DownloadingContract;
 import com.jtech.imaging.mvp.presenter.DownloadingPresenter;
 import com.jtech.imaging.view.adapter.DownloadingAdapter;
+import com.jtech.imaging.view.widget.dialog.DeleteDialog;
+import com.jtech.listener.OnItemLongClickListener;
 import com.jtech.view.JRecyclerView;
+import com.jtech.view.RecyclerHolder;
 import com.jtechlib.view.fragment.BaseFragment;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -23,7 +30,7 @@ import butterknife.Bind;
  * Created by jianghan on 2016/10/31.
  */
 
-public class DownloadingFragment extends BaseFragment implements DownloadingContract.View, DownloadingAdapter.OnDownloadingClickListener {
+public class DownloadingFragment extends BaseFragment implements DownloadingContract.View, DownloadingAdapter.OnDownloadingClickListener, OnItemLongClickListener {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
@@ -72,7 +79,32 @@ public class DownloadingFragment extends BaseFragment implements DownloadingCont
     }
 
     @Override
+    public boolean onItemLongClick(RecyclerHolder recyclerHolder, View view, final int position) {
+        DeleteDialog
+                .build(getActivity())
+                .setContent("Whether to delete download")
+                .setDoneClick(new DeleteDialog.OnDeleteListener() {
+                    @Override
+                    public void delete() {
+                        DownloadModel downloadModel = downloadingAdapter.getItem(position);
+                        presenter.deleteDownload(downloadModel.getId());
+                        //发送消息
+                        EventBus.getDefault().post(new DownloadEvent.StateEvent(downloadModel.getId(), downloadModel.getState(), downloadingAdapter.isAllStartDownload(), 0 != downloadingAdapter.getItemCount()));
+                    }
+                }).show();
+        return true;
+    }
+
+    @Override
     public void onStateClick(long id, int state) {
-        // TODO: 2017/1/6 下载状态点击事件
+        if (state == DownloadState.DOWNLOADING || state == DownloadState.DOWNLOAD_WAITING) {
+            presenter.stopDownload(id);
+            state = DownloadState.DOWNLOAD_STOP;
+        } else {
+            presenter.startDownload(id);
+            state = DownloadState.DOWNLOAD_WAITING;
+        }
+        //发送消息
+        EventBus.getDefault().post(new DownloadEvent.StateEvent(id, state, downloadingAdapter.isAllStartDownload(), 0 != downloadingAdapter.getItemCount()));
     }
 }

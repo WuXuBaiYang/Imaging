@@ -18,13 +18,24 @@ public class DeleteDialog {
         //实例化builder
         builder = new AlertDialog.Builder(context);
         //设置标题
-        builder.setTitle("Whether to delete photo");
+        builder.setTitle("delete");
         //设置取消按钮
         builder.setNegativeButton("cancel", null);
     }
 
     public static DeleteDialog build(Context context) {
         return new DeleteDialog(context);
+    }
+
+    /**
+     * 设置文本内容
+     *
+     * @param content
+     * @return
+     */
+    public DeleteDialog setContent(String content) {
+        builder.setMessage(content);
+        return this;
     }
 
     /**

@@ -12,6 +12,12 @@ import java.util.List;
 public interface DownloadingContract {
     interface Presenter extends BaseContract.Presenter {
         void getDownloadingList();
+
+        void startDownload(long id);
+
+        void stopDownload(long id);
+
+        void deleteDownload(long id);
     }
 
     interface View extends BaseContract.View {
