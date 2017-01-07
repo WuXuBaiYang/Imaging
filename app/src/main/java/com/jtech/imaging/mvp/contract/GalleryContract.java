@@ -1,7 +1,5 @@
 package com.jtech.imaging.mvp.contract;
 
-import com.jtech.imaging.model.DownloadModel;
-
 import java.util.List;
 
 /**
@@ -11,10 +9,11 @@ import java.util.List;
 
 public interface GalleryContract {
     interface Presenter {
-        void getDownloadedList();
+        List<String> getImageUris();
+
+        int getSelectIndex();
     }
 
     interface View {
-        void downloadTaskList(List<DownloadModel> downloadModels);
     }
 }

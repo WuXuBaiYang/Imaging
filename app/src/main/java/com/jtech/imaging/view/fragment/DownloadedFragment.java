@@ -87,7 +87,6 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
         // TODO: 2017/1/6 点击跳转到画廊模式浏览大图
         //获取到点击的图片
         ImageView imageView = recyclerHolder.getImageView(R.id.imageview_photo);
-        //发送消息
     }
 
     @Override

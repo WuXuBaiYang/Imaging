@@ -1,12 +1,9 @@
 package com.jtech.imaging.mvp.presenter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import com.jtech.imaging.mvp.contract.PhotoContract;
-import com.jtechlib.Util.ImageUtils;
-
-import rx.functions.Action1;
+import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 
 /**
  * 图片P类
@@ -17,28 +14,21 @@ public class PhotoPresenter implements PhotoContract.Presenter {
 
     private Context context;
     private PhotoContract.View view;
+    private String originUrl;
 
-    public PhotoPresenter(Context context, PhotoContract.View view) {
+    public PhotoPresenter(Context context, PhotoContract.View view, String originUrl) {
         this.context = context;
         this.view = view;
+        this.originUrl = originUrl;
     }
 
     @Override
-    public void getImage(String uri, int width, int height, int targetWidth) {
-        //等比缩放
-        double ratio = (1.0 * targetWidth) / width;
-        int targetHeight = (int) (height * ratio);
-        //获取目标大小的图片
-        ImageUtils.requestImage(context, uri, targetWidth, targetHeight, new Action1<Bitmap>() {
-            @Override
-            public void call(Bitmap bitmap) {
-                view.setPhoto(bitmap);
-            }
-        }, new Action1<Throwable>() {
-            @Override
-            public void call(Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        });
+    public String getUrl(int width) {
+        return isLocalImage() ? originUrl : originUrl + "?w=" + PhotoResolutionStrategy.getStrategyWidth(context);
+    }
+
+    @Override
+    public boolean isLocalImage() {
+        return originUrl.startsWith("http") || originUrl.startsWith("https");
     }
 }

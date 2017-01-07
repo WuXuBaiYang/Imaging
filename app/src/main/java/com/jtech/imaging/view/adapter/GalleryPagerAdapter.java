@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.view.fragment.PhotoFragment;
 
 import java.util.HashMap;
@@ -24,11 +23,11 @@ public class GalleryPagerAdapter extends FragmentStatePagerAdapter {
 
     private OnOutsidePhotoTap onOutsidePhotoTap;
     private Map<Integer, PhotoFragment> viewMap;
-    private List<DownloadModel> downloadModels;
+    private List<String> imageUris;
 
-    public GalleryPagerAdapter(FragmentManager fm, List<DownloadModel> downloadModels) {
+    public GalleryPagerAdapter(FragmentManager fm, List<String> imageUris) {
         super(fm);
-        this.downloadModels = downloadModels;
+        this.imageUris = imageUris;
         this.viewMap = new HashMap<>();
     }
 
@@ -38,8 +37,7 @@ public class GalleryPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        DownloadModel downloadModel = downloadModels.get(position);
-        PhotoFragment photoFragment = PhotoFragment.newInstance(downloadModel.getPath(), downloadModel.getWidth(), downloadModel.getHeight());
+        PhotoFragment photoFragment = PhotoFragment.newInstance(imageUris.get(position));
         photoFragment.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
             @Override
             public void onPhotoTap(View view, float x, float y) {
@@ -65,11 +63,7 @@ public class GalleryPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return downloadModels.size();
-    }
-
-    public DownloadModel getModel(int position) {
-        return downloadModels.get(position);
+        return imageUris.size();
     }
 
     public View getView(int position) {

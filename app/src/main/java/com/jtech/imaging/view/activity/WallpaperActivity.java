@@ -5,13 +5,12 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.mvp.contract.WallpaperContract;
-import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.mvp.presenter.WallpaperPresenter;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.view.widget.LoadingView;
@@ -31,9 +30,7 @@ import uk.co.senab.photoview.PhotoView;
  */
 
 public class WallpaperActivity extends BaseActivity implements WallpaperContract.View {
-
-    public static final String IMAGE_URL_KEY = "imageUrlKey";
-    public static final String IMAGE_LOCAL_PATH_KEY = "imageLocalPathKey";
+    public static final String KEY_IMAGE_URL = "IMAGE_URL";
     public static final long IMAGE_ANIMATION_DURATION = 450;
 
     @Bind(R.id.contentloading)
@@ -45,19 +42,14 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
     @Bind(R.id.tablayout_wallpaper)
     TabLayout tabLayout;
 
-    private String imageUrl;
-    private DownloadModel downloadModel;
     private WallpaperContract.Presenter presenter;
 
     @Override
     protected void initVariables(Bundle bundle) {
         //获取图片url
-        this.imageUrl = bundle.getString(IMAGE_URL_KEY);
-        //获取本地图片地址
-        Object object = bundle.getSerializable(IMAGE_LOCAL_PATH_KEY);
-        this.downloadModel = null != object ? (DownloadModel) object : null;
+        String imageUrl = bundle.getString(KEY_IMAGE_URL);
         //实例化P类
-        this.presenter = new WallpaperPresenter(getActivity(), this);
+        this.presenter = new WallpaperPresenter(getActivity(), this, imageUrl);
     }
 
     @Override
@@ -71,13 +63,14 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
 
     @Override
     protected void loadData() {
-        if (!TextUtils.isEmpty(imageUrl)) {
+        int screenWidth = DeviceUtils.getScreenWidth(getActivity());
+        if (!presenter.isLocalImage()) {
             //显示加载动画
             loadingView.show();
             //默认加载详情页设置的分辨率
             final long startTimeMillis = System.currentTimeMillis();
             //图片请求
-            ImageUtils.requestImage(getActivity(), presenter.getUrl(imageUrl, DeviceUtils.getScreenWidth(getActivity())), new Action1<Bitmap>() {
+            ImageUtils.requestImage(getActivity(), presenter.getUrl(screenWidth), new Action1<Bitmap>() {
                 @Override
                 public void call(Bitmap bitmap) {
                     if (presenter.isRightBitmap(getActivity(), bitmap)) {
@@ -98,7 +91,7 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
                 }
             });
         } else {
-            presenter.getImage(downloadModel, DeviceUtils.getScreenHeight(getActivity()), new Action1<Bitmap>() {
+            ImageUtils.requestImage(getActivity(), presenter.getUrl(screenWidth), screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, new Action1<Bitmap>() {
                 @Override
                 public void call(Bitmap bitmap) {
                     if (null != bitmap) {
@@ -114,7 +107,7 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
      * 设置分辨率选择的tab
      */
     private void setupTab() {
-        if (!TextUtils.isEmpty(imageUrl)) {
+        if (!presenter.isLocalImage()) {
             //添加tab
             for (String tabName : getResources().getStringArray(R.array.imageWallpaperResolutiorn)) {
                 tabLayout.addTab(tabLayout.newTab().setText(tabName));

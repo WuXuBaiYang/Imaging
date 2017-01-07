@@ -8,7 +8,6 @@ import android.support.v4.view.ViewPager;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.mvp.contract.GalleryContract;
-import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.mvp.presenter.GalleryPresenter;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.GalleryPagerAdapter;
@@ -17,7 +16,6 @@ import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -29,6 +27,8 @@ import rx.functions.Action1;
  */
 
 public class GalleryActivity extends BaseActivity implements GalleryContract.View, GalleryPagerAdapter.OnOutsidePhotoTap {
+    public static final String KEY_PHOTO_LIST = "PHOTO_LIST";
+    public static final String KEY_PHOTO_INDEX = "PHOTO_INDEX";
 
     @Bind(R.id.viewpager_gallery)
     ViewPager viewPager;
@@ -40,8 +40,11 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
 
     @Override
     protected void initVariables(Bundle bundle) {
+        //获取图片集合与选中
+        List<String> imageUris = bundle.getStringArrayList(KEY_PHOTO_LIST);
+        int selectIndex = bundle.getInt(KEY_PHOTO_INDEX);
         //实例化P类
-        this.presenter = new GalleryPresenter(getActivity(), this);
+        this.presenter = new GalleryPresenter(getActivity(), this, imageUris, selectIndex);
     }
 
     @Override
@@ -49,39 +52,27 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         setContentView(R.layout.activity_gallery);
         //设置fab的点击事件
         RxCompat.clickThrottleFirst(floatingActionButton, new FabClick());
+        //设置viewpager
+        setupPager(presenter.getImageUris());
     }
 
     @Override
     protected void loadData() {
-        presenter.getDownloadedList();
 
-        //假数据
-        List<DownloadModel> downloadModels = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            DownloadModel downloadModel = new DownloadModel();
-            downloadModel.setId(10000);
-            downloadModel.setColor("#607563");
-            downloadModel.setPath("http://h.hiphotos.baidu.com/zhidao/pic/item/6d81800a19d8bc3ed69473cb848ba61ea8d34516.jpg");
-            downloadModels.add(downloadModel);
-        }
-        downloadTaskList(downloadModels);
-    }
-
-    @Override
-    public void downloadTaskList(List<DownloadModel> downloadModels) {
-        setupPager(downloadModels);
     }
 
     /**
      * 设置viewpager
      */
-    private void setupPager(List<DownloadModel> downloadModels) {
+    private void setupPager(List<String> imageUris) {
         //实例化pager适配器
-        galleryPagerAdapter = new GalleryPagerAdapter(getSupportFragmentManager(), downloadModels);
+        galleryPagerAdapter = new GalleryPagerAdapter(getSupportFragmentManager(), imageUris);
         //设置点击事件
         galleryPagerAdapter.setOnOutsidePhotoTap(this);
         //设置适配器
         viewPager.setAdapter(galleryPagerAdapter);
+        //设置默认选中
+        viewPager.setCurrentItem(presenter.getSelectIndex());
     }
 
     @Override
@@ -97,7 +88,7 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         @Override
         public void call(Void aVoid) {
             Bundle bundle = BundleChain.build()
-                    .putSerializable(WallpaperActivity.IMAGE_LOCAL_PATH_KEY, galleryPagerAdapter.getModel(viewPager.getCurrentItem()))
+                    .putSerializable(WallpaperActivity.KEY_IMAGE_URL, "图片地址")
                     .toBundle();
             Pair[] pairs = PairChain
                     .build(floatingActionButton, getString(R.string.fab))

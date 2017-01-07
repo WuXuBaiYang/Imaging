@@ -3,10 +3,7 @@ package com.jtech.imaging.mvp.contract;
 import android.app.Activity;
 import android.graphics.Bitmap;
 
-import com.jtech.imaging.model.DownloadModel;
 import com.jtechlib.contract.BaseContract;
-
-import rx.functions.Action1;
 
 /**
  * 设置壁纸协议
@@ -15,7 +12,7 @@ import rx.functions.Action1;
 
 public interface WallpaperContract {
     interface Presenter extends BaseContract.Presenter {
-        String getUrl(String originUrl, int width);
+        String getUrl(int width);
 
         void setSelectPosition(int position);
 
@@ -25,7 +22,7 @@ public interface WallpaperContract {
 
         void setWallpaper(Bitmap bitmap);
 
-        void getImage(DownloadModel downloadModel, int targetHeight, Action1<Bitmap> action1);
+        boolean isLocalImage();
     }
 
     interface View extends BaseContract.View {

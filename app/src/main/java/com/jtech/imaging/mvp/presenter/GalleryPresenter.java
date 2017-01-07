@@ -3,9 +3,6 @@ package com.jtech.imaging.mvp.presenter;
 import android.content.Context;
 
 import com.jtech.imaging.mvp.contract.GalleryContract;
-import com.jtech.imaging.model.DownloadModel;
-import com.jtech.imaging.realm.DownloadRealmManager;
-import com.jtech.imaging.realm.listener.OnDownloadTaskListener;
 
 import java.util.List;
 
@@ -17,22 +14,24 @@ import java.util.List;
 public class GalleryPresenter implements GalleryContract.Presenter {
     private Context context;
     private GalleryContract.View view;
-    private DownloadRealmManager downloadRealmManager;
 
-    public GalleryPresenter(Context context, GalleryContract.View view) {
+    private List<String> imageUris;
+    private int selectIndex;
+
+    public GalleryPresenter(Context context, GalleryContract.View view, List<String> imageUris, int selectIndex) {
         this.context = context;
         this.view = view;
-        //实例化数据库管理
-        this.downloadRealmManager = new DownloadRealmManager();
+        this.imageUris = imageUris;
+        this.selectIndex = selectIndex;
     }
 
     @Override
-    public void getDownloadedList() {
-        downloadRealmManager.getDownloaded(new OnDownloadTaskListener() {
-            @Override
-            public void downloadTask(List<DownloadModel> downloadModels) {
-                view.downloadTaskList(downloadModels);
-            }
-        });
+    public List<String> getImageUris() {
+        return imageUris;
+    }
+
+    @Override
+    public int getSelectIndex() {
+        return selectIndex;
     }
 }

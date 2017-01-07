@@ -6,10 +6,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 import com.jtech.imaging.mvp.contract.WallpaperContract;
-import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtechlib.Util.DeviceUtils;
-import com.jtechlib.Util.ImageUtils;
 
 import java.io.IOException;
 
@@ -29,8 +27,10 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
     private Context context;
 
     private int position = -1;
+    private String originUrl;
 
-    public WallpaperPresenter(Context context, WallpaperContract.View view) {
+    public WallpaperPresenter(Context context, WallpaperContract.View view, String originUrl) {
+        this.originUrl = originUrl;
         this.context = context;
         this.view = view;
         //设置默认选择的清晰度
@@ -38,8 +38,8 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
     }
 
     @Override
-    public String getUrl(String originUrl, int width) {
-        return originUrl + "?w=" + getSelectWidth(width);
+    public String getUrl(int width) {
+        return isLocalImage() ? originUrl : originUrl + "?w=" + getSelectWidth(width);
     }
 
     @Override
@@ -108,13 +108,7 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
     }
 
     @Override
-    public void getImage(DownloadModel downloadModel, int targetHeight, Action1<Bitmap> action1) {
-        //限制最大高度为1K
-        targetHeight = targetHeight > 1920 ? 1920 : targetHeight;
-        //等比缩放
-        double ratio = (1.0 * targetHeight) / downloadModel.getHeight();
-        int targetWidth = (int) (downloadModel.getWidth() * ratio);
-        //获取图片
-        ImageUtils.requestImage(context, downloadModel.getPath(), targetWidth, targetHeight, action1);
+    public boolean isLocalImage() {
+        return originUrl.startsWith("http") || originUrl.startsWith("https");
     }
 }

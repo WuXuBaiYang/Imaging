@@ -10,9 +10,11 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.mvp.contract.PhotoContract;
 import com.jtech.imaging.mvp.presenter.PhotoPresenter;
 import com.jtechlib.Util.DeviceUtils;
+import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.fragment.BaseFragment;
 
 import butterknife.Bind;
+import rx.functions.Action1;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -22,18 +24,12 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  */
 
 public class PhotoFragment extends BaseFragment implements PhotoContract.View {
-
-    public static final String URI_KEY = "uriKey";
-    public static final String WIDTH_KEY = "width";
-    public static final String HEIGHT_KEY = "height";
+    public static final String KEY_PHOTO_URI = "PHOTO_URI";
 
     @Bind(R.id.photoview)
     PhotoView photoView;
 
     private PhotoContract.Presenter presenter;
-    private int width, height;
-    private String uri;
-    private PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener;
 
     @Override
     public View createView(LayoutInflater layoutInflater, ViewGroup viewGroup) {
@@ -43,41 +39,39 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
     @Override
     protected void initVariables(Bundle bundle) {
         //获取图片的uri
-        this.uri = bundle.getString(URI_KEY);
-        //获取图片宽度
-        this.width = bundle.getInt(WIDTH_KEY);
-        //获取图片高度
-        this.height = bundle.getInt(HEIGHT_KEY);
+        String originUrl = bundle.getString(KEY_PHOTO_URI);
         //实例化P类
-        this.presenter = new PhotoPresenter(getActivity(), this);
+        this.presenter = new PhotoPresenter(getActivity(), this, originUrl);
     }
 
     @Override
     protected void initViews(Bundle bundle) {
-        //设置tap事件
-        photoView.setOnPhotoTapListener(onPhotoTapListener);
+        //显示图片
+        int screenWidth = DeviceUtils.getScreenWidth(getActivity());
+        if (presenter.isLocalImage()) {
+            ImageUtils.requestImage(getActivity(), presenter.getUrl(screenWidth), screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, new Action1<Bitmap>() {
+                @Override
+                public void call(Bitmap bitmap) {
+                    if (null != bitmap) {
+                        photoView.setImageBitmap(bitmap);
+                    }
+                }
+            });
+        } else {
+            ImageUtils.showImage(getActivity(), presenter.getUrl(screenWidth), photoView);
+        }
     }
 
     @Override
     protected void loadData() {
-        presenter.getImage(uri, width, height, DeviceUtils.getScreenWidth(getActivity()));
     }
 
-    public static PhotoFragment newInstance(String uri, int width, int height) {
+    public static PhotoFragment newInstance(String uri) {
         Bundle args = new Bundle();
-        args.putString(URI_KEY, uri);
-        args.putInt(WIDTH_KEY, width);
-        args.putInt(HEIGHT_KEY, height);
+        args.putString(KEY_PHOTO_URI, uri);
         PhotoFragment fragment = new PhotoFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void setPhoto(Bitmap bitmap) {
-        if (null != bitmap) {
-            photoView.setImageBitmap(bitmap);
-        }
     }
 
     /**
@@ -86,7 +80,8 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
      * @param onPhotoTapListener
      */
     public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener) {
-        this.onPhotoTapListener = onPhotoTapListener;
+        //设置tap事件
+        photoView.setOnPhotoTapListener(onPhotoTapListener);
     }
 
     /**
