@@ -2,6 +2,7 @@ package com.jtech.imaging.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
@@ -11,9 +12,13 @@ import android.support.annotation.Nullable;
  */
 
 public class DownloadService extends Service {
+    private DownloadBinder downloadBinder;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        //实例化binder
+        this.downloadBinder = new DownloadBinder();
     }
 
     @Override
@@ -24,6 +29,13 @@ public class DownloadService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return downloadBinder;
+    }
+
+    /**
+     * 下载服务的binder
+     */
+    public class DownloadBinder extends Binder {
+
     }
 }

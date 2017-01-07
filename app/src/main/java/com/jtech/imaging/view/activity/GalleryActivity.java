@@ -88,7 +88,7 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
         @Override
         public void call(Void aVoid) {
             Bundle bundle = BundleChain.build()
-                    .putSerializable(WallpaperActivity.KEY_IMAGE_URL, "图片地址")
+                    .putSerializable(WallpaperActivity.KEY_IMAGE_URL, presenter.getImageUris().get(viewPager.getCurrentItem()))
                     .toBundle();
             Pair[] pairs = PairChain
                     .build(floatingActionButton, getString(R.string.fab))

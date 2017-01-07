@@ -10,8 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.jtech.imaging.R;
+import com.jtech.imaging.model.event.DownloadedGalleryEvent;
 import com.jtech.imaging.mvp.contract.DownloadContract;
 import com.jtech.imaging.mvp.presenter.DownloadPresenter;
+import com.jtech.imaging.util.Bus;
 import com.jtech.imaging.view.adapter.DownloadPagerAdapter;
 import com.jtech.imaging.view.fragment.DownloadedFragment;
 import com.jtech.imaging.view.fragment.DownloadingFragment;
@@ -119,7 +121,7 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         public void call(Void aVoid) {
             int currentItem = viewPager.getCurrentItem();
             if (0 == currentItem) {
-                // TODO: 2017/1/6 画廊模式
+                Bus.get().post(new DownloadedGalleryEvent());
             } else {
                 if (presenter.hasDownloading()) {
                     boolean isAllDownloading = presenter.isAllDownloading();

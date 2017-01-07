@@ -23,12 +23,12 @@ public class PhotoPresenter implements PhotoContract.Presenter {
     }
 
     @Override
-    public String getUrl(int width) {
+    public String getUrl() {
         return isLocalImage() ? originUrl : originUrl + "?w=" + PhotoResolutionStrategy.getStrategyWidth(context);
     }
 
     @Override
     public boolean isLocalImage() {
-        return originUrl.startsWith("http") || originUrl.startsWith("https");
+        return !originUrl.startsWith("http") && !originUrl.startsWith("https");
     }
 }

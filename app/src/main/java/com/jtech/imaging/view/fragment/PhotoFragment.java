@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.jtech.imaging.R;
 import com.jtech.imaging.mvp.contract.PhotoContract;
 import com.jtech.imaging.mvp.presenter.PhotoPresenter;
-import com.jtechlib.Util.DeviceUtils;
+import com.jtech.imaging.view.widget.LoadingView;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.view.fragment.BaseFragment;
 
@@ -28,8 +28,11 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
 
     @Bind(R.id.photoview)
     PhotoView photoView;
+    @Bind(R.id.contentloading)
+    LoadingView loadingView;
 
     private PhotoContract.Presenter presenter;
+    private PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener;
 
     @Override
     public View createView(LayoutInflater layoutInflater, ViewGroup viewGroup) {
@@ -46,19 +49,30 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
 
     @Override
     protected void initViews(Bundle bundle) {
+        loadingView.show();
+        //设置tap事件
+        photoView.setOnPhotoTapListener(onPhotoTapListener);
         //显示图片
-        int screenWidth = DeviceUtils.getScreenWidth(getActivity());
         if (presenter.isLocalImage()) {
-            ImageUtils.requestImage(getActivity(), presenter.getUrl(screenWidth), screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, new Action1<Bitmap>() {
+            ImageUtils.requestImage(getActivity(), presenter.getUrl(), new Action1<Bitmap>() {
                 @Override
                 public void call(Bitmap bitmap) {
                     if (null != bitmap) {
+                        loadingView.hide();
                         photoView.setImageBitmap(bitmap);
                     }
                 }
             });
         } else {
-            ImageUtils.showImage(getActivity(), presenter.getUrl(screenWidth), photoView);
+            ImageUtils.requestImage(getActivity(), presenter.getUrl(), new Action1<Bitmap>() {
+                @Override
+                public void call(Bitmap bitmap) {
+                    if (null != bitmap) {
+                        loadingView.hide();
+                        photoView.setImageBitmap(bitmap);
+                    }
+                }
+            });
         }
     }
 
@@ -80,8 +94,7 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
      * @param onPhotoTapListener
      */
     public void setOnPhotoTapListener(PhotoViewAttacher.OnPhotoTapListener onPhotoTapListener) {
-        //设置tap事件
-        photoView.setOnPhotoTapListener(onPhotoTapListener);
+        this.onPhotoTapListener = onPhotoTapListener;
     }
 
     /**

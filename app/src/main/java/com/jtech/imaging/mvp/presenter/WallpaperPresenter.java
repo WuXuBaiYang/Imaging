@@ -109,6 +109,6 @@ public class WallpaperPresenter implements WallpaperContract.Presenter {
 
     @Override
     public boolean isLocalImage() {
-        return originUrl.startsWith("http") || originUrl.startsWith("https");
+        return !originUrl.startsWith("http") && !originUrl.startsWith("https");
     }
 }

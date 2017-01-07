@@ -10,8 +10,7 @@ import android.net.NetworkInfo;
 
 import com.jtech.imaging.model.event.NetStateEvent;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
-
-import org.greenrobot.eventbus.EventBus;
+import com.jtech.imaging.util.Bus;
 
 import java.util.List;
 
@@ -29,6 +28,7 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         //获取当前网络信息
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        NetStateEvent netStateEvent;
         if (null != networkInfo) {
             //获取类型
             int type = networkInfo.getType();
@@ -42,12 +42,14 @@ public class ConnectionChangeReceiver extends BroadcastReceiver {
             NetworkInfo.DetailedState detailedState = networkInfo.getDetailedState();
             //存储网络状态到图片加载策略中
             PhotoLoadStrategy.setNetType(type);
-            //发送消息
-            EventBus.getDefault().post(new NetStateEvent(type, subType, typeName, state, detailedState));
+            //封装数据
+            netStateEvent = new NetStateEvent(type, subType, typeName, state, detailedState);
         } else {
             //无活动网络
-            EventBus.getDefault().post(new NetStateEvent(0, 0, "", NetworkInfo.State.UNKNOWN, NetworkInfo.DetailedState.FAILED));
+            netStateEvent = new NetStateEvent(0, 0, "", NetworkInfo.State.UNKNOWN, NetworkInfo.DetailedState.FAILED);
         }
+        //发送消息
+        Bus.get().post(netStateEvent);
     }
 
     /**

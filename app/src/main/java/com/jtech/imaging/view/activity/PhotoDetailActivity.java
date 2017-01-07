@@ -173,7 +173,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     @Override
     public void jumpToWallpaper() {
         Bundle bundle = BundleChain.build()
-                .putString(WallpaperActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                .putString(WallpaperActivity.KEY_IMAGE_URL, photoModel.getUrls().getRaw())
                 .toBundle();
         Pair[] pairs = PairChain
                 .build(floatingActionButton, getString(R.string.fab))
@@ -218,10 +218,10 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     String md5 = Tools.md5(name + width + height + url);
                     if (downloadRealmManager.hasDownload(md5)) {
                         Snackbar.make(content, "already exists", Snackbar.LENGTH_SHORT).show();
+                        bottomSheetDialog.dismiss();
                         return;
-                    } else {
-                        Snackbar.make(content, "start to download", Snackbar.LENGTH_SHORT).show();
                     }
+                    Snackbar.make(content, "start to download", Snackbar.LENGTH_SHORT).show();
                     downloadRealmManager.addDownloadAndStart(new DownloadModel(id, name, color, width, height, md5, url));
                     break;
                 default:

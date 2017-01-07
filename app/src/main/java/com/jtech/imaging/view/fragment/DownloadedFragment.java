@@ -1,16 +1,21 @@
 package com.jtech.imaging.view.fragment;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.model.DownloadModel;
+import com.jtech.imaging.model.event.DownloadedGalleryEvent;
 import com.jtech.imaging.mvp.contract.DownloadedContract;
 import com.jtech.imaging.mvp.presenter.DownloadedPresenter;
+import com.jtech.imaging.util.ActivityJump;
+import com.jtech.imaging.util.Bus;
+import com.jtech.imaging.view.activity.GalleryActivity;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.imaging.view.widget.dialog.DeleteDialog;
 import com.jtech.imaging.view.widget.dialog.UnknownDialog;
@@ -18,7 +23,10 @@ import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnItemLongClickListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
+import com.jtechlib.Util.BundleChain;
 import com.jtechlib.view.fragment.BaseFragment;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -46,6 +54,8 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
     protected void initVariables(Bundle bundle) {
         //实例化P类
         this.presenter = new DownloadedPresenter(getActivity(), this);
+        //上车
+        Bus.getOn(this);
     }
 
     @Override
@@ -83,10 +93,37 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
     }
 
     @Override
-    public void onItemClick(RecyclerHolder recyclerHolder, View view, int i) {
-        // TODO: 2017/1/6 点击跳转到画廊模式浏览大图
-        //获取到点击的图片
-        ImageView imageView = recyclerHolder.getImageView(R.id.imageview_photo);
+    public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
+        //跳转到图片浏览的指定位置
+        Bundle bundle = BundleChain.build()
+                .putStringArrayList(GalleryActivity.KEY_PHOTO_LIST, downloadedAdapter.getImageUris())
+                .putInt(GalleryActivity.KEY_PHOTO_INDEX, position)
+                .toBundle();
+        Pair[] pairs = {};
+        ActivityJump.build(getActivity(), GalleryActivity.class)
+                .addBundle(bundle)
+                .makeSceneTransitionAnimation(pairs)
+                .jump();
+    }
+
+    /**
+     * 已下载列表上的fab点击事件
+     */
+    @Subscribe
+    public void onGalleryClick(DownloadedGalleryEvent event) {
+        if (downloadedAdapter.getItemCount() <= 0) {
+            Snackbar.make(getContentView(), "no photos", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        Bundle bundle = BundleChain.build()
+                .putStringArrayList(GalleryActivity.KEY_PHOTO_LIST, downloadedAdapter.getImageUris())
+                .putInt(GalleryActivity.KEY_PHOTO_INDEX, 0)
+                .toBundle();
+        Pair[] pairs = {};
+        ActivityJump.build(getActivity(), GalleryActivity.class)
+                .addBundle(bundle)
+                .makeSceneTransitionAnimation(pairs)
+                .jump();
     }
 
     @Override
@@ -122,5 +159,12 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
                         presenter.redownload(id);
                     }
                 }).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //下车
+        Bus.getOff(this);
     }
 }

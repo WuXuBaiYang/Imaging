@@ -2,12 +2,11 @@ package com.jtech.imaging.view.adapter;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.jtech.adapter.RecyclerAdapter;
 import com.jtech.imaging.R;
@@ -17,6 +16,8 @@ import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.view.RecyclerHolder;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
+
+import java.util.ArrayList;
 
 import rx.functions.Action1;
 
@@ -39,6 +40,19 @@ public class DownloadedAdapter extends RecyclerAdapter<DownloadModel> {
         this.onDownloadedClickListener = onDownloadedClickListener;
     }
 
+    /**
+     * 获取图片集合
+     *
+     * @return
+     */
+    public ArrayList<String> getImageUris() {
+        ArrayList<String> imageUris = new ArrayList<>();
+        for (int i = 0; i < getItemCount(); i++) {
+            imageUris.add(TextUtils.isEmpty(getItem(i).getPath()) ? getItem(i).getUrl() : getItem(i).getPath());
+        }
+        return imageUris;
+    }
+
     @Override
     protected View createView(LayoutInflater layoutInflater, ViewGroup viewGroup, int i) {
         return layoutInflater.inflate(R.layout.view_downloaded, viewGroup, false);
@@ -52,7 +66,7 @@ public class DownloadedAdapter extends RecyclerAdapter<DownloadModel> {
         layoutParams.height = itemSize;
         holder.itemView.setLayoutParams(layoutParams);
         //设置图片
-        final ImageView imageView = holder.getImageView(R.id.imageview_photo);
+        final AppCompatImageView imageView = holder.getImageView(R.id.imageview_photo);
         String imageUri = TextUtils.isEmpty(model.getPath()) ? PhotoLoadStrategy.getUrl(getContext(), model.getUrl(), itemSize) : model.getPath();
         ImageUtils.requestImage(getContext(), imageUri, itemSize, itemSize, new Action1<Bitmap>() {
             @Override
@@ -63,7 +77,7 @@ public class DownloadedAdapter extends RecyclerAdapter<DownloadModel> {
             }
         });
         //设置默认背景颜色
-        imageView.setBackgroundColor(Color.parseColor(model.getColor()));
+//        imageView.setBackgroundColor(Color.parseColor(model.getColor()));
         //设置图片本地找不到时的图标以及点击事件
         holder.setViewVisible(R.id.imagebutton_photo_unknown, model.getState() == DownloadState.DOWNLOADED_NOT_FOUND);
         //设置unknown的点击事件

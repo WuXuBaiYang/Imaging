@@ -7,7 +7,7 @@ package com.jtech.imaging.mvp.contract;
 
 public interface PhotoContract {
     interface Presenter {
-        String getUrl(int width);
+        String getUrl();
 
         boolean isLocalImage();
     }
