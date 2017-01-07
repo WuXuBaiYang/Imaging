@@ -12,14 +12,10 @@ public class DownloadEvent {
     public static class StateEvent {
         private long id;
         private int state;
-        private boolean isAllDownloadStart;
-        private boolean hasDownload;
 
-        public StateEvent(long id, int state, boolean isAllDownloadStart, boolean hasDownload) {
+        public StateEvent(long id, int state) {
             this.id = id;
             this.state = state;
-            this.isAllDownloadStart = isAllDownloadStart;
-            this.hasDownload = hasDownload;
         }
 
         public long getId() {
@@ -36,22 +32,6 @@ public class DownloadEvent {
 
         public void setState(int state) {
             this.state = state;
-        }
-
-        public boolean isAllDownloadStart() {
-            return isAllDownloadStart;
-        }
-
-        public void setAllDownloadStart(boolean allDownloadStart) {
-            isAllDownloadStart = allDownloadStart;
-        }
-
-        public boolean hasDownload() {
-            return hasDownload;
-        }
-
-        public void setHasDownload(boolean hasDownload) {
-            this.hasDownload = hasDownload;
         }
     }
 }

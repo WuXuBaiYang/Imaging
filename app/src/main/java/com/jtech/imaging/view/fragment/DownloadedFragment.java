@@ -95,10 +95,12 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
                 .setDoneClick(new DeleteDialog.OnDeleteListener() {
                     @Override
                     public void delete() {
+                        //获取任务id
+                        long id = downloadedAdapter.getItem(position).getId();
                         //移除适配器数据
                         downloadedAdapter.removeData(position);
                         //移除数据库中的数据
-                        // TODO: 2017/1/6 删除数据库中已下载的图片,以及本地图片
+                        presenter.deleteDownloaded(id);
                     }
                 }).show();
         return true;

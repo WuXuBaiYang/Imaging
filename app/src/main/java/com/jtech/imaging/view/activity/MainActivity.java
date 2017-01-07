@@ -202,7 +202,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
 
     @Override
     public void cacheSuccess(List<PhotoModel> photoModels) {
-        if (null != photoModels) {//设置缓存
+        if (null != photoModels && photoModels.size() > 0) {//设置缓存
             photoAdapter.setDatas(photoModels);
         } else {//发起下拉刷新
             refreshLayout.startRefreshing();

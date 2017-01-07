@@ -64,21 +64,6 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
     }
 
     /**
-     * 是否全部开始下载
-     *
-     * @return
-     */
-    public boolean isAllStartDownload() {
-        for (int i = 0; i < getItemCount(); i++) {
-            int state = getItem(i).getState();
-            if (state != DownloadState.DOWNLOADING && state != DownloadState.DOWNLOAD_WAITING) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * 根据状态获取描述
      *
      * @param state

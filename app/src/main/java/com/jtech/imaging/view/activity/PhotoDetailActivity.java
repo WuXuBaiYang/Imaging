@@ -219,6 +219,8 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     if (downloadRealmManager.hasDownload(md5)) {
                         Snackbar.make(content, "already exists", Snackbar.LENGTH_SHORT).show();
                         return;
+                    } else {
+                        Snackbar.make(content, "start to download", Snackbar.LENGTH_SHORT).show();
                     }
                     downloadRealmManager.addDownloadAndStart(new DownloadModel(id, name, color, width, height, md5, url));
                     break;

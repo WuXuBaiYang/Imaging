@@ -1,10 +1,11 @@
 package com.jtech.imaging.mvp.presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.jtech.imaging.cache.PhotoCache;
-import com.jtech.imaging.mvp.contract.MainContract;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.mvp.contract.MainContract;
 import com.jtech.imaging.net.API;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * 演示用逻辑处理实现类
@@ -44,6 +47,11 @@ public class MainPresenter implements MainContract.Presenter {
                     @Override
                     public void call(List<PhotoModel> photoModels) {
                         view.cacheSuccess(photoModels);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.i(TAG, "call: " + throwable.getMessage());
                     }
                 });
     }

@@ -29,7 +29,7 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @return
      */
     public RealmAsyncTask addDownloadAndStart(DownloadModel downloadModel) {
-        downloadModel.setState(DownloadState.DOWNLOADING);
+        downloadModel.setState(DownloadState.DOWNLOAD_WAITING);
         return addDownload(downloadModel);
     }
 

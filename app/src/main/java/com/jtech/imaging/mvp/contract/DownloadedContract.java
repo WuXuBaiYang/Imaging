@@ -12,6 +12,8 @@ import java.util.List;
 public interface DownloadedContract {
     interface Presenter extends BaseContract.Presenter {
         void getDownloadedList();
+
+        void deleteDownloaded(long id);
     }
 
     interface View extends BaseContract.View {
