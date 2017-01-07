@@ -16,6 +16,7 @@
     <item name="menu_search_search" type="id"></item>
     <item name="appbar" type="id"></item>
     <item name="imageview_photo" type="id"></item>
+    <item name="imagebutton_photo_unknown" type="id"></item>
     <item name="background" type="id"></item>
     <item name="textview_photo" type="id"></item>
     <item name="textview_clear" type="id"></item>

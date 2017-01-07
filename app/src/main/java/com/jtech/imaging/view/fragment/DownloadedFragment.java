@@ -13,6 +13,7 @@ import com.jtech.imaging.mvp.contract.DownloadedContract;
 import com.jtech.imaging.mvp.presenter.DownloadedPresenter;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.imaging.view.widget.dialog.DeleteDialog;
+import com.jtech.imaging.view.widget.dialog.UnknownDialog;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnItemLongClickListener;
 import com.jtech.view.JRecyclerView;
@@ -28,7 +29,7 @@ import butterknife.Bind;
  * Created by jianghan on 2016/10/31.
  */
 
-public class DownloadedFragment extends BaseFragment implements DownloadedContract.View, OnItemClickListener, OnItemLongClickListener {
+public class DownloadedFragment extends BaseFragment implements DownloadedContract.View, OnItemClickListener, OnItemLongClickListener, DownloadedAdapter.OnDownloadedClickListener {
 
     @Bind(R.id.jrecyclerview)
     JRecyclerView jRecyclerView;
@@ -60,6 +61,8 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
         jRecyclerView.setOnItemClickListener(this);
         //设置item的长点击事件
         jRecyclerView.setOnItemLongClickListener(this);
+        //设置列表的点击事件
+        downloadedAdapter.setOnDownloadedClickListener(this);
     }
 
     @Override
@@ -104,5 +107,21 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
                     }
                 }).show();
         return true;
+    }
+
+    @Override
+    public void onUnknownClick(final long id, final int position) {
+        UnknownDialog
+                .build(getActivity())
+                .setContent("Failed to find pictures in the local,Whether or not to download")
+                .setDoneClick(new UnknownDialog.OnUnknownClick() {
+                    @Override
+                    public void redownload() {
+                        //移除适配器中数据
+                        downloadedAdapter.removeData(position);
+                        //重新下载
+                        presenter.redownload(id);
+                    }
+                }).show();
     }
 }
