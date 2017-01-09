@@ -166,5 +166,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
         super.onDestroy();
         //下车
         Bus.getOff(this);
+        //移除监听
+        presenter.removeListener();
     }
 }

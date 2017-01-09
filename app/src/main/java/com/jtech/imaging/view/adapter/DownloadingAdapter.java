@@ -71,19 +71,19 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
      */
     private String getStateDescribe(int state) {
         if (state == DownloadState.DOWNLOADING) {
-            return "downloading";
+            return "";
         } else if (state == DownloadState.DOWNLOAD_WAITING) {
             return "waiting";
         } else if (state == DownloadState.DOWNLOAD_STOP) {
-            return "stop";
+            return "";
         } else if (state == DownloadState.DOWNLOAD_FAIL_UNKNOWN) {
-            return "unknown";
+            return "unknown error";
         } else if (state == DownloadState.DOWNLOAD_FAIL_NETWORK_CHANGE) {
-            return "intent change";
+            return "netword change";
         } else if (state == DownloadState.DOWNLOAD_FAIL_NETWORK_ERROR) {
-            return "intent error";
+            return "netword error";
         }
-        return "unknown";
+        return "unknown error";
     }
 
     /**

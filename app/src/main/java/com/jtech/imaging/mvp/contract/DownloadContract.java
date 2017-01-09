@@ -18,6 +18,8 @@ public interface DownloadContract {
         boolean isAllDownloading();
 
         void addDownloadStateChangeListener();
+
+        void removeListener();
     }
 
     interface View extends BaseContract.View {

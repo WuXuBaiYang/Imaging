@@ -208,7 +208,6 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     jumpToWallpaper();
                     break;
                 case 3://下载
-                    DownloadRealmManager downloadRealmManager = new DownloadRealmManager();
                     long id = System.currentTimeMillis();
                     String name = photoModel.getUser().getName();
                     String color = photoModel.getColor();
@@ -216,13 +215,13 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     int height = photoModel.getHeight();
                     String url = photoModel.getUrls().getRaw();
                     String md5 = Tools.md5(name + width + height + url);
-                    if (downloadRealmManager.hasDownload(md5)) {
+                    if (DownloadRealmManager.get().hasDownload(md5)) {
                         Snackbar.make(content, "already exists", Snackbar.LENGTH_SHORT).show();
                         bottomSheetDialog.dismiss();
                         return;
                     }
                     Snackbar.make(content, "start to download", Snackbar.LENGTH_SHORT).show();
-                    downloadRealmManager.addDownloadAndStart(new DownloadModel(id, name, color, width, height, md5, url));
+                    DownloadRealmManager.get().addDownloadAndStart(new DownloadModel(id, name, color, width, height, md5, url));
                     break;
                 default:
                     break;

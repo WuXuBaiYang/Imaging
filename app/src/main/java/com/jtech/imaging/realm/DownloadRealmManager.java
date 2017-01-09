@@ -3,7 +3,6 @@ package com.jtech.imaging.realm;
 import com.jtech.imaging.common.Constants;
 import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.DownloadModel;
-import com.jtech.imaging.realm.listener.OnDownloadTaskListener;
 
 import io.realm.Realm;
 import io.realm.RealmAsyncTask;
@@ -16,6 +15,18 @@ import io.realm.RealmResults;
  */
 
 public class DownloadRealmManager extends BaseRealmManager {
+    private static DownloadRealmManager INSTANCE;
+    //下载中列表
+    private RealmResults<DownloadModel> realmResultsDownloading;
+    //已下载列表
+    private RealmResults<DownloadModel> realmResultsDownloaded;
+
+    public static DownloadRealmManager get() {
+        if (null == INSTANCE) {
+            INSTANCE = new DownloadRealmManager();
+        }
+        return INSTANCE;
+    }
 
     @Override
     public String getDBName() {
@@ -205,13 +216,8 @@ public class DownloadRealmManager extends BaseRealmManager {
                 //获取到暂停以及错误的下载集合
                 RealmResults<DownloadModel> realmResults = realm
                         .where(DownloadModel.class)
-                        .equalTo("state", DownloadState.DOWNLOAD_STOP)
-                        .or()
-                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_UNKNOWN)
-                        .or()
-                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_NETWORK_ERROR)
-                        .or()
-                        .equalTo("state", DownloadState.DOWNLOAD_FAIL_NETWORK_CHANGE)
+                        .notEqualTo("state", DownloadState.DOWNLOADED)
+                        .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
                         .findAll();
                 //修改全部任务为开始状态
                 for (DownloadModel downloadMode : realmResults) {
@@ -231,9 +237,8 @@ public class DownloadRealmManager extends BaseRealmManager {
                 //获取到下载中,连接中状态的集合
                 RealmResults<DownloadModel> realmResults = realm
                         .where(DownloadModel.class)
-                        .equalTo("state", DownloadState.DOWNLOADING)
-                        .or()
-                        .equalTo("state", DownloadState.DOWNLOAD_WAITING)
+                        .notEqualTo("state", DownloadState.DOWNLOADED)
+                        .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
                         .findAll();
                 //修改全部任务为暂停中状态
                 for (DownloadModel downloadModel : realmResults) {
@@ -304,21 +309,29 @@ public class DownloadRealmManager extends BaseRealmManager {
      *
      * @return
      */
-    public void getDownloading(final OnDownloadTaskListener onDownloadTaskListener) {
-        RealmResults<DownloadModel> realmResults = getRealm()
-                .where(DownloadModel.class)
-                .notEqualTo("state", DownloadState.DOWNLOADED)
-                .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
-                .findAllSortedAsync("id");
-        //回调查询结果
-        realmResults.addChangeListener(new RealmChangeListener<RealmResults<DownloadModel>>() {
-            @Override
-            public void onChange(RealmResults<DownloadModel> element) {
-                if (null != onDownloadTaskListener) {
-                    onDownloadTaskListener.downloadTask(copyFromRealm(getRealm(), element));
-                }
-            }
-        });
+    public void getDownloading(RealmChangeListener realmChangeListener) {
+        //获取集合
+        RealmResults realmResults = getDownloading(getRealm());
+        //添加监听
+        realmResults.addChangeListener(realmChangeListener);
+        //手动回调
+        realmChangeListener.onChange(realmResults);
+    }
+
+    /**
+     * 获取下载列表对象
+     *
+     * @return
+     */
+    public RealmResults<DownloadModel> getDownloading(Realm realm) {
+        if (null == realmResultsDownloading || !realmResultsDownloading.isValid()) {
+            realmResultsDownloading = realm
+                    .where(DownloadModel.class)
+                    .notEqualTo("state", DownloadState.DOWNLOADED)
+                    .notEqualTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
+                    .findAllSorted("id");
+        }
+        return realmResultsDownloading;
     }
 
     /**
@@ -326,21 +339,39 @@ public class DownloadRealmManager extends BaseRealmManager {
      *
      * @return
      */
-    public void getDownloaded(final OnDownloadTaskListener onDownloadTaskListener) {
-        RealmResults<DownloadModel> realmResults = getRealm()
-                .where(DownloadModel.class)
-                .equalTo("state", DownloadState.DOWNLOADED)
-                .or()
-                .equalTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
-                .findAllSortedAsync("id");
-        //回调查询结果
-        realmResults.addChangeListener(new RealmChangeListener<RealmResults<DownloadModel>>() {
-            @Override
-            public void onChange(RealmResults<DownloadModel> element) {
-                if (null != onDownloadTaskListener) {
-                    onDownloadTaskListener.downloadTask(copyFromRealm(getRealm(), element));
-                }
-            }
-        });
+    public void getDownloaded(RealmChangeListener realmChangeListener) {
+        //获取集合
+        RealmResults realmResults = getDownloaded(getRealm());
+        //添加数据变化监听
+        realmResults.addChangeListener(realmChangeListener);
+        //手动回调
+        realmChangeListener.onChange(realmResults);
+    }
+
+    /**
+     * 获取已下载列表对象
+     *
+     * @return
+     */
+    public RealmResults<DownloadModel> getDownloaded(Realm realm) {
+        if (null == realmResultsDownloaded || !realmResultsDownloaded.isValid()) {
+            realmResultsDownloaded = realm
+                    .where(DownloadModel.class)
+                    .equalTo("state", DownloadState.DOWNLOADED)
+                    .or()
+                    .equalTo("state", DownloadState.DOWNLOADED_NOT_FOUND)
+                    .findAllSorted("id");
+        }
+        return realmResultsDownloaded;
+    }
+
+    /**
+     * 移除监听
+     *
+     * @param realmChangeListener
+     */
+    public void removeListener(RealmChangeListener realmChangeListener) {
+        getDownloading(getRealm()).removeChangeListener(realmChangeListener);
+        getDownloaded(getRealm()).removeChangeListener(realmChangeListener);
     }
 }

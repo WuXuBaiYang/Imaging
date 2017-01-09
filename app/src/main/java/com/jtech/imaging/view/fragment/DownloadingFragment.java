@@ -104,4 +104,11 @@ public class DownloadingFragment extends BaseFragment implements DownloadingCont
             presenter.startDownload(id);
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //移除监听
+        presenter.removeListener();
+    }
 }

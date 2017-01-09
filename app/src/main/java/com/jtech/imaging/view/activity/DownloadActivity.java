@@ -73,7 +73,8 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
 
     @Override
     protected void loadData() {
-
+        //添加数据变化监听
+        presenter.addDownloadStateChangeListener();
     }
 
     @Override
@@ -124,17 +125,22 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
                 Bus.get().post(new DownloadedGalleryEvent());
             } else {
                 if (presenter.hasDownloading()) {
-                    boolean isAllDownloading = presenter.isAllDownloading();
-                    if (isAllDownloading) {
+                    if (presenter.isAllDownloading()) {
                         presenter.stopAllDownload();
                     } else {
                         presenter.startAllDownload();
                     }
-                    setDownloadingState(isAllDownloading);
                 } else {
                     Snackbar.make(content, "no download", Snackbar.LENGTH_SHORT).show();
                 }
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //移除监听
+        presenter.removeListener();
     }
 }
