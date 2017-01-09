@@ -131,7 +131,7 @@ public class DownloadService extends Service {
 
         @Override
         protected void error(BaseDownloadTask task, Throwable e) {
-            //设置下载任务为错误
+            //设置下载任务为未知错误
             downloadRealmManager.downloadFailUnknown(task.getId());
             // 找到下一个下载任务
             findNextDownloadTask();
