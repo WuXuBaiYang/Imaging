@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import com.jtech.imaging.R;
 import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.DownloadModel;
+import com.jtech.imaging.model.event.DownloadEvent;
 import com.jtech.imaging.mvp.contract.DownloadingContract;
 import com.jtech.imaging.mvp.presenter.DownloadingPresenter;
+import com.jtech.imaging.util.Bus;
 import com.jtech.imaging.view.adapter.DownloadingAdapter;
 import com.jtech.imaging.view.widget.dialog.DeleteDialog;
 import com.jtech.listener.OnItemLongClickListener;
@@ -103,12 +105,7 @@ public class DownloadingFragment extends BaseFragment implements DownloadingCont
         } else {
             presenter.startDownload(id);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //移除监听
-        presenter.removeListener();
+        //发送任务变化消息
+        Bus.get().post(new DownloadEvent.StateEvent(id, state));
     }
 }

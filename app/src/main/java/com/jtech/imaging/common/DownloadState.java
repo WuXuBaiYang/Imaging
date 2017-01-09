@@ -26,4 +26,11 @@ public class DownloadState {
     public static final int DOWNLOAD_FAIL_NETWORK_CHANGE = 0x08;
     /*下载失败，网络错误*/
     public static final int DOWNLOAD_FAIL_NETWORK_ERROR = 0x09;
+
+    /*下载任务删除*/
+    public static final int DOWNLOAD_DELETE = 0x11;
+    /*全部开始*/
+    public static final int DOWNLOAD_START_ALL = 0x12;
+    /*全部停止*/
+    public static final int DOWNLOAD_STOP_ALL = 0x13;
 }

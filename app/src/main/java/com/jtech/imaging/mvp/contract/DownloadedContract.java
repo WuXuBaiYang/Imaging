@@ -16,8 +16,6 @@ public interface DownloadedContract {
         void deleteDownloaded(long id);
 
         void redownload(long id);
-
-        void removeListener();
     }
 
     interface View extends BaseContract.View {

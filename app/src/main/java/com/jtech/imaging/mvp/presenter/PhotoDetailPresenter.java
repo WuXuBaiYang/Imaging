@@ -3,9 +3,19 @@ package com.jtech.imaging.mvp.presenter;
 import android.content.Context;
 
 import com.jtech.imaging.cache.PhotoCache;
-import com.jtech.imaging.mvp.contract.PhotoDetailContract;
+import com.jtech.imaging.common.Constants;
+import com.jtech.imaging.common.DownloadState;
+import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.model.event.DownloadEvent;
+import com.jtech.imaging.mvp.contract.PhotoDetailContract;
 import com.jtech.imaging.net.API;
+import com.jtech.imaging.realm.DownloadRealmManager;
+import com.jtech.imaging.util.Bus;
+import com.jtech.imaging.util.Tools;
+import com.liulishuo.filedownloader.util.FileDownloadUtils;
+
+import java.io.File;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -19,10 +29,41 @@ import rx.schedulers.Schedulers;
  */
 
 public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
+    private Context context;
     private PhotoDetailContract.View view;
 
-    public PhotoDetailPresenter(PhotoDetailContract.View view) {
+    private String imageId;
+    private String imageName;
+    private String imageUrl;
+
+    private PhotoModel photoModel;
+
+    public PhotoDetailPresenter(Context context, PhotoDetailContract.View view, String imageId, String imageName, String imageUrl) {
+        this.context = context;
         this.view = view;
+        this.imageId = imageId;
+        this.imageName = imageName;
+        this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public String getPhotoName() {
+        return imageName;
+    }
+
+    @Override
+    public String getPhotoUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public String getPhotoId() {
+        return imageId;
+    }
+
+    @Override
+    public PhotoModel getPhotoModel() {
+        return photoModel;
     }
 
     @Override
@@ -41,6 +82,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
                     @Override
                     public void call(PhotoModel photoModel) {
                         if (null != photoModel) {
+                            PhotoDetailPresenter.this.photoModel = photoModel;
                             view.success(photoModel);
                             return;
                         }
@@ -74,6 +116,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
                 .subscribe(new Action1<PhotoModel>() {
                     @Override
                     public void call(PhotoModel photoModel) {
+                        PhotoDetailPresenter.this.photoModel = photoModel;
                         view.success(photoModel);
                     }
                 }, new Action1<Throwable>() {
@@ -82,5 +125,35 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
                         view.fail(throwable.getMessage());
                     }
                 });
+    }
+
+    @Override
+    public void startDownload() {
+        String url = photoModel.getUrls().getRaw();
+        String path = getPath(System.currentTimeMillis() + "");
+        long id = FileDownloadUtils.generateId(url, path, false);
+        String name = photoModel.getUser().getName();
+        String color = photoModel.getColor();
+        int width = photoModel.getWidth();
+        int height = photoModel.getHeight();
+        String md5 = Tools.md5(name + width + height + url);
+        DownloadRealmManager downloadRealmManager = new DownloadRealmManager();
+        if (downloadRealmManager.hasDownload(md5)) {
+            view.downloadFail("already exists");
+            return;
+        }
+        downloadRealmManager.addDownloadAndStart(new DownloadModel(id, name, color, width, height, md5, url, path));
+        //发送任务开始消息
+        Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_WAITING));
+    }
+
+    /**
+     * 获取存储路径
+     *
+     * @param fileName
+     * @return
+     */
+    private String getPath(String fileName) {
+        return new File(context.getCacheDir(), Constants.CACHE_NAME + "/" + fileName + ".jpg").getAbsolutePath();
     }
 }

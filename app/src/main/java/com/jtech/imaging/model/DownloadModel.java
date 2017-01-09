@@ -29,7 +29,7 @@ public class DownloadModel extends RealmObject implements Serializable {
     public DownloadModel() {
     }
 
-    public DownloadModel(long id, String name, String color, int width, int height, String md5, String url) {
+    public DownloadModel(long id, String name, String color, int width, int height, String md5, String url, String path) {
         this.id = id;
         this.name = name;
         this.color = color;
@@ -37,6 +37,7 @@ public class DownloadModel extends RealmObject implements Serializable {
         this.height = height;
         this.md5 = md5;
         this.url = url;
+        this.path = path;
     }
 
     public String getName() {

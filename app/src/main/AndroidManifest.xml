@@ -12,7 +12,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        //欢迎页
+        <!--欢迎页-->
         <activity
             android:name=".view.activity.WelcomeActivity"
             android:theme="@style/AppCompat.FullScreen">
@@ -21,29 +21,31 @@
                 <category android:name="android.intent.category.LAUNCHER"></category>
             </intent-filter>
         </activity>
-        //主页
+        <!--主页-->
         <activity android:name=".view.activity.MainActivity" />
-        //授权认证
+        <!--授权认证-->
         <activity android:name=".view.activity.OauthActivity" />
-        //搜索页
+        <!--搜索页-->
         <activity android:name=".view.activity.SearchActivity" />
-        //图片详情
+        <!--图片详情-->
         <activity android:name=".view.activity.PhotoDetailActivity" />
-        //设置壁纸页面
+        <!--设置壁纸页面-->
         <activity
             android:name=".view.activity.WallpaperActivity"
             android:theme="@style/AppCompat.FullScreen" />
-        //下载管理页
+        <!--下载页面-->
         <activity android:name=".view.activity.DownloadActivity" />
-        //画廊页面
+        <!--画廊页面-->
         <activity
             android:name=".view.activity.GalleryActivity"
             android:theme="@style/AppCompat.Translucent.FullScreen" />
-        //随机页面
+        <!--随机页面-->
         <activity
             android:name=".view.activity.RandomActivity"
             android:theme="@style/AppCompat.Translucent.FullScreen" />
-        //网络状态变化广播接收
+        <!--下载服务-->
+        <service android:name=".service.DownloadService" />
+        <!--网络状态变化广播接收-->
         <receiver
             android:name=".receiver.ConnectionChangeReceiver"
             android:label="NetworkConnection">

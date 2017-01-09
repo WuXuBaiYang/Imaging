@@ -17,14 +17,11 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.PhotoCache;
 import com.jtech.imaging.common.PhotoResolution;
-import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.model.PhotoModel;
 import com.jtech.imaging.mvp.contract.PhotoDetailContract;
 import com.jtech.imaging.mvp.presenter.PhotoDetailPresenter;
-import com.jtech.imaging.realm.DownloadRealmManager;
 import com.jtech.imaging.strategy.PhotoResolutionStrategy;
 import com.jtech.imaging.util.ActivityJump;
-import com.jtech.imaging.util.Tools;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.imaging.view.widget.dialog.PhotoDetailSheetDialog;
@@ -66,30 +63,23 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     @Bind(R.id.content)
     CoordinatorLayout content;
 
-    private String imageId;
-    private String imageName;
-    private String imageUrl;
-    private PhotoModel photoModel;
-
     private PhotoDetailContract.Presenter presenter;
 
     @Override
     protected void initVariables(Bundle bundle) {
+        //获取参数
+        String imageId = bundle.getString(IMAGE_ID_KEY);
+        String imageName = bundle.getString(IMAGE_NAME_KEY);
+        String imageUrl = bundle.getString(IMAGE_URL_KEY);
         //p类实现
-        this.presenter = new PhotoDetailPresenter(this);
-        //获取图片id
-        this.imageId = bundle.getString(IMAGE_ID_KEY);
-        //获取图片名字
-        this.imageName = bundle.getString(IMAGE_NAME_KEY);
-        //获取图片url
-        this.imageUrl = bundle.getString(IMAGE_URL_KEY);
+        this.presenter = new PhotoDetailPresenter(getActivity(), this, imageId, imageName, imageUrl);
     }
 
     @Override
     protected void initViews(Bundle bundle) {
         setContentView(R.layout.activity_photo_detail);
         //设置标题
-        toolbar.setTitle(imageName + "(" + PhotoResolutionStrategy.getStrategyString(getActivity()) + ")");
+        toolbar.setTitle(presenter.getPhotoName() + "(" + PhotoResolutionStrategy.getStrategyString(getActivity()) + ")");
         //设置标题栏
         setupToolbar(toolbar)
                 .setContentInsetStartWithNavigation(0)
@@ -106,10 +96,10 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
         //显示加载动画
         loadingView.show();
         //设置标题
-        toolbar.setTitle(imageName + "(" + PhotoResolutionStrategy.getStrategyString(getActivity()) + ")");
+        toolbar.setTitle(presenter.getPhotoName() + "(" + PhotoResolutionStrategy.getStrategyString(getActivity()) + ")");
         //显示图片
         final long startTimeMillis = System.currentTimeMillis();
-        ImageUtils.requestImage(getActivity(), PhotoResolutionStrategy.getUrl(getActivity(), imageUrl), new Action1<Bitmap>() {
+        ImageUtils.requestImage(getActivity(), PhotoResolutionStrategy.getUrl(getActivity(), presenter.getPhotoUrl()), new Action1<Bitmap>() {
             @Override
             public void call(Bitmap bitmap) {
                 if (null != bitmap) {
@@ -130,12 +120,11 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
             }
         });
         //获取图片缓存
-        presenter.getPhotoDetailCache(getActivity(), imageId);
+        presenter.getPhotoDetailCache(getActivity(), presenter.getPhotoId());
     }
 
     @Override
-    public void success(final PhotoModel photoModel) {
-        this.photoModel = photoModel;
+    public void success(PhotoModel photoModel) {
         //隐藏加载动画
         loadingView.hide();
     }
@@ -143,6 +132,16 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     @Override
     public void fail(String message) {
         Snackbar.make(photoView, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void downloadFail(String error) {
+        Snackbar.make(content, "already exists", Snackbar.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void downloadSuccess() {
+        Snackbar.make(content, "start to download", Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -165,7 +164,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     @Override
     public void showPhotoExifDialog() {
         PhotoExifDialog
-                .build(getActivity(), photoModel)
+                .build(getActivity(), presenter.getPhotoModel())
                 .setDoneClick(new OnPhotoExifDoneClick())
                 .show();
     }
@@ -173,7 +172,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     @Override
     public void jumpToWallpaper() {
         Bundle bundle = BundleChain.build()
-                .putString(WallpaperActivity.KEY_IMAGE_URL, photoModel.getUrls().getRaw())
+                .putString(WallpaperActivity.KEY_IMAGE_URL, presenter.getPhotoModel().getUrls().getRaw())
                 .toBundle();
         Pair[] pairs = PairChain
                 .build(floatingActionButton, getString(R.string.fab))
@@ -208,20 +207,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                     jumpToWallpaper();
                     break;
                 case 3://下载
-                    long id = System.currentTimeMillis();
-                    String name = photoModel.getUser().getName();
-                    String color = photoModel.getColor();
-                    int width = photoModel.getWidth();
-                    int height = photoModel.getHeight();
-                    String url = photoModel.getUrls().getRaw();
-                    String md5 = Tools.md5(name + width + height + url);
-                    if (DownloadRealmManager.get().hasDownload(md5)) {
-                        Snackbar.make(content, "already exists", Snackbar.LENGTH_SHORT).show();
-                        bottomSheetDialog.dismiss();
-                        return;
-                    }
-                    Snackbar.make(content, "start to download", Snackbar.LENGTH_SHORT).show();
-                    DownloadRealmManager.get().addDownloadAndStart(new DownloadModel(id, name, color, width, height, md5, url));
+                    presenter.startDownload();
                     break;
                 default:
                     break;
@@ -334,7 +320,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     private class FabClick implements Action1 {
         @Override
         public void call(Object o) {
-            if (null != photoModel) {
+            if (null != presenter.getPhotoModel()) {
                 showSheetDialog();
             } else {
                 Snackbar.make(content, "Please wait for loading", Snackbar.LENGTH_SHORT).show();

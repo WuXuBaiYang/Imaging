@@ -48,5 +48,5 @@ dependencies {
     //加载动画
     compile 'com.github.ybq:Android-SpinKit:1.1.0'
     //下载框架
-    compile 'com.liulishuo.filedownloader:library:1.2.2'
+    compile 'com.liulishuo.filedownloader:library:1.3.9'
 }

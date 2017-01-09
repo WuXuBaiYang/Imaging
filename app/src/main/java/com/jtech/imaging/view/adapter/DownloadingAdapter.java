@@ -10,6 +10,7 @@ import com.jtech.adapter.RecyclerAdapter;
 import com.jtech.imaging.R;
 import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.DownloadModel;
+import com.jtech.imaging.util.FileUtils;
 import com.jtech.view.RecyclerHolder;
 
 /**
@@ -51,6 +52,8 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
             //设置进度
             int progress = (int) ((1.0 * model.getDownloadSize()) / model.getSize() * 100);
             progressBar.setProgress(progress);
+            //显示下载进度
+            holder.setText(R.id.textview_downloading_status, getProgressText(model.getDownloadSize(), model.getSize()));
         }
         //设置状态的点击事件
         holder.setClickListener(R.id.imagebutton_downloading_status, new View.OnClickListener() {
@@ -61,6 +64,17 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
                 }
             }
         });
+    }
+
+    /**
+     * 获取进度的文本描述
+     *
+     * @param soFarBytes
+     * @param totalBytes
+     * @return
+     */
+    private String getProgressText(long soFarBytes, long totalBytes) {
+        return FileUtils.FormetFileSize(soFarBytes) + " / " + FileUtils.FormetFileSize(totalBytes);
     }
 
     /**

@@ -136,11 +136,4 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
             }
         }
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //移除监听
-        presenter.removeListener();
-    }
 }

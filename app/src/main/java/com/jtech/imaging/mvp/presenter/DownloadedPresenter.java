@@ -17,30 +17,30 @@ import io.realm.RealmResults;
 public class DownloadedPresenter implements DownloadedContract.Presenter, RealmChangeListener<RealmResults<DownloadModel>> {
     private Context context;
     private DownloadedContract.View view;
+    private DownloadRealmManager downloadRealmManager;
 
     public DownloadedPresenter(Context context, DownloadedContract.View view) {
         this.context = context;
         this.view = view;
+        //实例化数据库操作
+        downloadRealmManager = new DownloadRealmManager();
     }
 
     @Override
     public void getDownloadedList() {
-        DownloadRealmManager.get().getDownloaded(this);
+        downloadRealmManager
+                .getDownloaded()
+                .addChangeListener(this);
     }
 
     @Override
     public void deleteDownloaded(long id) {
-        DownloadRealmManager.get().removeDownload(id);
+        downloadRealmManager.removeDownload(id);
     }
 
     @Override
     public void redownload(long id) {
-        DownloadRealmManager.get().startDownload(id);
-    }
-
-    @Override
-    public void removeListener() {
-        DownloadRealmManager.get().removeListener(this);
+      downloadRealmManager.startDownload(id);
     }
 
     @Override

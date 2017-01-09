@@ -1,9 +1,11 @@
 package com.jtech.imaging;
 
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
 import com.jtech.imaging.receiver.ConnectionChangeReceiver;
+import com.jtech.imaging.service.DownloadService;
 import com.jtechlib.BaseApplication;
 import com.liulishuo.filedownloader.FileDownloader;
 
@@ -26,6 +28,8 @@ public class JApplication extends BaseApplication {
         Realm.init(getApplicationContext());
         //初始化下载管理
         FileDownloader.init(getApplicationContext());
+        //启动下载服务
+        startService(new Intent(this, DownloadService.class));
     }
 
     /**
