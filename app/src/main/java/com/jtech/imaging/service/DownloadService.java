@@ -2,7 +2,6 @@ package com.jtech.imaging.service;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
@@ -24,7 +23,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 public class DownloadService extends Service {
     private BaseDownloadTask downloadTask;
-    private DownloadBinder downloadBinder;
     private DownloadRealmManager downloadRealmManager;
 
     @Override
@@ -34,8 +32,6 @@ public class DownloadService extends Service {
         Bus.getOn(this);
         //初始化task
         downloadTask = FileDownloader.getImpl().create("");
-        //binder
-        downloadBinder = new DownloadBinder();
         //实例化数据库操作对象
         downloadRealmManager = new DownloadRealmManager();
     }
@@ -159,16 +155,10 @@ public class DownloadService extends Service {
         }
     }
 
-    /**
-     * 下载的binder
-     */
-    public class DownloadBinder extends Binder {
-    }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return downloadBinder;
+        return null;
     }
 
     @Override
