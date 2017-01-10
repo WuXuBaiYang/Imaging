@@ -36,7 +36,7 @@ android {
 
 dependencies {
     //JTech
-    compile 'com.github.WuXuBaiYang:JTechLib:0.7.1'
+    compile 'com.github.WuXuBaiYang:JTechLib:0.7.2'
     //recycleerview分割线
     compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
     //视差滚动
