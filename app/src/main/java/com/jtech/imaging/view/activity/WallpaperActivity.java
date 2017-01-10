@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.jtech.imaging.R;
@@ -91,7 +90,7 @@ public class WallpaperActivity extends BaseActivity implements WallpaperContract
                 }
             });
         } else {
-            ImageUtils.requestImage(getActivity(), presenter.getUrl(screenWidth), screenWidth, ViewGroup.LayoutParams.WRAP_CONTENT, new Action1<Bitmap>() {
+            ImageUtils.requestLocalImage(getActivity(), presenter.getUrl(screenWidth), screenWidth, -1, new Action1<Bitmap>() {
                 @Override
                 public void call(Bitmap bitmap) {
                     if (null != bitmap) {

@@ -59,6 +59,7 @@ public class DownloadingPresenter implements DownloadingContract.Presenter, Real
 
     @Override
     public void onChange(RealmResults<DownloadModel> element) {
+        element.addChangeListener(this);
         view.downloadingList(Realm.getDefaultInstance().copyFromRealm(element));
     }
 }

@@ -10,11 +10,10 @@ import com.jtech.imaging.R;
 import com.jtech.imaging.mvp.contract.PhotoContract;
 import com.jtech.imaging.mvp.presenter.PhotoPresenter;
 import com.jtech.imaging.view.widget.LoadingView;
-import com.jtechlib.Util.ImageUtils;
+import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.fragment.BaseFragment;
 
 import butterknife.Bind;
-import rx.functions.Action1;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -52,32 +51,12 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
         loadingView.show();
         //设置tap事件
         photoView.setOnPhotoTapListener(onPhotoTapListener);
-        //显示图片
-        if (presenter.isLocalImage()) {
-            ImageUtils.requestImage(getActivity(), presenter.getUrl(), new Action1<Bitmap>() {
-                @Override
-                public void call(Bitmap bitmap) {
-                    if (null != bitmap) {
-                        loadingView.hide();
-                        photoView.setImageBitmap(bitmap);
-                    }
-                }
-            });
-        } else {
-            ImageUtils.requestImage(getActivity(), presenter.getUrl(), new Action1<Bitmap>() {
-                @Override
-                public void call(Bitmap bitmap) {
-                    if (null != bitmap) {
-                        loadingView.hide();
-                        photoView.setImageBitmap(bitmap);
-                    }
-                }
-            });
-        }
     }
 
     @Override
     protected void loadData() {
+        //请求图片
+        presenter.loadImage(DeviceUtils.getScreenWidth(getActivity()));
     }
 
     public static PhotoFragment newInstance(String uri) {
@@ -86,6 +65,17 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
         PhotoFragment fragment = new PhotoFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void loadSuccess(Bitmap bitmap) {
+        loadingView.hide();
+        photoView.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void looadFail(String error) {
+
     }
 
     /**

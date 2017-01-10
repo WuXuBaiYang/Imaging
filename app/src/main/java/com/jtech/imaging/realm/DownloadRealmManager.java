@@ -25,23 +25,26 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @param downloadModel
      * @return
      */
-    public RealmAsyncTask addDownloadAndStart(DownloadModel downloadModel) {
+    public RealmAsyncTask addDownloadAndStart(DownloadModel downloadModel, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
         downloadModel.setState(DownloadState.DOWNLOAD_WAITING);
-        return addDownload(downloadModel);
+        return addDownload(downloadModel, onSuccess, onError);
     }
 
     /**
      * 添加一条下载记录
      *
      * @param downloadModel
+     * @param onSuccess
+     * @param onError
+     * @return
      */
-    public RealmAsyncTask addDownload(final DownloadModel downloadModel) {
+    public RealmAsyncTask addDownload(final DownloadModel downloadModel, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
         return execute(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.insertOrUpdate(downloadModel);
             }
-        });
+        }, onSuccess, onError);
     }
 
     /**
@@ -299,11 +302,12 @@ public class DownloadRealmManager extends BaseRealmManager {
         return execute(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(DownloadModel.class)
+                DownloadModel downloadModel = realm.where(DownloadModel.class)
                         .equalTo("id", id)
-                        .findFirst()
-                        .setState(state);
-
+                        .findFirst();
+                if (null != downloadModel) {
+                    downloadModel.setState(state);
+                }
             }
         });
     }

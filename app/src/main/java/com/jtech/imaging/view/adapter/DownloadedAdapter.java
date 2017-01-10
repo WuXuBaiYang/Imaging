@@ -2,7 +2,6 @@ package com.jtech.imaging.view.adapter;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.support.v7.widget.AppCompatImageView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import com.jtech.adapter.RecyclerAdapter;
 import com.jtech.imaging.R;
 import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.DownloadModel;
-import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.view.RecyclerHolder;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
@@ -59,20 +57,18 @@ public class DownloadedAdapter extends RecyclerAdapter<DownloadModel> {
     }
 
     @Override
-    protected void convert(RecyclerHolder holder, final DownloadModel model, final int position) {
+    protected void convert(final RecyclerHolder holder, final DownloadModel model, final int position) {
         //设置item的宽高
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
         layoutParams.width = itemSize;
         layoutParams.height = itemSize;
         holder.itemView.setLayoutParams(layoutParams);
-        //设置图片
-        final AppCompatImageView imageView = holder.getImageView(R.id.imageview_photo);
-        String imageUri = TextUtils.isEmpty(model.getPath()) ? PhotoLoadStrategy.getUrl(getContext(), model.getUrl(), itemSize) : model.getPath();
-        ImageUtils.requestImage(getContext(), imageUri, itemSize, itemSize, new Action1<Bitmap>() {
+        //只请求本地图片
+        ImageUtils.requestLocalImage(getContext(), model.getPath(), itemSize, -1, new Action1<Bitmap>() {
             @Override
             public void call(Bitmap bitmap) {
                 if (null != bitmap) {
-                    imageView.setImageBitmap(bitmap);
+                    holder.getImageView(R.id.imageview_photo).setImageBitmap(bitmap);
                 }
             }
         });

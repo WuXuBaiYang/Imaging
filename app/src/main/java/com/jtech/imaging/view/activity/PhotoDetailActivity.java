@@ -72,7 +72,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
         String imageName = bundle.getString(KEY_IMAGE_NAME);
         String imageUrl = bundle.getString(KEY_IMAGE_URL);
         //p类实现
-        this.presenter = new PhotoDetailPresenter(getActivity(), this, imageId, imageName, imageUrl);
+        presenter = new PhotoDetailPresenter(getActivity(), this, imageId, imageName, imageUrl);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
 
     @Override
     public void downloadFail(String error) {
-        Snackbar.make(content, "already exists", Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(content, error, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

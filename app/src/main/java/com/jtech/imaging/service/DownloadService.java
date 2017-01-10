@@ -84,8 +84,8 @@ public class DownloadService extends Service {
                     .getImpl()
                     .create(downloadModel.getUrl())
                     .setPath(downloadModel.getPath())
-                    .setListener(new DownloadListener())
-                    .setWifiRequired(true);
+                    .setListener(new DownloadListener(downloadModel.getId()));
+//                    .setWifiRequired(true);
             //开始下载
             downloadTask.start();
         }
@@ -95,24 +95,30 @@ public class DownloadService extends Service {
      * 下载监听
      */
     private class DownloadListener extends FileDownloadListener {
+        private long downloadId;
+
+        public DownloadListener(long downloadId) {
+            this.downloadId = downloadId;
+        }
+
         @Override
         protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
             //将状态设置为下载中
-            downloadRealmManager.downloading(task.getId());
+            downloadRealmManager.downloading(downloadId);
             // TODO: 2017/1/9 显示通知栏
         }
 
         @Override
         protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
             //更新下载文件的进度
-            downloadRealmManager.updataDownloadingProgress(task.getId(), soFarBytes, totalBytes);
+            downloadRealmManager.updataDownloadingProgress(downloadId, soFarBytes, totalBytes);
             // TODO: 2017/1/9 更新通知栏
         }
 
         @Override
         protected void completed(BaseDownloadTask task) {
             //设置下载任务为已完成
-            downloadRealmManager.finishDownload(task.getId());
+            downloadRealmManager.finishDownload(downloadId);
             // 找到下一个下载任务
             findNextDownloadTask();
             // TODO: 2017/1/9 取消通知栏消息
@@ -128,7 +134,7 @@ public class DownloadService extends Service {
         @Override
         protected void error(BaseDownloadTask task, Throwable e) {
             //设置下载任务为未知错误
-            downloadRealmManager.downloadFailUnknown(task.getId());
+            downloadRealmManager.downloadFailUnknown(downloadId);
             // 找到下一个下载任务
             findNextDownloadTask();
             // TODO: 2017/1/9 取消通知栏消息
@@ -137,7 +143,7 @@ public class DownloadService extends Service {
         @Override
         protected void warn(BaseDownloadTask task) {
             //设置下载任务为错误
-            downloadRealmManager.downloadFailUnknown(task.getId());
+            downloadRealmManager.downloadFailUnknown(downloadId);
             // 找到下一个下载任务
             findNextDownloadTask();
             // TODO: 2017/1/9 取消通知栏消息

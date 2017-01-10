@@ -60,8 +60,14 @@ public class DownloadPresenter implements DownloadContract.Presenter, RealmChang
                 .addChangeListener(this);
     }
 
+    /**
+     * 数据库变化监听
+     *
+     * @param element
+     */
     @Override
     public void onChange(RealmResults<DownloadModel> element) {
+        element.addChangeListener(this);
         boolean isAllDownloading = element.size() > 0 ? true : false;
         for (DownloadModel downloadModel : element) {
             int state = downloadModel.getState();

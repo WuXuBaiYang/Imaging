@@ -17,6 +17,7 @@ import com.liulishuo.filedownloader.util.FileDownloadUtils;
 
 import java.io.File;
 
+import io.realm.Realm;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -131,7 +132,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
     public void startDownload() {
         String url = photoModel.getUrls().getRaw();
         String path = getPath(System.currentTimeMillis() + "");
-        long id = FileDownloadUtils.generateId(url, path, false);
+        final long id = FileDownloadUtils.generateId(url, path, false);
         String name = photoModel.getUser().getName();
         String color = photoModel.getColor();
         int width = photoModel.getWidth();
@@ -142,9 +143,21 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
             view.downloadFail("already exists");
             return;
         }
-        downloadRealmManager.addDownloadAndStart(new DownloadModel(id, name, color, width, height, md5, url, path));
-        //发送任务开始消息
-        Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_WAITING));
+        DownloadModel downloadModel = new DownloadModel(id, name, color, width, height, md5, url, path);
+        downloadRealmManager
+                .addDownloadAndStart(downloadModel, new Realm.Transaction.OnSuccess() {
+                    @Override
+                    public void onSuccess() {
+                        view.downloadSuccess();
+                        //发送任务开始消息
+                        Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_WAITING));
+                    }
+                }, new Realm.Transaction.OnError() {
+                    @Override
+                    public void onError(Throwable error) {
+                        view.downloadFail("download error");
+                    }
+                });
     }
 
     /**
@@ -154,6 +167,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
      * @return
      */
     private String getPath(String fileName) {
-        return new File(context.getCacheDir(), Constants.CACHE_NAME + "/" + fileName + ".jpg").getAbsolutePath();
+        File file = new File(context.getCacheDir(), Constants.CACHE_NAME + File.separator + fileName + ".jpg");
+        return file.getAbsolutePath();
     }
 }
