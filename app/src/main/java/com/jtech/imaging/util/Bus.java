@@ -16,11 +16,9 @@ public class Bus extends EventBus {
      * @return
      */
     public static EventBus get() {
-        if (null == INSTANCE) {
-            synchronized (Bus.class) {
-                if (null == INSTANCE) {
-                    INSTANCE = new Bus();
-                }
+        synchronized (Bus.class) {
+            if (null == INSTANCE) {
+                INSTANCE = new Bus();
             }
         }
         return INSTANCE;

@@ -44,9 +44,9 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PhotoDetailActivity extends BaseActivity implements PhotoDetailContract.View, View.OnClickListener {
 
-    public static final String IMAGE_ID_KEY = "imageIdKey";
-    public static final String IMAGE_NAME_KEY = "imageNameKey";
-    public static final String IMAGE_URL_KEY = "imageUrlKey";
+    public static final String KEY_IMAGE_NAME = "IMAGE_NAME";
+    public static final String KEY_IMAGE_URL = "IMAGE_URL";
+    public static final String KEY_IMAGE_ID = "IMAGE_ID";
     public static final long IMAGE_ANIMATION_DURATION = 450;
     public static final long APPBAR_ANIMATION_DURATION = 350;
 
@@ -68,9 +68,9 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
     @Override
     protected void initVariables(Bundle bundle) {
         //获取参数
-        String imageId = bundle.getString(IMAGE_ID_KEY);
-        String imageName = bundle.getString(IMAGE_NAME_KEY);
-        String imageUrl = bundle.getString(IMAGE_URL_KEY);
+        String imageId = bundle.getString(KEY_IMAGE_ID);
+        String imageName = bundle.getString(KEY_IMAGE_NAME);
+        String imageUrl = bundle.getString(KEY_IMAGE_URL);
         //p类实现
         this.presenter = new PhotoDetailPresenter(getActivity(), this, imageId, imageName, imageUrl);
     }

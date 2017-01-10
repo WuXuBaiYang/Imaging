@@ -51,7 +51,7 @@ public class RandomActivity extends BaseActivity implements RandomContract.View,
     @Override
     protected void initVariables(Bundle bundle) {
         //绑定P类
-        this.presenter = new RandomPresenter(getActivity(), this);
+        presenter = new RandomPresenter(getActivity(), this);
     }
 
     @Override
@@ -123,9 +123,9 @@ public class RandomActivity extends BaseActivity implements RandomContract.View,
     public void onPhotoTap(View view, float x, float y) {
         if (null != photoModel) {
             Bundle bundle = new Bundle();
-            bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId());
-            bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName());
-            bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw());
+            bundle.putString(PhotoDetailActivity.KEY_IMAGE_ID, photoModel.getId());
+            bundle.putString(PhotoDetailActivity.KEY_IMAGE_NAME, photoModel.getUser().getName());
+            bundle.putString(PhotoDetailActivity.KEY_IMAGE_URL, photoModel.getUrls().getRaw());
             Pair[] pairs = PairChain
                     .build(floatingActionButton, getString(R.string.fab))
                     .addPair(photoView, getString(R.string.image))

@@ -18,9 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.jtech.imaging.R;
-import com.jtech.imaging.mvp.contract.SearchContract;
 import com.jtech.imaging.model.ResultsModel;
 import com.jtech.imaging.model.SearchPhotoModel;
+import com.jtech.imaging.mvp.contract.SearchContract;
 import com.jtech.imaging.mvp.presenter.SearchPresenter;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.LoadMoreFooterAdapter;
@@ -47,7 +47,7 @@ import rx.functions.Action1;
 
 public class SearchActivity extends BaseActivity implements SearchContract.View, SearchView.OnQueryTextListener, View.OnFocusChangeListener, View.OnClickListener, RefreshLayout.OnRefreshListener, OnLoadListener, OnItemClickListener, CoverView.OnCoverCancelListener, SearchRecordPopup.OnSearchRecordClick {
 
-    public static final String SEARCH_QUERY_KEY = "searchQuerykey";
+    public static final String KEY_SEARCH_QUERY = "SEARCH_QUERY";
     private static final int REQUEST_PHOTO_DETAIL_CODE = 0x0123;
 
     @Bind(R.id.toolbar)
@@ -63,7 +63,6 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
     @Bind(R.id.content_cover)
     CoverView coverView;
 
-    private String query;
     private SearchView searchView;
     private SearchAdapter searchAdapter;
     private SearchContract.Presenter presenter;
@@ -71,10 +70,10 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
     @Override
     protected void initVariables(Bundle bundle) {
-        //绑定P类
-        presenter = new SearchPresenter(getActivity(), this);
         //获取搜索信息
-        this.query = bundle.getString(SEARCH_QUERY_KEY, "");
+        String query = bundle.getString(KEY_SEARCH_QUERY, "");
+        //绑定P类
+        presenter = new SearchPresenter(getActivity(), this, query);
     }
 
     @Override
@@ -127,7 +126,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         //设置默认信息
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
         //设置搜索内容
-        searchSubmit(query);
+        searchSubmit(presenter.getSearchQuery());
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -149,7 +148,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
      */
     private boolean searchSubmit(String query) {
         if (!TextUtils.isEmpty(query.trim())) {
-            this.query = query;
+            presenter.setSearchQuery(query);
             //设置标题栏
             toolbar.setTitle(query);
             //关闭搜索状态
@@ -223,7 +222,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
 
     @Override
     public void onRefresh() {
-        presenter.searchPhotoList(query, searchAdapter.getPage(false), false);
+        presenter.searchPhotoList(presenter.getSearchQuery(), searchAdapter.getPage(false), false);
     }
 
     @Override
@@ -233,7 +232,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
             jRecyclerView.setLoadFinishState();
         } else {
             //发起请求更多
-            presenter.searchPhotoList(query, searchAdapter.getPage(true), true);
+            presenter.searchPhotoList(presenter.getSearchQuery(), searchAdapter.getPage(true), true);
         }
     }
 
@@ -243,9 +242,9 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         ResultsModel resultsModel = searchAdapter.getItem(position);
         //跳转到详情页
         Bundle bundle = new Bundle();
-        bundle.putString(PhotoDetailActivity.IMAGE_ID_KEY, resultsModel.getId());
-        bundle.putString(PhotoDetailActivity.IMAGE_NAME_KEY, resultsModel.getUser().getName());
-        bundle.putString(PhotoDetailActivity.IMAGE_URL_KEY, resultsModel.getUrls().getRaw());
+        bundle.putString(PhotoDetailActivity.KEY_IMAGE_ID, resultsModel.getId());
+        bundle.putString(PhotoDetailActivity.KEY_IMAGE_NAME, resultsModel.getUser().getName());
+        bundle.putString(PhotoDetailActivity.KEY_IMAGE_URL, resultsModel.getUrls().getRaw());
         Pair[] pairs = PairChain
                 .build(floatingActionButton, getString(R.string.fab))
                 .addPair(searchAdapter.getParallaxView(recyclerHolder), getString(R.string.image))

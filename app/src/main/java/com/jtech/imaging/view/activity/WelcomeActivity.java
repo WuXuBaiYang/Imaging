@@ -13,9 +13,9 @@ import android.widget.TextView;
 
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OauthCache;
-import com.jtech.imaging.mvp.contract.WelcomeContract;
 import com.jtech.imaging.model.OauthModel;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.mvp.contract.WelcomeContract;
 import com.jtech.imaging.mvp.presenter.WelcomePresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.util.ActivityJump;
@@ -35,7 +35,6 @@ import rx.functions.Action1;
  * Created by jianghan on 2016/9/20.
  */
 public class WelcomeActivity extends BaseActivity implements WelcomeContract.View {
-
     private static final long INFO_ANIMATION_DURATION = 300;
 
     @Bind(R.id.fab)
@@ -177,9 +176,9 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
             isDoubleClick = false;
             //跳转到图片详情
             Bundle bundle = BundleChain.build()
-                    .putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId())
-                    .putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName())
-                    .putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                    .putString(PhotoDetailActivity.KEY_IMAGE_ID, photoModel.getId())
+                    .putString(PhotoDetailActivity.KEY_IMAGE_NAME, photoModel.getUser().getName())
+                    .putString(PhotoDetailActivity.KEY_IMAGE_URL, photoModel.getUrls().getRaw())
                     .toBundle();
             Pair[] pairs = PairChain
                     .build(floatingActionButton, getString(R.string.fab))

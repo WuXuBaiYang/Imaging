@@ -11,6 +11,10 @@ import com.jtechlib.contract.BaseContract;
 public interface SearchContract {
     interface Presenter extends BaseContract.Presenter {
         void searchPhotoList(String query, int page, boolean loadMore);
+
+        String getSearchQuery();
+
+        void setSearchQuery(String query);
     }
 
     interface View extends BaseContract.View {

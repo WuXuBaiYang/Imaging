@@ -2,8 +2,8 @@ package com.jtech.imaging.mvp.presenter;
 
 import android.content.Context;
 
-import com.jtech.imaging.mvp.contract.SearchContract;
 import com.jtech.imaging.model.SearchPhotoModel;
+import com.jtech.imaging.mvp.contract.SearchContract;
 import com.jtech.imaging.net.API;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -16,12 +16,14 @@ import rx.schedulers.Schedulers;
  */
 
 public class SearchPresenter implements SearchContract.Presenter {
-    private SearchContract.View view;
     private Context context;
+    private SearchContract.View view;
+    private String query;
 
-    public SearchPresenter(Context context, SearchContract.View view) {
+    public SearchPresenter(Context context, SearchContract.View view, String query) {
         this.context = context;
         this.view = view;
+        this.query = query;
     }
 
     @Override
@@ -41,5 +43,15 @@ public class SearchPresenter implements SearchContract.Presenter {
                         view.fail(throwable.getMessage());
                     }
                 });
+    }
+
+    @Override
+    public String getSearchQuery() {
+        return query;
+    }
+
+    @Override
+    public void setSearchQuery(String query) {
+        this.query = query;
     }
 }

@@ -165,9 +165,9 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
     public void onItemClick(RecyclerHolder recyclerHolder, View view, int position) {
         PhotoModel photoModel = photoAdapter.getItem(position);
         Bundle bundle = BundleChain.build()
-                .putString(PhotoDetailActivity.IMAGE_ID_KEY, photoModel.getId())
-                .putString(PhotoDetailActivity.IMAGE_NAME_KEY, photoModel.getUser().getName())
-                .putString(PhotoDetailActivity.IMAGE_URL_KEY, photoModel.getUrls().getRaw())
+                .putString(PhotoDetailActivity.KEY_IMAGE_ID, photoModel.getId())
+                .putString(PhotoDetailActivity.KEY_IMAGE_NAME, photoModel.getUser().getName())
+                .putString(PhotoDetailActivity.KEY_IMAGE_URL, photoModel.getUrls().getRaw())
                 .toBundle();
         Pair[] pairs = PairChain
                 .build(floatingActionButton, getString(R.string.fab))
@@ -280,7 +280,7 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         if (!TextUtils.isEmpty(query.trim())) {
             //跳转到搜索页
             Bundle bundle = BundleChain.build()
-                    .putString(SearchActivity.SEARCH_QUERY_KEY, query)
+                    .putString(SearchActivity.KEY_SEARCH_QUERY, query)
                     .toBundle();
             Pair[] pairs = PairChain
                     .build(floatingActionButton, getString(R.string.fab))
