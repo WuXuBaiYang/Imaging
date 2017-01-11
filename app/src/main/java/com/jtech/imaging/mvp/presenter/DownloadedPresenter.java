@@ -19,33 +19,29 @@ public class DownloadedPresenter implements DownloadedContract.Presenter, RealmC
     private DownloadedContract.View view;
     private DownloadRealmManager downloadRealmManager;
 
+    private RealmResults downloadedResults;
+
     public DownloadedPresenter(Context context, DownloadedContract.View view) {
         this.context = context;
         this.view = view;
         //实例化数据库操作
         downloadRealmManager = new DownloadRealmManager();
+        //获取已下载列表
+        downloadedResults = downloadRealmManager.getDownloaded();
     }
 
     @Override
-    public void getDownloadedList() {
-        downloadRealmManager
-                .getDownloaded()
-                .addChangeListener(this);
+    public void addDownloadedListener() {
+        downloadedResults.addChangeListener(this);
     }
 
     @Override
     public void deleteDownloaded(long id) {
-        downloadRealmManager.removeDownload(id);
-    }
-
-    @Override
-    public void redownload(long id) {
-      downloadRealmManager.startDownload(id);
+        downloadRealmManager.removeDownload(id, null);
     }
 
     @Override
     public void onChange(RealmResults<DownloadModel> element) {
-        element.addChangeListener(this);
         view.downloadedList(Realm.getDefaultInstance().copyFromRealm(element));
     }
 }

@@ -84,6 +84,13 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        //设置监听
+        presenter.addDownloadStateChangeListener();
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
@@ -124,14 +131,18 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
             if (0 == currentItem) {
                 Bus.get().post(new DownloadedGalleryEvent());
             } else {
-                if (presenter.hasDownloading()) {
-                    if (presenter.isAllDownloading()) {
-                        presenter.stopAllDownload();
-                    } else {
-                        presenter.startAllDownload();
-                    }
-                } else {
+                if (!presenter.hasDownloading()) {
                     Snackbar.make(content, "no download", Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+//                if (presenter.hasIndeterminate()) {
+//                    Snackbar.make(content, "waiting for download", Snackbar.LENGTH_SHORT).show();
+//                    return;
+//                }
+                if (presenter.isAllDownloading()) {
+                    presenter.stopAllDownload();
+                } else {
+                    presenter.startAllDownload();
                 }
             }
         }

@@ -150,7 +150,7 @@ public class PhotoDetailPresenter implements PhotoDetailContract.Presenter {
                     public void onSuccess() {
                         view.downloadSuccess();
                         //发送任务开始消息
-                        Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_WAITING));
+                        Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_QUEUE));
                     }
                 }, new Realm.Transaction.OnError() {
                     @Override

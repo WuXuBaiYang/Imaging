@@ -26,7 +26,7 @@ public class DownloadRealmManager extends BaseRealmManager {
      * @return
      */
     public RealmAsyncTask addDownloadAndStart(DownloadModel downloadModel, Realm.Transaction.OnSuccess onSuccess, Realm.Transaction.OnError onError) {
-        downloadModel.setState(DownloadState.DOWNLOAD_WAITING);
+        downloadModel.setState(DownloadState.DOWNLOAD_QUEUE);
         return addDownload(downloadModel, onSuccess, onError);
     }
 
@@ -60,12 +60,36 @@ public class DownloadRealmManager extends BaseRealmManager {
     }
 
     /**
+     * 判断是否存在未知状态的下载任务
+     *
+     * @return
+     */
+    public boolean hasIndeterminateDownload() {
+        return 0 != getRealm().where(DownloadModel.class)
+                .equalTo("state", DownloadState.DOWNLOAD_INDETERMINATE)
+                .count();
+    }
+
+    /**
+     * 判断目标下载任务是否为未知状态
+     *
+     * @param id
+     * @return
+     */
+    public boolean isIndeterminateDownload(long id) {
+        return 0 != getRealm().where(DownloadModel.class)
+                .equalTo("state", DownloadState.DOWNLOAD_INDETERMINATE)
+                .equalTo("id", id)
+                .count();
+    }
+
+    /**
      * 移除一条下载记录
      *
      * @param id
      * @return
      */
-    public RealmAsyncTask removeDownload(final long id) {
+    public RealmAsyncTask removeDownload(final long id, Realm.Transaction.OnSuccess onSuccess) {
         return execute(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -76,6 +100,11 @@ public class DownloadRealmManager extends BaseRealmManager {
                     downloadModel.deleteFromRealm();
                 }
             }
+        }, onSuccess, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
+            }
         });
     }
 
@@ -84,14 +113,19 @@ public class DownloadRealmManager extends BaseRealmManager {
      *
      * @param id
      */
-    public RealmAsyncTask startDownload(final long id) {
+    public RealmAsyncTask startDownload(final long id, Realm.Transaction.OnSuccess onSuccess) {
         return execute(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.where(DownloadModel.class)
                         .equalTo("id", id)
                         .findFirst()
-                        .setState(DownloadState.DOWNLOAD_WAITING);
+                        .setState(DownloadState.DOWNLOAD_QUEUE);
+            }
+        }, onSuccess, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
             }
         });
     }
@@ -101,7 +135,7 @@ public class DownloadRealmManager extends BaseRealmManager {
      *
      * @param id
      */
-    public RealmAsyncTask stopDownload(final long id) {
+    public RealmAsyncTask stopDownload(final long id, Realm.Transaction.OnSuccess onSuccess) {
         return execute(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -109,6 +143,11 @@ public class DownloadRealmManager extends BaseRealmManager {
                         .equalTo("id", id)
                         .findFirst()
                         .setState(DownloadState.DOWNLOAD_STOP);
+            }
+        }, onSuccess, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
             }
         });
     }
@@ -144,6 +183,16 @@ public class DownloadRealmManager extends BaseRealmManager {
     }
 
     /**
+     * 不确定状态
+     *
+     * @param id
+     * @return
+     */
+    public RealmAsyncTask downloadIndeterminate(long id) {
+        return updataDownloadState(id, DownloadState.DOWNLOAD_INDETERMINATE);
+    }
+
+    /**
      * 判断所有任务是否正在下载
      *
      * @return
@@ -156,7 +205,8 @@ public class DownloadRealmManager extends BaseRealmManager {
         //判断是否全是下载中状态
         for (DownloadModel downloadModel : realmResults) {
             int state = downloadModel.getState();
-            if (state != DownloadState.DOWNLOADING && state != DownloadState.DOWNLOAD_WAITING) {
+            if (state != DownloadState.DOWNLOADING
+                    && state != DownloadState.DOWNLOAD_QUEUE && state != DownloadState.DOWNLOAD_INDETERMINATE) {
                 return false;
             }
         }
@@ -178,7 +228,7 @@ public class DownloadRealmManager extends BaseRealmManager {
     /**
      * 开启全部的下载(暂停和出现错误的任务)
      */
-    public RealmAsyncTask startAllDownload() {
+    public RealmAsyncTask startAllDownload(Realm.Transaction.OnSuccess onSuccess) {
         return execute(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -186,11 +236,18 @@ public class DownloadRealmManager extends BaseRealmManager {
                 RealmResults<DownloadModel> realmResults = realm
                         .where(DownloadModel.class)
                         .notEqualTo("state", DownloadState.DOWNLOADED)
+                        .notEqualTo("state", DownloadState.DOWNLOAD_INDETERMINATE)
+                        .notEqualTo("state", DownloadState.DOWNLOADING)
                         .findAll();
                 //修改全部任务为开始状态
                 for (DownloadModel downloadMode : realmResults) {
-                    downloadMode.setState(DownloadState.DOWNLOAD_WAITING);
+                    downloadMode.setState(DownloadState.DOWNLOAD_QUEUE);
                 }
+            }
+        }, onSuccess, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
             }
         });
     }
@@ -198,7 +255,7 @@ public class DownloadRealmManager extends BaseRealmManager {
     /**
      * 暂停所有下载(下载中和连接中的任务)
      */
-    public RealmAsyncTask stopAllDownload() {
+    public RealmAsyncTask stopAllDownload(Realm.Transaction.OnSuccess onSuccess) {
         return execute(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -211,6 +268,11 @@ public class DownloadRealmManager extends BaseRealmManager {
                 for (DownloadModel downloadModel : realmResults) {
                     downloadModel.setState(DownloadState.DOWNLOAD_STOP);
                 }
+            }
+        }, onSuccess, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                error.printStackTrace();
             }
         });
     }
@@ -227,7 +289,7 @@ public class DownloadRealmManager extends BaseRealmManager {
                         .where(DownloadModel.class)
                         .equalTo("state", DownloadState.DOWNLOADING)
                         .or()
-                        .equalTo("state", DownloadState.DOWNLOAD_WAITING)
+                        .equalTo("state", DownloadState.DOWNLOAD_QUEUE)
                         .findAll();
                 //修改全部任务为暂停中状态
                 for (DownloadModel downloadModel : realmResults) {
@@ -301,7 +363,7 @@ public class DownloadRealmManager extends BaseRealmManager {
     public DownloadModel getFirstDownloadWaiting() {
         return copyFromRealm(getRealm(), getRealm()
                 .where(DownloadModel.class)
-                .equalTo("state", DownloadState.DOWNLOAD_WAITING)
+                .equalTo("state", DownloadState.DOWNLOAD_QUEUE)
                 .findFirst());
     }
 

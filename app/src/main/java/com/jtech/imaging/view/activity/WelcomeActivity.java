@@ -79,8 +79,6 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
         double ratio = (1.0 * width) / screenWidth;
         int height = (int) (ratio * screenHeight);
         presenter.getWelcomePagePhoto("", "", "", "", "", width, height, "portrait");
-        //恢复下载任务
-        presenter.resumeDownloading();
     }
 
     @Override
@@ -122,6 +120,8 @@ public class WelcomeActivity extends BaseActivity implements WelcomeContract.Vie
             ActivityJump.build(getActivity(), MainActivity.class)
                     .makeSceneTransitionAnimation(pairs)
                     .jump();
+            //恢复下载任务
+            presenter.resumeDownloading();
         } else {
             //跳转到授权登陆页
             Pair[] pairs = PairChain

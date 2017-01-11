@@ -49,6 +49,8 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
         if (isVisibleProgressbar(state)) {
             //获取进度条的对象
             ProgressBar progressBar = holder.getView(R.id.progressbar_downloading_progress);
+            //是否为不确定状态
+            progressBar.setIndeterminate(model.getState() == DownloadState.DOWNLOAD_INDETERMINATE);
             //设置进度
             int progress = (int) ((1.0 * model.getDownloadSize()) / model.getSize() * 100);
             progressBar.setProgress(progress);
@@ -86,12 +88,14 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
     private String getStateDescribe(int state) {
         if (state == DownloadState.DOWNLOADING) {
             return "";
-        } else if (state == DownloadState.DOWNLOAD_WAITING) {
+        } else if (state == DownloadState.DOWNLOAD_QUEUE) {
             return "waiting";
         } else if (state == DownloadState.DOWNLOAD_STOP) {
             return "";
         } else if (state == DownloadState.DOWNLOAD_ERROR) {
             return "error";
+        } else if (state == DownloadState.DOWNLOAD_INDETERMINATE) {
+            return "waiting";
         }
         return "unknown error";
     }
@@ -104,7 +108,8 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
      * @return
      */
     private int getStateIcon(int state) {
-        if (state == DownloadState.DOWNLOADING || state == DownloadState.DOWNLOAD_WAITING) {
+        if (state == DownloadState.DOWNLOADING
+                || state == DownloadState.DOWNLOAD_QUEUE || state == DownloadState.DOWNLOAD_INDETERMINATE) {
             return R.drawable.ic_pause_black_18dp;
         }
         return R.drawable.ic_file_download_black_18dp;
@@ -118,7 +123,7 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
      * @return
      */
     private boolean isVisibleProgressbar(int state) {
-        return state == DownloadState.DOWNLOADING;
+        return state == DownloadState.DOWNLOADING || state == DownloadState.DOWNLOAD_INDETERMINATE;
     }
 
     /**

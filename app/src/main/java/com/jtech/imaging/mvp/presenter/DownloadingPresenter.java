@@ -22,44 +22,63 @@ public class DownloadingPresenter implements DownloadingContract.Presenter, Real
     private DownloadingContract.View view;
     private DownloadRealmManager downloadRealmManager;
 
+    private RealmResults downloadingResults;
+
     public DownloadingPresenter(Context context, DownloadingContract.View view) {
         this.context = context;
         this.view = view;
         //实例化数据库操作
         downloadRealmManager = new DownloadRealmManager();
+        //获取下载列表
+        downloadingResults = downloadRealmManager.getDownloading();
     }
 
     @Override
-    public void getDownloadingList() {
-        downloadRealmManager
-                .getDownloading()
-                .addChangeListener(this);
+    public void addDownloadingListener() {
+        downloadingResults.addChangeListener(this);
     }
 
     @Override
-    public void startDownload(long id) {
-        downloadRealmManager.startDownload(id);
-        //发送任务开始消息
-        Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_WAITING));
+    public void startDownload(final long id) {
+        downloadRealmManager.startDownload(id, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                //发送任务开始消息
+                Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_QUEUE));
+            }
+        });
     }
 
     @Override
-    public void stopDownload(long id) {
-        downloadRealmManager.stopDownload(id);
-        //发送任务停止消息
-        Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_STOP));
+    public void stopDownload(final long id) {
+        downloadRealmManager.stopDownload(id, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                //发送任务停止消息
+                Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_STOP));
+            }
+        });
     }
 
     @Override
-    public void deleteDownload(long id) {
-        downloadRealmManager.removeDownload(id);
-        //发送任务删除消息
-        Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_DELETE));
+    public void deleteDownload(final long id) {
+        downloadRealmManager.removeDownload(id, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                //发送任务删除消息
+                Bus.get().post(new DownloadEvent.StateEvent(id, DownloadState.DOWNLOAD_DELETE));
+            }
+        });
     }
 
     @Override
     public void onChange(RealmResults<DownloadModel> element) {
         element.addChangeListener(this);
         view.downloadingList(Realm.getDefaultInstance().copyFromRealm(element));
+    }
+
+    @Override
+    public boolean isIndeterminate(long id) {
+        return downloadRealmManager.isIndeterminateDownload(id);
     }
 }

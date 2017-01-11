@@ -8,10 +8,12 @@ package com.jtech.imaging.common;
 public class DownloadState {
     //下载中
     public static final int DOWNLOADING = 343;
-    //队列中等待下载
-    public static final int DOWNLOAD_WAITING = 339;
+    //队列中
+    public static final int DOWNLOAD_QUEUE = 339;
     //下载暂停，默认状态
     public static final int DOWNLOAD_STOP = 814;
+    //不确定状态
+    public static final int DOWNLOAD_INDETERMINATE = 722;
 
     //下载完成
     public static final int DOWNLOADED = 319;

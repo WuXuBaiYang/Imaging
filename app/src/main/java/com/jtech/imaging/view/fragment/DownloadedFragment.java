@@ -76,7 +76,7 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
 
     @Override
     protected void loadData() {
-        presenter.getDownloadedList();
+        presenter.addDownloadedListener();
     }
 
     public static DownloadedFragment newInstance() {
@@ -89,6 +89,13 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
     @Override
     public void downloadedList(List<DownloadModel> downloadModels) {
         downloadedAdapter.setDatas(downloadModels);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //设置监听
+        presenter.addDownloadedListener();
     }
 
     @Override

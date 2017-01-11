@@ -18,6 +18,8 @@ public interface DownloadContract {
         boolean isAllDownloading();
 
         void addDownloadStateChangeListener();
+
+        boolean hasIndeterminate();
     }
 
     interface View extends BaseContract.View {

@@ -64,7 +64,14 @@ public class DownloadingFragment extends BaseFragment implements DownloadingCont
 
     @Override
     protected void loadData() {
-        presenter.getDownloadingList();
+        presenter.addDownloadingListener();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //设置监听
+        presenter.addDownloadingListener();
     }
 
     public static DownloadingFragment newInstance() {
@@ -100,9 +107,15 @@ public class DownloadingFragment extends BaseFragment implements DownloadingCont
 
     @Override
     public void onStateClick(long id, int state) {
-        if (state == DownloadState.DOWNLOADING || state == DownloadState.DOWNLOAD_WAITING) {
+//        if (presenter.isIndeterminate(id)) {
+//            Snackbar.make(getContentView(), "waiting for download", Snackbar.LENGTH_SHORT).show();
+//            return;
+//        }
+        if (state == DownloadState.DOWNLOADING || state == DownloadState.DOWNLOAD_QUEUE || state == DownloadState.DOWNLOAD_INDETERMINATE) {
+            state = DownloadState.DOWNLOAD_STOP;
             presenter.stopDownload(id);
         } else {
+            state = DownloadState.DOWNLOAD_QUEUE;
             presenter.startDownload(id);
         }
         //发送任务变化消息
