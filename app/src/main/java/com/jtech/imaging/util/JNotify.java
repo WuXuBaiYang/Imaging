@@ -21,6 +21,11 @@ import android.widget.RemoteViews;
 
 public class JNotify {
     public static final int REQUEST_CODE_NOTIFY = 818;
+    private static final int DEFAULT_LIGHT_COLOR = 0xFFFF0000;
+    private static final int DEFAULT_LIGHT_ON = 350;
+    private static final int DEFAULT_LIGHT_OFF = 300;
+    private static final int DEFAULT_VIBRATE_ON = 200;
+    private static final int DEFAULT_VIBRATE_OFF = 100;
 
     /**
      * 开始构造
@@ -97,6 +102,22 @@ public class JNotify {
             return this;
         }
 
+        public NotifyBuilder setCustomBigContentView(RemoteViews contentView) {
+            builder.setCustomBigContentView(contentView);
+            return this;
+        }
+
+        public NotifyBuilder setCustomContentView(RemoteViews contentView) {
+            builder.setCustomContentView(contentView);
+            return this;
+        }
+
+        public NotifyBuilder setCustomHeadsUpContentView(RemoteViews contentView) {
+            builder.setCustomHeadsUpContentView(contentView);
+            return this;
+        }
+
+
         public NotifyBuilder setSmallIcon(int icon) {
             builder.setSmallIcon(icon);
             return this;
@@ -123,7 +144,7 @@ public class JNotify {
         }
 
         public NotifyBuilder setDefaultLight() {
-            setLight(0xFFFF0000, 350, 300);
+            setLight(DEFAULT_LIGHT_COLOR, DEFAULT_LIGHT_ON, DEFAULT_LIGHT_OFF);
             return this;
         }
 
@@ -133,7 +154,7 @@ public class JNotify {
         }
 
         public NotifyBuilder setDefaultVibrate() {
-            setVibrate(new long[]{200, 100, 200, 100});
+            setVibrate(new long[]{DEFAULT_VIBRATE_ON, DEFAULT_VIBRATE_OFF, DEFAULT_VIBRATE_ON, DEFAULT_VIBRATE_OFF});
             return this;
         }
 
