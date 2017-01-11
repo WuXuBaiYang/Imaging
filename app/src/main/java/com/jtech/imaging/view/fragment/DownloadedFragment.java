@@ -18,7 +18,6 @@ import com.jtech.imaging.util.Bus;
 import com.jtech.imaging.view.activity.GalleryActivity;
 import com.jtech.imaging.view.adapter.DownloadedAdapter;
 import com.jtech.imaging.view.widget.dialog.DeleteDialog;
-import com.jtech.imaging.view.widget.dialog.UnknownDialog;
 import com.jtech.listener.OnItemClickListener;
 import com.jtech.listener.OnItemLongClickListener;
 import com.jtech.view.JRecyclerView;
@@ -143,22 +142,6 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
                     }
                 }).show();
         return true;
-    }
-
-    @Override
-    public void onUnknownClick(final long id, final int position) {
-        UnknownDialog
-                .build(getActivity())
-                .setContent("Failed to find pictures in the local,Whether or not to download")
-                .setDoneClick(new UnknownDialog.OnUnknownClick() {
-                    @Override
-                    public void redownload() {
-                        //移除适配器中数据
-                        downloadedAdapter.removeData(position);
-                        //重新下载
-                        presenter.redownload(id);
-                    }
-                }).show();
     }
 
     @Override

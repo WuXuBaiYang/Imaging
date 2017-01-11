@@ -90,12 +90,8 @@ public class DownloadingAdapter extends RecyclerAdapter<DownloadModel> {
             return "waiting";
         } else if (state == DownloadState.DOWNLOAD_STOP) {
             return "";
-        } else if (state == DownloadState.DOWNLOAD_FAIL_UNKNOWN) {
-            return "unknown error";
-        } else if (state == DownloadState.DOWNLOAD_FAIL_NETWORK_CHANGE) {
-            return "netword change";
-        } else if (state == DownloadState.DOWNLOAD_FAIL_NETWORK_ERROR) {
-            return "netword error";
+        } else if (state == DownloadState.DOWNLOAD_ERROR) {
+            return "error";
         }
         return "unknown error";
     }

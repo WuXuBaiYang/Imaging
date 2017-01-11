@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.jtech.adapter.RecyclerAdapter;
 import com.jtech.imaging.R;
-import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.DownloadModel;
 import com.jtech.view.RecyclerHolder;
 import com.jtechlib.Util.DeviceUtils;
@@ -74,23 +73,11 @@ public class DownloadedAdapter extends RecyclerAdapter<DownloadModel> {
         });
         //设置默认背景颜色
 //        imageView.setBackgroundColor(Color.parseColor(model.getColor()));
-        //设置图片本地找不到时的图标以及点击事件
-        holder.setViewVisible(R.id.imagebutton_photo_unknown, model.getState() == DownloadState.DOWNLOADED_NOT_FOUND);
-        //设置unknown的点击事件
-        holder.setClickListener(R.id.imagebutton_photo_unknown, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (null != onDownloadedClickListener) {
-                    onDownloadedClickListener.onUnknownClick(model.getId(), position);
-                }
-            }
-        });
     }
 
     /**
      * 已下载列表的点击事件
      */
     public interface OnDownloadedClickListener {
-        void onUnknownClick(long id, int position);
     }
 }

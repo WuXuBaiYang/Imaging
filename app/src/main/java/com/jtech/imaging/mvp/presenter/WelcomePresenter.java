@@ -4,9 +4,12 @@ import android.content.Context;
 import android.util.Log;
 
 import com.jtech.imaging.cache.PhotoCache;
-import com.jtech.imaging.mvp.contract.WelcomeContract;
+import com.jtech.imaging.common.DownloadState;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.model.event.DownloadEvent;
+import com.jtech.imaging.mvp.contract.WelcomeContract;
 import com.jtech.imaging.net.API;
+import com.jtech.imaging.util.Bus;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -70,5 +73,11 @@ public class WelcomePresenter implements WelcomeContract.Presenter {
                         }
                     });
         }
+    }
+
+    @Override
+    public void resumeDownloading() {
+        //恢复下载
+        Bus.get().post(new DownloadEvent.StateEvent(0, DownloadState.DOWNLOAD_RESUME));
     }
 }

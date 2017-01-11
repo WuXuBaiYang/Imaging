@@ -48,7 +48,7 @@ public class DownloadService extends Service {
             case DownloadState.DOWNLOAD_START_ALL://全部任务开始
                 if (!downloadTask.isRunning()) {
                     //如果没有任务在运行，则找到第一个任务并开启
-                    startDownload(downloadRealmManager.getFirstDownload());
+                    startDownload(downloadRealmManager.getFirstDownloadWaiting());
                 }
                 break;
             case DownloadState.DOWNLOAD_STOP://任务暂停
@@ -67,6 +67,18 @@ public class DownloadService extends Service {
                 if (downloadTask.isRunning() && downloadTask.getId() == event.getId()) {
                     //如果需要删除的任务是当前正在运行的，则停止
                     downloadTask.pause();
+                }
+                break;
+            case DownloadState.DOWNLOAD_RESUME://下载恢复
+                if (!downloadTask.isRunning()) {
+                    //查找是否有下载中任务，如果有则恢复下载
+                    DownloadModel downloadModel = downloadRealmManager.getFirstDownloading();
+                    //如果没有下载中任务，则继续查找第一个等待任务
+                    if (null == downloadModel) {
+                        downloadModel = downloadRealmManager.getFirstDownloadWaiting();
+                    }
+                    //开始任务
+                    startDownload(downloadModel);
                 }
                 break;
         }
@@ -134,7 +146,7 @@ public class DownloadService extends Service {
         @Override
         protected void error(BaseDownloadTask task, Throwable e) {
             //设置下载任务为未知错误
-            downloadRealmManager.downloadFailUnknown(downloadId);
+            downloadRealmManager.downloadError(downloadId);
             // 找到下一个下载任务
             findNextDownloadTask();
             // TODO: 2017/1/9 取消通知栏消息
@@ -143,7 +155,7 @@ public class DownloadService extends Service {
         @Override
         protected void warn(BaseDownloadTask task) {
             //设置下载任务为错误
-            downloadRealmManager.downloadFailUnknown(downloadId);
+            downloadRealmManager.downloadError(downloadId);
             // 找到下一个下载任务
             findNextDownloadTask();
             // TODO: 2017/1/9 取消通知栏消息
@@ -154,7 +166,7 @@ public class DownloadService extends Service {
          */
         private void findNextDownloadTask() {
             //找到下载列表中第一个状态为等待的任务
-            DownloadModel downloadModel = downloadRealmManager.getFirstWaitingDownload();
+            DownloadModel downloadModel = downloadRealmManager.getFirstDownloadWaiting();
             if (null != downloadModel) {
                 Bus.get().post(new DownloadEvent.StateEvent(downloadModel.getId(), DownloadState.DOWNLOAD_WAITING));
             }
@@ -172,7 +184,5 @@ public class DownloadService extends Service {
         super.onDestroy();
         //下车
         Bus.getOff(this);
-        //将所有下载中和等待中的任务置为停止状态
-        downloadRealmManager.stopAllDownloadingTask();
     }
 }

@@ -16,7 +16,8 @@ public interface WelcomeContract {
     }
 
     interface Presenter extends BaseContract.Presenter {
-
         void getWelcomePagePhoto(String category, String collections, String featured, String username, String query, int width, int height, String orientation);
+
+        void resumeDownloading();
     }
 }

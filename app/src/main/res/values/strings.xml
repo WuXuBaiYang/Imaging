@@ -33,9 +33,7 @@
     <string name="download_state_not_found">FileNotFound</string>
     <string name="download_state_stoping">Stoping</string>
     <string name="download_state_connection">Connection</string>
-    <string name="download_state_fail_unknown">Unknown</string>
-    <string name="download_state_fail_intent_change">IntentChange</string>
-    <string name="download_state_fail_intent_error">IntentError</string>
+    <string name="download_state_error">Error</string>
 
 
     <array name="sort">
