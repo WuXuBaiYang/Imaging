@@ -19,6 +19,7 @@ import com.jtech.listener.OnItemLongClickListener;
 import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtechlib.view.fragment.BaseFragment;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -72,6 +73,14 @@ public class DownloadingFragment extends BaseFragment implements DownloadingCont
         super.onResume();
         //设置监听
         presenter.addDownloadingListener();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
     }
 
     public static DownloadingFragment newInstance() {

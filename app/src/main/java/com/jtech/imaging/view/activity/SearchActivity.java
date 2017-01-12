@@ -36,6 +36,7 @@ import com.jtech.view.RefreshLayout;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -303,5 +304,19 @@ public class SearchActivity extends BaseActivity implements SearchContract.View,
         if (requestCode == REQUEST_PHOTO_DETAIL_CODE) {//从详情跳转回来的
             searchAdapter.animateImage(jRecyclerView);
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
+        MobclickAgent.onPause(this);
     }
 }

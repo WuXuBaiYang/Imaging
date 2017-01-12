@@ -31,6 +31,7 @@ import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -326,5 +327,19 @@ public class PhotoDetailActivity extends BaseActivity implements PhotoDetailCont
                 Snackbar.make(content, "Please wait for loading", Snackbar.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
+        MobclickAgent.onPause(this);
     }
 }

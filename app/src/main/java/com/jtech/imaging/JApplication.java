@@ -8,6 +8,7 @@ import com.jtech.imaging.receiver.ConnectionChangeReceiver;
 import com.jtech.imaging.service.DownloadService;
 import com.jtechlib.BaseApplication;
 import com.liulishuo.filedownloader.FileDownloader;
+import com.umeng.analytics.MobclickAgent;
 
 import io.realm.Realm;
 
@@ -30,6 +31,10 @@ public class JApplication extends BaseApplication {
         FileDownloader.init(getApplicationContext());
         //启动下载服务
         startService(new Intent(this, DownloadService.class));
+        //设置友盟统计类型
+        MobclickAgent.setScenarioType(getApplicationContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
+        //设置activity不自动统计页面跳转
+        MobclickAgent.openActivityDurationTrack(false);
     }
 
     /**

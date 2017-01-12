@@ -24,6 +24,7 @@ import com.jtech.view.JRecyclerView;
 import com.jtech.view.RecyclerHolder;
 import com.jtechlib.Util.BundleChain;
 import com.jtechlib.view.fragment.BaseFragment;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -96,6 +97,14 @@ public class DownloadedFragment extends BaseFragment implements DownloadedContra
         super.onResume();
         //设置监听
         presenter.addDownloadedListener();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
     }
 
     @Override

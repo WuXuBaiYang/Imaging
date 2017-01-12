@@ -18,8 +18,8 @@ import android.webkit.WebViewClient;
 import com.jtech.imaging.R;
 import com.jtech.imaging.cache.OauthCache;
 import com.jtech.imaging.common.Constants;
-import com.jtech.imaging.mvp.contract.OauthContract;
 import com.jtech.imaging.model.OauthModel;
+import com.jtech.imaging.mvp.contract.OauthContract;
 import com.jtech.imaging.mvp.presenter.OauthPresenter;
 import com.jtech.imaging.util.ActivityJump;
 import com.jtech.imaging.view.adapter.ScopesAdapter;
@@ -27,6 +27,7 @@ import com.jtech.imaging.view.widget.RxCompat;
 import com.jtech.view.JRecyclerView;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -162,5 +163,19 @@ public class OauthActivity extends BaseActivity implements OauthContract.View {
             view.loadUrl(url);
             return super.shouldOverrideUrlLoading(view, request);
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
+        MobclickAgent.onPause(this);
     }
 }

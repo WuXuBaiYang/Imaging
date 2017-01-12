@@ -20,6 +20,7 @@ import com.jtech.imaging.view.fragment.DownloadingFragment;
 import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.view.activity.BaseActivity;
 import com.jtechlib.view.fragment.BaseFragment;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.Arrays;
 
@@ -88,6 +89,15 @@ public class DownloadActivity extends BaseActivity implements DownloadContract.V
         super.onResume();
         //设置监听
         presenter.addDownloadStateChangeListener();
+        //友盟页面统计
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //友盟页面统计
+        MobclickAgent.onPause(this);
     }
 
     @Override

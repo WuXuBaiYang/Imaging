@@ -12,6 +12,7 @@ import com.jtech.imaging.mvp.presenter.PhotoPresenter;
 import com.jtech.imaging.view.widget.LoadingView;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.view.fragment.BaseFragment;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import uk.co.senab.photoview.PhotoView;
@@ -94,5 +95,17 @@ public class PhotoFragment extends BaseFragment implements PhotoContract.View {
      */
     public PhotoView getPhotoView() {
         return photoView;
+    }
+
+    public void onResume() {
+        super.onResume();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
     }
 }

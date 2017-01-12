@@ -43,6 +43,7 @@ import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -467,5 +468,19 @@ public class MainActivity extends BaseActivity implements MainContract.View, Ref
         if (requestCode == REQUEST_PHOTO_DETAIL_CODE) {//从详情跳转回来的
             photoAdapter.animateImage(jRecyclerView);
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
+        MobclickAgent.onPause(this);
     }
 }

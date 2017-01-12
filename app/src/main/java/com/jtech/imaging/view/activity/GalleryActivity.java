@@ -15,6 +15,7 @@ import com.jtech.imaging.view.widget.RxCompat;
 import com.jtechlib.Util.BundleChain;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
@@ -99,5 +100,19 @@ public class GalleryActivity extends BaseActivity implements GalleryContract.Vie
                     .makeSceneTransitionAnimation(pairs)
                     .jump();
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
+        MobclickAgent.onPause(this);
     }
 }

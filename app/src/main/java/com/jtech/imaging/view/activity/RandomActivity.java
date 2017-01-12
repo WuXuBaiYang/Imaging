@@ -12,8 +12,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.bumptech.glide.request.target.Target;
 import com.jtech.imaging.R;
-import com.jtech.imaging.mvp.contract.RandomContract;
 import com.jtech.imaging.model.PhotoModel;
+import com.jtech.imaging.mvp.contract.RandomContract;
 import com.jtech.imaging.mvp.presenter.RandomPresenter;
 import com.jtech.imaging.strategy.PhotoLoadStrategy;
 import com.jtech.imaging.util.ActivityJump;
@@ -23,6 +23,7 @@ import com.jtechlib.Util.DeviceUtils;
 import com.jtechlib.Util.ImageUtils;
 import com.jtechlib.Util.PairChain;
 import com.jtechlib.view.activity.BaseActivity;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Bind;
 import rx.functions.Action1;
@@ -157,5 +158,19 @@ public class RandomActivity extends BaseActivity implements RandomContract.View,
             //请求数据
             presenter.getRandomPhoto("", "", "", "", "", 0, 0, "landscape");
         }
+    }
+
+    public void onResume() {
+        super.onResume();
+        //友盟统计
+        MobclickAgent.onPageStart(TAG);
+        MobclickAgent.onResume(this);
+    }
+
+    public void onPause() {
+        super.onPause();
+        //友盟统计
+        MobclickAgent.onPageEnd(TAG);
+        MobclickAgent.onPause(this);
     }
 }
