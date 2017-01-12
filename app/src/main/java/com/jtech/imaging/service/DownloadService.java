@@ -12,7 +12,7 @@ import com.jtech.imaging.model.DownloadModel;
 import com.jtech.imaging.model.event.DownloadEvent;
 import com.jtech.imaging.realm.DownloadRealmManager;
 import com.jtech.imaging.util.Bus;
-import com.jtech.imaging.util.JNotify;
+import com.jtechlib.Util.JNotify;
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
 import com.liulishuo.filedownloader.FileDownloader;
